@@ -1,0 +1,69 @@
+{
+  "name": "good-guitarist",
+  "version": "4.1.0",
+  "description": "Alecaddd WordPress Starter Theme for savvy developers",
+  "main": "index.js",
+  "prettier": "@wordpress/prettier-config",
+  "scripts": {
+    "dev": "mix",
+    "development": "mix",
+    "watch": "mix watch",
+    "watch-poll": "mix watch -- --watch-options-poll=1000",
+    "hot": "mix watch --hot",
+    "prod": "mix --production",
+    "production": "mix --production",
+    "lint": "eslint \"./**/*.js\""
+  },
+  "devDependencies": {
+    "@babel/eslint-parser": "^7.13.8",
+    "@babel/preset-react": "^7.0.0",
+    "@popperjs/core": "^2.8.6",
+    "@tinypixelco/laravel-mix-wp-blocks": "^1.1.0",
+    "@wordpress/prettier-config": "^1.0.1",
+    "autoprefixer": "^10.2.4",
+    "axios": "^0.21",
+    "babel-preset-react": "^6.24.1",
+    "browser-sync": "^2.23.6",
+    "browser-sync-webpack-plugin": "^2.0.1",
+    "cross-env": "^7.0",
+    "eslint": "^7.12.1",
+    "eslint-config-standard": "^16.0.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.0.1",
+    "jquery": "^3.3.1",
+    "laravel-mix": "^6.0.13",
+    "laravel-mix-tailwind": "^0.1.0",
+    "lodash": "^4.17.4",
+    "postcss": "^8.2.6",
+    "prettier": "^2.2.1",
+    "resolve-url-loader": "^3.0.0",
+    "sass": "^1.17.0",
+    "sass-loader": "11.*",
+    "tailwindcss": "^2.0.3",
+    "vue": "^2.6.6",
+    "vue-template-compiler": "^2.6.6",
+    "webpack": "^5.24.2",
+    "webpack-cli": "^4.5.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Alecaddd/awps.git"
+  },
+  "keywords": [
+    "wordpress",
+    "theme",
+    "starter"
+  ],
+  "author": "Alessandro Castellani <me@alecaddd.com> (https://alecaddd.com)",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/Alecaddd/awps/issues"
+  },
+  "homepage": "https://github.com/Alecaddd/awps#readme",
+  "dependencies": {
+    "@wordpress/scripts": "^13.0.3",
+    "normalize-scss": "^7.0.1",
+    "slick-carousel": "^1.8.1"
+  }
+}
