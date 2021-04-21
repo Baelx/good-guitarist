@@ -61,3 +61,15 @@
   margin: 0;
   padding: 0 20%;
 }
+
+.wp-block-cover {
+  padding: 0 20%;
+}
+
+.wp-block-columns {
+  margin-bottom: 0;
+}
+
+.wp-block-group {
+  padding: 0 10rem;
+}

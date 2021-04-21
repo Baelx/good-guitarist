@@ -22,7 +22,8 @@ h1,
 
 h2,
 .h2 {
-	@include font-size(26px, 32px, 0.36px);
+	@include font-size(3rem, 32px, 0.36px);
+	font-weight: 500;
 
 	@media (max-width: #{$sm}) {
 		@include font-size(20px, 24px, 0.36px);

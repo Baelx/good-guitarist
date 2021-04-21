@@ -30,13 +30,6 @@
 					esc_html( GoodGuitarist\Api\Customizer::text( 'awps_footer_copy_text' ) )
 				);
 			?>
-			<span class="sep"> | </span>
-			<?php
-				/* translators: %1: Theme name. */
-
-				/* translators: %2: Author name. */
-				printf( esc_html__( 'Theme: %1$s by %2$s.', 'good-guitarist' ), 'AWPS', '<a href="http://alecaddd.com/" rel="designer">Alecaddd</a>' );
-			?>
 		</div><!-- .site-info -->
 	</footer><!-- #colophon -->
 </div><!-- #page -->

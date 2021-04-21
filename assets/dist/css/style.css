@@ -5449,9 +5449,10 @@ h1,
 
 h2,
 .h2 {
-  font-size: 26px;
+  font-size: 3rem;
   line-height: 32px;
   letter-spacing: 0.36px;
+  font-weight: 500;
 }
 @media (max-width: 600px) {
   h2,
@@ -5723,6 +5724,37 @@ img, img.img-responsive {
 header {
   position: relative;
 }
+header .site-title {
+  text-align: center;
+}
+header .header-navigation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+header .header-navigation #primary-menu {
+  list-style: none;
+  display: flex;
+}
+header .header-navigation #primary-menu .menu-item {
+  font-size: 1.25rem;
+  font-weight: 700;
+  padding: 0 1rem;
+}
+header .header-navigation #primary-menu .menu-item a {
+  color: #000;
+}
+header.transparent-header {
+  position: absolute;
+  z-index: 999;
+  width: 100%;
+}
+header.transparent-header .site-title img {
+  filter: invert(1);
+}
+header.transparent-header .header-navigation #primary-menu .menu-item a {
+  color: #fff;
+}
 
 aside {
   position: relative;
@@ -5735,3 +5767,14 @@ footer {
 /*--------------------------------------------------------------
 # Pages
 --------------------------------------------------------------*/
+.front-page-title {
+  position: absolute;
+  left: -9999px;
+  top: -9999px;
+}
+
+.entry-title {
+  position: absolute;
+  left: -9999px;
+  top: -9999px;
+}

@@ -1,3 +1,52 @@
 header {
 	position: relative;
+
+	.site-title {
+		text-align: center;
+	}
+
+	.header-navigation {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		#primary-menu {
+			list-style: none;
+			display: flex;
+
+			.menu-item {
+				font-size: 1.25rem;
+				font-weight: 700;
+				padding: 0 1rem;
+
+				a {
+					color: #000;
+				}
+			}
+		}
+	}
+
+	&.transparent-header {
+		position: absolute;
+		z-index: 999;
+		width: 100%;
+
+		.site-title {
+			img {
+				filter: invert(1);
+			}
+		}
+
+		.header-navigation {
+
+			#primary-menu {
+
+				.menu-item {
+					a {
+						color: #fff;
+					}
+				}
+			}
+		}
+	}
 }
