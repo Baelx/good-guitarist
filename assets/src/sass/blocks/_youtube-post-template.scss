@@ -1,0 +1,43 @@
+[data-type="gutenberg-good-guitarist/ypt"] {
+
+
+	.youtube-video-url {
+		width: 100%;
+
+		.components-base-control__field {
+
+			input.block-editor-url-input__input {
+				width: 100%;
+				border: 1px solid rgb(88, 193, 228);
+				border-radius: 2px;
+			}
+		}
+	}
+
+	iframe {
+		padding: 2rem;
+	}
+
+	.components-base-control {
+		& > div {
+			display: flex;
+			flex-wrap: wrap;
+
+			label {
+				width: 100%;
+			}
+
+			textarea {
+				width: 100%;
+				min-height: 400px;
+			}
+		}
+	}
+
+}
+
+.wp-block-gutenberg-good-guitarist-ypt {
+	.youtube-post-type-video-description {
+		white-space: pre-wrap;
+	}
+}

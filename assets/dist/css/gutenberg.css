@@ -73,3 +73,30 @@
 .wp-block-group {
   padding: 0 10rem;
 }
+
+[data-type="gutenberg-good-guitarist/ypt"] .youtube-video-url {
+  width: 100%;
+}
+[data-type="gutenberg-good-guitarist/ypt"] .youtube-video-url .components-base-control__field input.block-editor-url-input__input {
+  width: 100%;
+  border: 1px solid #58c1e4;
+  border-radius: 2px;
+}
+[data-type="gutenberg-good-guitarist/ypt"] iframe {
+  padding: 2rem;
+}
+[data-type="gutenberg-good-guitarist/ypt"] .components-base-control > div {
+  display: flex;
+  flex-wrap: wrap;
+}
+[data-type="gutenberg-good-guitarist/ypt"] .components-base-control > div label {
+  width: 100%;
+}
+[data-type="gutenberg-good-guitarist/ypt"] .components-base-control > div textarea {
+  width: 100%;
+  min-height: 400px;
+}
+
+.wp-block-gutenberg-good-guitarist-ypt .youtube-post-type-video-description {
+  white-space: pre-wrap;
+}

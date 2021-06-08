@@ -1,3 +1,43 @@
-footer {
-	position: relative;
+.site-footer {
+	padding: 0;
+	margin-top: 4rem;
+
+	.social-links-footer-section {
+		display: flex;
+		flex-wrap: wrap;
+
+		.social-icon-label-facebook {
+			background-color: blue;
+		}
+
+		.social-icon-label-instagram {
+			background-color: pink;
+		}
+
+		.social-icon-label-patreon {
+			background-color: orange;
+		}
+
+		.social-icon-label-youtube {
+			background-color: red;
+		}
+
+		.social-icon-container {
+			flex: 1 0 25%; /* explanation below */
+			height: 100px;
+			color: #fff;
+			text-align: center;
+
+			i {
+				// color: #fff;
+			}
+
+			.social-icon-label {
+				// color: #fff;
+			}
+		}
+	}
+}
+
+.entry-footer {
 }

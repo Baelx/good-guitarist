@@ -11,9 +11,11 @@ class Extras
      * register default hooks and actions for WordPress
      * @return
      */
-	public function register()
-	{
+	public function register() {
 		add_filter( 'body_class', array( $this, 'body_class' ) );
+		add_filter( 'wp_headers', array( $this, 'additional_headers' ) );
+		error_log('happening?');
+
 	}
 
 	public function body_class( $classes )
@@ -29,5 +31,12 @@ class Extras
 		}
 
 		return $classes;
+	}
+
+	public function additional_headers( $headers ) {
+		error_log('going?');
+
+		$headers['X-Frame-Options'] = 'ALLOW-FROM youtube.com';
+		return $headers;
 	}
 }

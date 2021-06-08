@@ -11,7 +11,7 @@ const {
 } = wp.editor;
 const { IconButton, RangeControl, PanelBody } = wp.components;
 
-registerBlockType( 'gutenberg-awps/awps-cta', {
+registerBlockType( 'gutenberg-good-guitarist/cta', {
 	title: 'Call to Action',
 	icon: 'format-image',
 	category: 'layout',

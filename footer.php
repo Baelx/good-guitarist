@@ -20,7 +20,24 @@
 	?>
 
 	<footer id="colophon" class="site-footer container-fluid" role="contentinfo">
-
+		<section class="social-links-footer-section">
+			<div class="social-icon-container social-icon-label-youtube">
+				<i class="fa"></i>
+				<p class="social-icon-label">Youtube</p>
+			</div>
+			<div class="social-icon-container social-icon-label-facebook">
+				<i class="fa"></i>
+				<p class="social-icon-label">Facebook</p>
+			</div>
+			<div class="social-icon-container social-icon-label-instagram">
+				<i class="fa"></i>
+				<p class="social-icon-label">Instagram</p>
+			</div>
+			<div class="social-icon-container social-icon-label-patreon">
+				<i class="fa"></i>
+				<p class="social-icon-label">Patreon</p>
+			</div>
+		</section>
 		<div class="site-info">
 			<?php
 				printf(

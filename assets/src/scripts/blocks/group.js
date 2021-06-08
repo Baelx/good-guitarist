@@ -6,7 +6,7 @@ const { addFilter } = wp.hooks;
  * or config file.
  */
 const modifyGroupBlock = (settings) => {
-    console.log(settings.name)
+    // console.log(settings.name)
 
 	if (settings.name !== 'core/group') {
         return settings

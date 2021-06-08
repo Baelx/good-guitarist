@@ -78,10 +78,11 @@ class Gutenberg
 	 */
 	public function gutenberg_enqueue()
 	{
-		wp_register_script( 'gutenberg-awps', get_template_directory_uri() . '/assets/dist/js/gutenberg.js', array( 'wp-blocks', 'wp-element', 'wp-editor' ) );
+		wp_enqueue_script( 'gutenberg-good-guitarist-youtube-js', 'https://apis.google.com/js/api.js', array(), );
+		wp_register_script( 'gutenberg-good-guitarist', get_template_directory_uri() . '/assets/dist/js/gutenberg.js', array( 'wp-blocks', 'wp-element', 'wp-editor', 'gutenberg-good-guitarist-youtube-js' ) );
 
-		register_block_type( 'gutenberg-awps/awps-cta', array(
-			'editor_script' => 'gutenberg-awps', // Load script in the editor
+		register_block_type( 'gutenberg-good-guitarist/cta', array(
+			'editor_script' => 'gutenberg-good-guitarist', // Load script in the editor.
 		) );
 	}
 
@@ -91,6 +92,6 @@ class Gutenberg
 	 */
 	public function gutenberg_assets()
 	{
-		wp_enqueue_style( 'gutenberg-awps-cta', get_template_directory_uri() . '/assets/dist/css/gutenberg.css', null );
+		wp_enqueue_style( 'gutenberg-good-guitarist-cta', get_template_directory_uri() . '/assets/dist/css/gutenberg.css', null );
 	}
 }

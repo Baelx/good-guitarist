@@ -16,6 +16,7 @@
 
 	<div class="entry-content">
 		<?php
+			the_title();
 			the_content();
 
 			wp_link_pages(

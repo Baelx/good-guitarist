@@ -63,8 +63,8 @@ class Settings
 	/**
 	 * Constructor
 	 */
-	public function __construct()
-	{}
+	public function __construct() {
+	}
 
 	public function register()
 	{
@@ -104,6 +104,15 @@ class Settings
 		return $this;
 	}
 
+	public function app_enqueue( ) {
+		['script' => array(
+			'font-awesome',
+			'https://use.fontawesome.com/d156204254.js',
+		)];
+
+		// $this->enqueues[ $i ] = $this->enqueue_script( $val, $key );
+	}
+
 	/**
 	 * Call the right WP functions based on the file or string passed
 	 *
@@ -125,7 +134,6 @@ class Settings
 	 */
 	public function admin_scripts( $hook )
 	{
-		// dd( $hook );
 		$this->enqueue_on_pages = ( !empty( $this->enqueue_on_pages ) ) ? $this->enqueue_on_pages : array( $hook );
 
 		if ( in_array( $hook, $this->enqueue_on_pages ) ) :

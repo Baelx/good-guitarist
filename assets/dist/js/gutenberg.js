@@ -64,7 +64,7 @@ var _wp$components = wp.components,
     IconButton = _wp$components.IconButton,
     RangeControl = _wp$components.RangeControl,
     PanelBody = _wp$components.PanelBody;
-registerBlockType('gutenberg-awps/awps-cta', {
+registerBlockType('gutenberg-good-guitarist/cta', {
   title: 'Call to Action',
   icon: 'format-image',
   category: 'layout',
@@ -388,8 +388,7 @@ var addFilter = wp.hooks.addFilter;
  */
 
 var modifyGroupBlock = function modifyGroupBlock(settings) {
-  console.log(settings.name);
-
+  // console.log(settings.name)
   if (settings.name !== 'core/group') {
     return settings;
   }
@@ -405,6 +404,157 @@ addFilter('blocks.registerBlockType', // hook name, very important!
 'good-guitarist/modify-group-block', // your name, very arbitrary!
 modifyGroupBlock // function to run
 );
+
+/***/ }),
+
+/***/ "./assets/src/scripts/blocks/youtube-post-template.js":
+/*!************************************************************!*\
+  !*** ./assets/src/scripts/blocks/youtube-post-template.js ***!
+  \************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _youtube_api_config__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../youtube-api-config */ "./youtube-api-config.js");
+
+var registerBlockType = wp.blocks.registerBlockType;
+var RichText = wp.editor.RichText;
+var _wp$components = wp.components,
+    TextControl = _wp$components.TextControl,
+    TextareaControl = _wp$components.TextareaControl,
+    Button = _wp$components.Button,
+    FocusableIframe = _wp$components.FocusableIframe; // const { withState } = wp.compose;
+
+var _wp$blockEditor = wp.blockEditor,
+    InnerBlocks = _wp$blockEditor.InnerBlocks,
+    URLInput = _wp$blockEditor.URLInput,
+    URLInputButton = _wp$blockEditor.URLInputButton;
+
+registerBlockType('gutenberg-good-guitarist/ypt', {
+  title: 'Youtube Post Template',
+  icon: 'playlist-video',
+  category: 'layout',
+  className: 'youtube-post-type',
+  attributes: {
+    videoDescription: {
+      type: 'string'
+    },
+    videoURL: {
+      type: 'string'
+    },
+    videoID: {
+      type: 'string'
+    }
+  },
+  edit: function edit(_ref) {
+    var attributes = _ref.attributes,
+        className = _ref.className,
+        setAttributes = _ref.setAttributes;
+    var videoID = attributes.videoID,
+        videoURL = attributes.videoURL,
+        videoDescription = attributes.videoDescription;
+
+    var initFetch = function initFetch(videoID) {
+      gapi.load('client', function () {
+        console.log('the vid id', videoID);
+        gapi.client.setApiKey(_youtube_api_config__WEBPACK_IMPORTED_MODULE_1__.youtubeAPIConfig.key);
+        gapi.client.load('youtube', 'v3', function () {
+          gapi.client.youtube.videos.list({
+            part: 'snippet',
+            id: videoID
+          }).execute(function (response) {
+            var fetchedDescription = response.result.items[0].snippet.description;
+            setAttributes({
+              videoDescription: fetchedDescription
+            });
+            console.log(response.result);
+          });
+        });
+      });
+    };
+
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: className
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(URLInput, {
+      value: videoURL,
+      className: "youtube-video-url",
+      onChange: function onChange(url) {
+        var parsedVideoID = null;
+        var videoIDMatch = url.match(/(\?v=)(\w|-)+/g);
+
+        if (videoIDMatch) {
+          parsedVideoID = videoIDMatch[0].replace('?v=', '');
+        }
+
+        setAttributes({
+          videoID: parsedVideoID,
+          videoURL: url
+        });
+        console.log('video url', attributes);
+      }
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(Button, {
+      isSecondary: true,
+      onClick: function onClick() {
+        return initFetch(videoID);
+      }
+    }, "Fetch Video Description"), videoURL ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("iframe", {
+      width: "560",
+      height: "515",
+      src: videoURL,
+      title: "YouTube video player",
+      frameborder: "0",
+      allow: "accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture",
+      allowfullscreen: true
+    }) : '', (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(TextareaControl, {
+      label: "Post content",
+      "class": "youtube-post-type-video-description",
+      value: videoDescription,
+      onChange: function onChange(text) {
+        return setAttributes({
+          videoDescription: text
+        });
+      }
+    }));
+  },
+  save: function save(_ref2) {
+    var attributes = _ref2.attributes,
+        className = _ref2.className;
+    var videoURL = attributes.videoURL,
+        videoDescription = attributes.videoDescription;
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: className
+    }, videoURL ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("iframe", {
+      width: "560",
+      height: "515",
+      src: videoURL,
+      title: "YouTube video player",
+      frameborder: "0",
+      allow: "accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture",
+      allowfullscreen: true
+    }) : '', (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+      "class": "youtube-post-type-video-description"
+    }, videoDescription));
+  }
+});
+
+/***/ }),
+
+/***/ "./youtube-api-config.js":
+/*!*******************************!*\
+  !*** ./youtube-api-config.js ***!
+  \*******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "youtubeAPIConfig": () => (/* binding */ youtubeAPIConfig)
+/* harmony export */ });
+var youtubeAPIConfig = {
+  key: 'AIzaSyAZ1ibASlnCXrLWO5UDk6Hu4hRnFtn_V9o'
+};
 
 /***/ }),
 
@@ -501,6 +651,8 @@ __webpack_require__(/*! ./blocks/cta.js */ "./assets/src/scripts/blocks/cta.js")
 __webpack_require__(/*! ./blocks/cover.js */ "./assets/src/scripts/blocks/cover.js");
 
 __webpack_require__(/*! ./blocks/group.js */ "./assets/src/scripts/blocks/group.js");
+
+__webpack_require__(/*! ./blocks/youtube-post-template.js */ "./assets/src/scripts/blocks/youtube-post-template.js");
 })();
 
 /******/ })()

@@ -5760,20 +5760,37 @@ aside {
   position: relative;
 }
 
-footer {
-  position: relative;
+.site-footer {
+  padding: 0;
+  margin-top: 4rem;
 }
-
+.site-footer .social-links-footer-section {
+  display: flex;
+  flex-wrap: wrap;
+}
+.site-footer .social-links-footer-section .social-icon-label-facebook {
+  background-color: blue;
+}
+.site-footer .social-links-footer-section .social-icon-label-instagram {
+  background-color: pink;
+}
+.site-footer .social-links-footer-section .social-icon-label-patreon {
+  background-color: orange;
+}
+.site-footer .social-links-footer-section .social-icon-label-youtube {
+  background-color: red;
+}
+.site-footer .social-links-footer-section .social-icon-container {
+  flex: 1 0 25%;
+  /* explanation below */
+  height: 100px;
+  color: #fff;
+  text-align: center;
+}
 /*--------------------------------------------------------------
 # Pages
 --------------------------------------------------------------*/
 .front-page-title {
-  position: absolute;
-  left: -9999px;
-  top: -9999px;
-}
-
-.entry-title {
   position: absolute;
   left: -9999px;
   top: -9999px;
