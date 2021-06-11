@@ -438,8 +438,12 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
   category: 'layout',
   className: 'youtube-post-type',
   attributes: {
-    videoDescription: {
+    videoTitle: {
       type: 'string'
+    },
+    videoDescription: {
+      type: 'array',
+      "default": []
     },
     videoURL: {
       type: 'string'
@@ -454,7 +458,9 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
         setAttributes = _ref.setAttributes;
     var videoID = attributes.videoID,
         videoURL = attributes.videoURL,
+        videoTitle = attributes.videoTitle,
         videoDescription = attributes.videoDescription;
+    var videoInfoFetched = false;
 
     var initFetch = function initFetch(videoID) {
       gapi.load('client', function () {
@@ -465,11 +471,21 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
             part: 'snippet',
             id: videoID
           }).execute(function (response) {
-            var fetchedDescription = response.result.items[0].snippet.description;
+            var fetchedTitle = response.result.items[0].snippet.title;
+            var fetchedDescription = response.result.items[0].snippet.description; // let descriptitonWithoutCarriageReturns = fetchedDescription.replace('\r', '');
+            // console.log(descriptitonWithoutCarriageReturns)
+
+            var descriptitonWithAnchorTags = fetchedDescription.replace(/(http:\/\/|https:\/\/).*/g, function (text) {
+              return "<a href=\"".concat(text, "\">").concat(text, "</a>");
+            }); // console.log(descriptitonWithAnchorTags)
+
+            var descriptionArray = descriptitonWithAnchorTags.split("\n"); // console.log(descriptionArray)
+
             setAttributes({
-              videoDescription: fetchedDescription
+              videoTitle: fetchedTitle,
+              videoDescription: descriptitonWithAnchorTags
             });
-            console.log(response.result);
+            videoInfoFetched = true;
           });
         });
       });
@@ -478,6 +494,7 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: className
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(URLInput, {
+      label: "Video URL",
       value: videoURL,
       className: "youtube-video-url",
       onChange: function onChange(url) {
@@ -499,7 +516,10 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
       onClick: function onClick() {
         return initFetch(videoID);
       }
-    }, "Fetch Video Description"), videoURL ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("iframe", {
+    }, "Populate Post"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(TextControl, {
+      label: "Video Title",
+      value: videoTitle
+    }), videoURL ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("iframe", {
       width: "560",
       height: "515",
       src: videoURL,
@@ -507,16 +527,11 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
       frameborder: "0",
       allow: "accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture",
       allowfullscreen: true
-    }) : '', (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(TextareaControl, {
-      label: "Post content",
-      "class": "youtube-post-type-video-description",
-      value: videoDescription,
-      onChange: function onChange(text) {
-        return setAttributes({
-          videoDescription: text
-        });
-      }
-    }));
+    }) : '', (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      "class": "post-content-video-description"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(RichText, {
+      value: videoDescription
+    })));
   },
   save: function save(_ref2) {
     var attributes = _ref2.attributes,
@@ -533,9 +548,11 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
       frameborder: "0",
       allow: "accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture",
       allowfullscreen: true
-    }) : '', (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
-      "class": "youtube-post-type-video-description"
-    }, videoDescription));
+    }) : '', (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      "class": "post-content-video-description"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(RichText.Content, {
+      value: videoDescription
+    })));
   }
 });
 

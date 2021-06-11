@@ -574,6 +574,9 @@ template {
 body {
   background-color: #fff;
 }
+body .youtube-post .entry-header, body .youtube-post .entry-content {
+  padding: 1rem 3rem;
+}
 
 .container,
 .container-fluid,

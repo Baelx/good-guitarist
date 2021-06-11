@@ -22,8 +22,12 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 	category: 'layout',
 	className: 'youtube-post-type',
 	attributes: {
+		videoTitle: {
+			type: 'string'
+		},
 		videoDescription: {
-			type: 'string',
+			type: 'array',
+			default: []
 		},
 		videoURL: {
 			type: 'string',
@@ -38,8 +42,11 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 		const {
 			videoID,
 			videoURL,
+			videoTitle,
 			videoDescription,
 		} = attributes;
+
+		let videoInfoFetched = false;
 
 		const initFetch = (videoID) => {
 			gapi.load('client', () => {
@@ -50,10 +57,19 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 						part: 'snippet',
 						id : videoID
 					}).execute((response) => {
+						let fetchedTitle = response.result.items[0].snippet.title;
 						let fetchedDescription = response.result.items[0].snippet.description;
-
-						setAttributes({videoDescription: fetchedDescription})
-						console.log(response.result)
+						// let descriptitonWithoutCarriageReturns = fetchedDescription.replace('\r', '');
+						// console.log(descriptitonWithoutCarriageReturns)
+						let descriptitonWithAnchorTags = fetchedDescription.replace(/(http:\/\/|https:\/\/).*/g, (text) => (`<a href="${text}">${text}</a>`))
+						// console.log(descriptitonWithAnchorTags)
+						let descriptionArray = descriptitonWithAnchorTags.split("\n");
+						// console.log(descriptionArray)
+						setAttributes({
+							videoTitle: fetchedTitle,
+							videoDescription: descriptitonWithAnchorTags
+						})
+						videoInfoFetched = true;
 					});
 				});
 			})
@@ -62,6 +78,7 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 		return (
 			<div className={ className }>
 				<URLInput
+					label="Video URL"
 					value={ videoURL }
 					className={`youtube-video-url`}
 					onChange={(url) => {
@@ -77,16 +94,13 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 						console.log('video url', attributes)
 					}}
 				/>
-				<Button isSecondary onClick={() => initFetch(videoID)}>Fetch Video Description</Button>
+				<Button isSecondary onClick={() => initFetch(videoID)}>Populate Post</Button>
+				<TextControl label="Video Title" value={videoTitle} />
 				{ videoURL ? <iframe width="560" height="515" src={videoURL} title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> : ''}
-				<TextareaControl
-					label="Post content"
-					class={`youtube-post-type-video-description`}
-					value={ videoDescription }
-					onChange={ ( text ) => setAttributes( { videoDescription: text } ) }
-    			/>
-
-				{ }
+				<div class="post-content-video-description">
+					{/* { videoDescription.map((paragraph) => <RichText value={paragraph} /> )} */}
+					<RichText value={videoDescription} />
+				</div>
 			</div>
 		);
 	},
@@ -100,7 +114,10 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 		return (
 			<div className={ className }>
 				{ videoURL ? <iframe width="560" height="515" src={videoURL} title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> : ''}
-				<p class={`youtube-post-type-video-description`}>{videoDescription}</p>
+				<div class="post-content-video-description">
+					{/* { videoDescription.map((paragraph) => <RichText.Content value={paragraph} />)} */}
+					<RichText.Content value={videoDescription} />
+				</div>
 			</div>
 		);
 	}

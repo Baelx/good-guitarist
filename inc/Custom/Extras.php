@@ -34,9 +34,9 @@ class Extras
 	}
 
 	public function additional_headers( $headers ) {
-		error_log('going?');
+		error_log('going now?');
 
-		$headers['X-Frame-Options'] = 'ALLOW-FROM youtube.com';
+		$headers['X-Frame-Options'] = 'ALLOW-FROM https://youtube.com';
 		return $headers;
 	}
 }
