@@ -420,13 +420,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _youtube_api_config__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../youtube-api-config */ "./youtube-api-config.js");
 
 var registerBlockType = wp.blocks.registerBlockType;
-var RichText = wp.editor.RichText;
+var _wp$editor = wp.editor,
+    RichText = _wp$editor.RichText,
+    InspectorControls = _wp$editor.InspectorControls;
 var _wp$components = wp.components,
     TextControl = _wp$components.TextControl,
     TextareaControl = _wp$components.TextareaControl,
     Button = _wp$components.Button,
-    FocusableIframe = _wp$components.FocusableIframe; // const { withState } = wp.compose;
-
+    FocusableIframe = _wp$components.FocusableIframe,
+    PanelBody = _wp$components.PanelBody,
+    PanelRow = _wp$components.PanelRow,
+    FormToggle = _wp$components.FormToggle,
+    SelectControl = _wp$components.SelectControl,
+    ToggleControl = _wp$components.ToggleControl;
 var _wp$blockEditor = wp.blockEditor,
     InnerBlocks = _wp$blockEditor.InnerBlocks,
     URLInput = _wp$blockEditor.URLInput,
@@ -442,13 +448,24 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
       type: 'string'
     },
     videoDescription: {
-      type: 'array',
-      "default": []
+      type: 'string'
     },
     videoURL: {
       type: 'string'
     },
     videoID: {
+      type: 'string'
+    },
+    showPatreonLink: {
+      type: 'boolean'
+    },
+    showEBookLink: {
+      type: 'boolean'
+    },
+    courseSlotOne: {
+      type: 'string'
+    },
+    courseSlotTwo: {
       type: 'string'
     }
   },
@@ -459,7 +476,11 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
     var videoID = attributes.videoID,
         videoURL = attributes.videoURL,
         videoTitle = attributes.videoTitle,
-        videoDescription = attributes.videoDescription;
+        videoDescription = attributes.videoDescription,
+        showPatreonLink = attributes.showPatreonLink,
+        showEBookLink = attributes.showEBookLink,
+        courseSlotOne = attributes.courseSlotOne,
+        courseSlotTwo = attributes.courseSlotTwo;
     var videoInfoFetched = false;
 
     var initFetch = function initFetch(videoID) {
@@ -472,15 +493,10 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
             id: videoID
           }).execute(function (response) {
             var fetchedTitle = response.result.items[0].snippet.title;
-            var fetchedDescription = response.result.items[0].snippet.description; // let descriptitonWithoutCarriageReturns = fetchedDescription.replace('\r', '');
-            // console.log(descriptitonWithoutCarriageReturns)
-
+            var fetchedDescription = response.result.items[0].snippet.description;
             var descriptitonWithAnchorTags = fetchedDescription.replace(/(http:\/\/|https:\/\/).*/g, function (text) {
               return "<a href=\"".concat(text, "\">").concat(text, "</a>");
-            }); // console.log(descriptitonWithAnchorTags)
-
-            var descriptionArray = descriptitonWithAnchorTags.split("\n"); // console.log(descriptionArray)
-
+            });
             setAttributes({
               videoTitle: fetchedTitle,
               videoDescription: descriptitonWithAnchorTags
@@ -491,9 +507,68 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
       });
     };
 
+    var availableCourses = [{
+      label: 'Select a course',
+      value: null
+    }, {
+      label: 'Beginner Course',
+      value: 'beginner-course'
+    }, {
+      label: 'Intermediate Course',
+      value: 'intermediate-course'
+    }, {
+      label: 'Advanced Course',
+      value: 'advanced-course'
+    }, {
+      label: 'Expert Course',
+      value: 'expert-course'
+    }];
+
+    var CourseArea = function CourseArea() {
+      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null);
+    };
+
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: className
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(URLInput, {
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(InspectorControls, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(PanelBody, {
+      title: "Courses and Links"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(PanelRow, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(ToggleControl, {
+      id: "show-patreon-form-toggle",
+      label: "Show Patreon Link",
+      checked: showPatreonLink,
+      onChange: function onChange(newValue) {
+        return setAttributes({
+          showPatreonLink: newValue
+        });
+      }
+    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(PanelRow, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(ToggleControl, {
+      id: "high-contrast-form-toggle",
+      label: "Show E-Book Link",
+      checked: showEBookLink,
+      onChange: function onChange(newValue) {
+        return setAttributes({
+          showEBookLink: newValue
+        });
+      }
+    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(PanelRow, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(SelectControl, {
+      label: "Course Slot 1",
+      value: courseSlotOne,
+      options: availableCourses,
+      onChange: function onChange(newValue) {
+        return setAttributes({
+          courseSlotOne: newValue
+        });
+      }
+    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(PanelRow, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(SelectControl, {
+      label: "Course slot 2",
+      value: courseSlotTwo,
+      options: availableCourses,
+      onChange: function onChange(newValue) {
+        return setAttributes({
+          courseSlotTwo: newValue
+        });
+      }
+    })))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(URLInput, {
       label: "Video URL",
       value: videoURL,
       className: "youtube-video-url",
@@ -519,7 +594,9 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
     }, "Populate Post"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(TextControl, {
       label: "Video Title",
       value: videoTitle
-    }), videoURL ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("iframe", {
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      "class": "youtube-post-video-area"
+    }, videoURL ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("iframe", {
       width: "560",
       height: "515",
       src: videoURL,
@@ -527,7 +604,7 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
       frameborder: "0",
       allow: "accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture",
       allowfullscreen: true
-    }) : '', (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    }) : null, courseSlotOne ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(CourseArea, null) : null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       "class": "post-content-video-description"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(RichText, {
       value: videoDescription
