@@ -11,8 +11,8 @@ const {
 } = wp.editor;
 const { IconButton, RangeControl, PanelBody } = wp.components;
 
-registerBlockType( 'gutenberg-good-guitarist/cta', {
-	title: 'Call to Action',
+registerBlockType( 'gutenberg-good-guitarist/large-cta', {
+	title: 'Large Call to Action',
 	icon: 'format-image',
 	category: 'layout',
 
@@ -166,7 +166,7 @@ registerBlockType( 'gutenberg-good-guitarist/cta', {
 				backgroundRepeat: 'no-repeat'
 			}}>
 				<div className="cta-overlay" style={{ background: overlayColor, opacity: overlayOpacity }}></div>
-				<div class="cta-content">
+				<div className="cta-content">
 					<RichText
 						key="editable"
 						tagName="h3"
@@ -187,7 +187,7 @@ registerBlockType( 'gutenberg-good-guitarist/cta', {
 						value={body}
 						style={{ color: bodyColor }}
 					/>
-					<div class="cta-content-button">
+					<div className="cta-content-button">
 						<RichText
 							tagName="a"
 							onChange={changeButtonText}
@@ -228,14 +228,14 @@ registerBlockType( 'gutenberg-good-guitarist/cta', {
 				backgroundRepeat: 'no-repeat'
 			}}>
 				<div className="cta-overlay" style={{ background: overlayColor, opacity: overlayOpacity }}></div>
-				<div class="cta-content">
+				<div className="cta-content">
 					<h3 style={{ color: titleColor }}>{title}</h3>
 					<RichText.Content
 						tagName="p"
 						value={body}
 						style={{ color: bodyColor }}
 					/>
-					<div class="cta-content-button">
+					<div className="cta-content-button">
 						<RichText.Content
 							tagName="a"
 							href={url}

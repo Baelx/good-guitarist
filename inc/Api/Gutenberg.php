@@ -81,8 +81,21 @@ class Gutenberg
 		wp_enqueue_script( 'gutenberg-good-guitarist-youtube-js', 'https://apis.google.com/js/api.js', array(), );
 		wp_register_script( 'gutenberg-good-guitarist', get_template_directory_uri() . '/assets/dist/js/gutenberg.js', array( 'wp-blocks', 'wp-element', 'wp-editor', 'gutenberg-good-guitarist-youtube-js' ) );
 
-		register_block_type( 'gutenberg-good-guitarist/cta', array(
+		register_block_type( 'gutenberg-good-guitarist/small-cta', array(
 			'editor_script' => 'gutenberg-good-guitarist', // Load script in the editor.
+		) );
+
+		register_block_type( 'gutenberg-good-guitarist/large-cta', array(
+			'editor_script' => 'gutenberg-good-guitarist', // Load script in the editor.
+		) );
+
+		register_block_type( 'gutenberg-good-guitarist/ypt', array(
+			'editor_script' => 'gutenberg-good-guitarist'
+		) );
+
+		register_block_type( 'gutenberg-good-guitarist/ypt-search', array(
+			'editor_script' => 'gutenberg-good-guitarist',
+			'render_callback' => [ $this, 'youtube_search_block_render' ]
 		) );
 	}
 
@@ -90,8 +103,51 @@ class Gutenberg
 	 * Enqueue scripts and styles of your Gutenberg blocks in the editor
 	 * @return
 	 */
-	public function gutenberg_assets()
-	{
+	public function gutenberg_assets() {
 		wp_enqueue_style( 'gutenberg-good-guitarist-cta', get_template_directory_uri() . '/assets/dist/css/gutenberg.css', null );
+	}
+
+	/**
+	 * Prepare data for view then return HTML string for search block.
+	 *
+	 * @param	array	$att	Block attributes.
+	 * @return	string
+	 */
+	public function youtube_search_block_render( $att ) {
+		$ypt_terms = $this->get_youtube_post_taxonomies_and_terms();
+
+		error_log('hello');
+		error_log( print_r($ypt_terms, true));
+		ob_start();
+		include get_template_directory() . '/views/blocks/ypt-search.php';
+		return ob_get_clean();
+	}
+
+	public function get_youtube_post_taxonomies_and_terms() {
+		$ypt_taxonomies_and_terms = [];
+		$ypt_taxonomies = get_object_taxonomies( 'youtube-post' );
+
+		if ( $ypt_taxonomies ) {
+
+			foreach ( $ypt_taxonomies as $taxonomy ) {
+				$term_list = get_terms([
+					'taxonomy' => $taxonomy,
+					'hide_empty' => false
+				]);
+
+				$term_list = array_map( function( $term_object ) {
+					$term_array = (array) $term_object;
+			$term_array = array_filter( $term_array, function( $key ) {
+						return $key === 'slug' || $key === 'name';
+					}, ARRAY_FILTER_USE_KEY );
+					return $term_array;
+				}, $term_list );
+
+
+
+				$ypt_taxonomies_and_terms[$taxonomy] = $term_list;
+			}
+		}
+		return $ypt_taxonomies_and_terms;
 	}
 }

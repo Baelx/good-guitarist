@@ -20,6 +20,8 @@ const {
 	URLInputButton,
 } = wp.blockEditor;
 import { youtubeAPIConfig } from '../../../../youtube-api-config'
+import ebook1 from '../../../dist/images/ebook-1.png'
+import ebook2 from '../../../dist/images/ebook-2.png'
 
 registerBlockType( 'gutenberg-good-guitarist/ypt', {
 	title: 'Youtube Post Template',
@@ -91,17 +93,24 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 		}
 
 		const availableCourses = [
-			{ label: 'Select a course', value: null },
-			{ label: 'Beginner Course', value: 'beginner-course' },
-			{ label: 'Intermediate Course', value: 'intermediate-course' },
-			{ label: 'Advanced Course', value: 'advanced-course' },
-			{ label: 'Expert Course', value: 'expert-course' }
+			{ label: 'Select a course', value: null, img: ebook1 },
+			{ label: 'Beginner Course', value: 'beginner-course', img: ebook2 },
+			{ label: 'Intermediate Course', value: 'intermediate-course', img: '' },
+			{ label: 'Advanced Course', value: 'advanced-course', img: '' },
+			{ label: 'Expert Course', value: 'expert-course', img: '' }
 		];
 
-		const CourseArea = () => (
-			<div></div>
-		)
-
+		const CourseArea = ( props ) => {
+			const selectedCourse = availableCourses.filter(item => item.value === props.slotContent);
+			const imgSrc = selectedCourse.img;
+			return (
+				<div className="">
+					<img src={ebook1} alt="" />
+					<h3>{props.slotContent}</h3>
+					<button></button>
+				</div>
+			)
+		}
 		return (
 			<div className={ className }>
 				<InspectorControls>
@@ -159,12 +168,12 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 				/>
 				<Button isSecondary onClick={() => initFetch(videoID)}>Populate Post</Button>
 				<TextControl label="Video Title" value={videoTitle} />
-				<div class="youtube-post-video-area">
+				<div className="youtube-post-video-area">
 					{ videoURL ? <iframe width="560" height="515" src={videoURL} title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> : null}
-					{ courseSlotOne ? <CourseArea /> : null }
+					{ courseSlotOne ? <CourseArea slotContent={courseSlotOne} /> : null }
+					{ courseSlotTwo ? <CourseArea slotContent={courseSlotTwo} /> : null}
 				</div>
-				<div class="post-content-video-description">
-					{/* { videoDescription.map((paragraph) => <RichText value={paragraph} /> )} */}
+				<div claclassNamess="post-content-video-description">
 					<RichText value={videoDescription} />
 				</div>
 			</div>
@@ -180,8 +189,7 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 		return (
 			<div className={ className }>
 				{ videoURL ? <iframe width="560" height="515" src={videoURL} title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> : ''}
-				<div class="post-content-video-description">
-					{/* { videoDescription.map((paragraph) => <RichText.Content value={paragraph} />)} */}
+				<div className="post-content-video-description">
 					<RichText.Content value={videoDescription} />
 				</div>
 			</div>

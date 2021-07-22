@@ -39,10 +39,82 @@ function _defineProperty(obj, key, value) {
 
 /***/ }),
 
-/***/ "./assets/src/scripts/blocks/cta.js":
-/*!******************************************!*\
-  !*** ./assets/src/scripts/blocks/cta.js ***!
-  \******************************************/
+/***/ "./assets/src/scripts/blocks/group.js":
+/*!********************************************!*\
+  !*** ./assets/src/scripts/blocks/group.js ***!
+  \********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/esm/defineProperty.js");
+
+
+function ownKeys(object, enumerableOnly) {
+  var keys = Object.keys(object);
+
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    if (enumerableOnly) symbols = symbols.filter(function (sym) {
+      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+    });
+    keys.push.apply(keys, symbols);
+  }
+
+  return keys;
+}
+
+function _objectSpread(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+
+    if (i % 2) {
+      ownKeys(Object(source), true).forEach(function (key) {
+        (0,_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__.default)(target, key, source[key]);
+      });
+    } else if (Object.getOwnPropertyDescriptors) {
+      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+    } else {
+      ownKeys(Object(source)).forEach(function (key) {
+        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+      });
+    }
+  }
+
+  return target;
+}
+
+var addFilter = wp.hooks.addFilter;
+/**
+ * When this function gets run by the addfilter
+ * hook below, the filter passes it the block settings
+ * or config file.
+ */
+
+var modifyGroupBlock = function modifyGroupBlock(settings) {
+  // console.log(settings.name)
+  if (settings.name !== 'core/group') {
+    return settings;
+  }
+
+  var newSettings = _objectSpread({}, settings); // we need to pass along the settings object
+  // even if we haven't modified them!
+
+
+  return settings;
+};
+
+addFilter('blocks.registerBlockType', // hook name, very important!
+'good-guitarist/modify-group-block', // your name, very arbitrary!
+modifyGroupBlock // function to run
+);
+
+/***/ }),
+
+/***/ "./assets/src/scripts/blocks/large-cta.js":
+/*!************************************************!*\
+  !*** ./assets/src/scripts/blocks/large-cta.js ***!
+  \************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -64,8 +136,8 @@ var _wp$components = wp.components,
     IconButton = _wp$components.IconButton,
     RangeControl = _wp$components.RangeControl,
     PanelBody = _wp$components.PanelBody;
-registerBlockType('gutenberg-good-guitarist/cta', {
-  title: 'Call to Action',
+registerBlockType('gutenberg-good-guitarist/large-cta', {
+  title: 'Large Call to Action',
   icon: 'format-image',
   category: 'layout',
   attributes: {
@@ -244,7 +316,7 @@ registerBlockType('gutenberg-good-guitarist/cta', {
         opacity: overlayOpacity
       }
     }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      "class": "cta-content"
+      className: "cta-content"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(RichText, {
       key: "editable",
       tagName: "h3",
@@ -266,7 +338,7 @@ registerBlockType('gutenberg-good-guitarist/cta', {
         color: bodyColor
       }
     }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      "class": "cta-content-button"
+      className: "cta-content-button"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(RichText, {
       tagName: "a",
       onChange: changeButtonText,
@@ -310,7 +382,7 @@ registerBlockType('gutenberg-good-guitarist/cta', {
         opacity: overlayOpacity
       }
     }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      "class": "cta-content"
+      className: "cta-content"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", {
       style: {
         color: titleColor
@@ -322,7 +394,7 @@ registerBlockType('gutenberg-good-guitarist/cta', {
         color: bodyColor
       }
     }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      "class": "cta-content-button"
+      className: "cta-content-button"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(RichText.Content, {
       tagName: "a",
       href: url,
@@ -335,75 +407,53 @@ registerBlockType('gutenberg-good-guitarist/cta', {
 
 /***/ }),
 
-/***/ "./assets/src/scripts/blocks/group.js":
-/*!********************************************!*\
-  !*** ./assets/src/scripts/blocks/group.js ***!
-  \********************************************/
+/***/ "./assets/src/scripts/blocks/small-cta.js":
+/*!************************************************!*\
+  !*** ./assets/src/scripts/blocks/small-cta.js ***!
+  \************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/esm/defineProperty.js");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
 
-
-function ownKeys(object, enumerableOnly) {
-  var keys = Object.keys(object);
-
-  if (Object.getOwnPropertySymbols) {
-    var symbols = Object.getOwnPropertySymbols(object);
-    if (enumerableOnly) symbols = symbols.filter(function (sym) {
-      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-    });
-    keys.push.apply(keys, symbols);
+var registerBlockType = wp.blocks.registerBlockType;
+var Fragment = wp.element.Fragment;
+var _wp$editor = wp.editor,
+    PlainText = _wp$editor.PlainText,
+    RichText = _wp$editor.RichText,
+    MediaUpload = _wp$editor.MediaUpload,
+    BlockControls = _wp$editor.BlockControls,
+    InspectorControls = _wp$editor.InspectorControls,
+    ColorPalette = _wp$editor.ColorPalette,
+    getColorClass = _wp$editor.getColorClass;
+var _wp$components = wp.components,
+    IconButton = _wp$components.IconButton,
+    RangeControl = _wp$components.RangeControl,
+    PanelBody = _wp$components.PanelBody;
+registerBlockType('gutenberg-good-guitarist/small-cta', {
+  title: 'Small Call to Action',
+  icon: 'format-image',
+  category: 'layout',
+  attributes: {},
+  edit: function edit() {
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: ""
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+      src: "",
+      alt: ""
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", null));
+  },
+  save: function save() {
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: ""
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+      src: "",
+      alt: ""
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", null));
   }
-
-  return keys;
-}
-
-function _objectSpread(target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i] != null ? arguments[i] : {};
-
-    if (i % 2) {
-      ownKeys(Object(source), true).forEach(function (key) {
-        (0,_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__.default)(target, key, source[key]);
-      });
-    } else if (Object.getOwnPropertyDescriptors) {
-      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
-    } else {
-      ownKeys(Object(source)).forEach(function (key) {
-        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
-      });
-    }
-  }
-
-  return target;
-}
-
-var addFilter = wp.hooks.addFilter;
-/**
- * When this function gets run by the addfilter
- * hook below, the filter passes it the block settings
- * or config file.
- */
-
-var modifyGroupBlock = function modifyGroupBlock(settings) {
-  // console.log(settings.name)
-  if (settings.name !== 'core/group') {
-    return settings;
-  }
-
-  var newSettings = _objectSpread({}, settings); // we need to pass along the settings object
-  // even if we haven't modified them!
-
-
-  return settings;
-};
-
-addFilter('blocks.registerBlockType', // hook name, very important!
-'good-guitarist/modify-group-block', // your name, very arbitrary!
-modifyGroupBlock // function to run
-);
+});
 
 /***/ }),
 
@@ -418,6 +468,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _youtube_api_config__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../youtube-api-config */ "./youtube-api-config.js");
+/* harmony import */ var _dist_images_ebook_1_png__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../dist/images/ebook-1.png */ "./assets/dist/images/ebook-1.png");
+/* harmony import */ var _dist_images_ebook_2_png__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../dist/images/ebook-2.png */ "./assets/dist/images/ebook-2.png");
 
 var registerBlockType = wp.blocks.registerBlockType;
 var _wp$editor = wp.editor,
@@ -437,6 +489,8 @@ var _wp$blockEditor = wp.blockEditor,
     InnerBlocks = _wp$blockEditor.InnerBlocks,
     URLInput = _wp$blockEditor.URLInput,
     URLInputButton = _wp$blockEditor.URLInputButton;
+
+
 
 registerBlockType('gutenberg-good-guitarist/ypt', {
   title: 'Youtube Post Template',
@@ -509,23 +563,37 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
 
     var availableCourses = [{
       label: 'Select a course',
-      value: null
+      value: null,
+      img: _dist_images_ebook_1_png__WEBPACK_IMPORTED_MODULE_2__.default
     }, {
       label: 'Beginner Course',
-      value: 'beginner-course'
+      value: 'beginner-course',
+      img: _dist_images_ebook_2_png__WEBPACK_IMPORTED_MODULE_3__.default
     }, {
       label: 'Intermediate Course',
-      value: 'intermediate-course'
+      value: 'intermediate-course',
+      img: ''
     }, {
       label: 'Advanced Course',
-      value: 'advanced-course'
+      value: 'advanced-course',
+      img: ''
     }, {
       label: 'Expert Course',
-      value: 'expert-course'
+      value: 'expert-course',
+      img: ''
     }];
 
-    var CourseArea = function CourseArea() {
-      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null);
+    var CourseArea = function CourseArea(props) {
+      var selectedCourse = availableCourses.filter(function (item) {
+        return item.value === props.slotContent;
+      });
+      var imgSrc = selectedCourse.img;
+      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        className: ""
+      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+        src: _dist_images_ebook_1_png__WEBPACK_IMPORTED_MODULE_2__.default,
+        alt: ""
+      }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, props.slotContent), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", null));
     };
 
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -595,7 +663,7 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
       label: "Video Title",
       value: videoTitle
     }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      "class": "youtube-post-video-area"
+      className: "youtube-post-video-area"
     }, videoURL ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("iframe", {
       width: "560",
       height: "515",
@@ -604,8 +672,12 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
       frameborder: "0",
       allow: "accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture",
       allowfullscreen: true
-    }) : null, courseSlotOne ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(CourseArea, null) : null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      "class": "post-content-video-description"
+    }) : null, courseSlotOne ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(CourseArea, {
+      slotContent: courseSlotOne
+    }) : null, courseSlotTwo ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(CourseArea, {
+      slotContent: courseSlotTwo
+    }) : null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      claclassNamess: "post-content-video-description"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(RichText, {
       value: videoDescription
     })));
@@ -626,10 +698,61 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
       allow: "accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture",
       allowfullscreen: true
     }) : '', (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      "class": "post-content-video-description"
+      className: "post-content-video-description"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(RichText.Content, {
       value: videoDescription
     })));
+  }
+});
+
+/***/ }),
+
+/***/ "./assets/src/scripts/blocks/ypt-search.js":
+/*!*************************************************!*\
+  !*** ./assets/src/scripts/blocks/ypt-search.js ***!
+  \*************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _youtube_api_config__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../youtube-api-config */ "./youtube-api-config.js");
+/* harmony import */ var _dist_images_ebook_1_png__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../dist/images/ebook-1.png */ "./assets/dist/images/ebook-1.png");
+/* harmony import */ var _dist_images_ebook_2_png__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../dist/images/ebook-2.png */ "./assets/dist/images/ebook-2.png");
+
+var registerBlockType = wp.blocks.registerBlockType;
+var _wp$editor = wp.editor,
+    RichText = _wp$editor.RichText,
+    InspectorControls = _wp$editor.InspectorControls;
+var _wp$components = wp.components,
+    TextControl = _wp$components.TextControl,
+    TextareaControl = _wp$components.TextareaControl,
+    Button = _wp$components.Button,
+    FocusableIframe = _wp$components.FocusableIframe,
+    PanelBody = _wp$components.PanelBody,
+    PanelRow = _wp$components.PanelRow,
+    FormToggle = _wp$components.FormToggle,
+    SelectControl = _wp$components.SelectControl,
+    ToggleControl = _wp$components.ToggleControl;
+var _wp$blockEditor = wp.blockEditor,
+    InnerBlocks = _wp$blockEditor.InnerBlocks,
+    URLInput = _wp$blockEditor.URLInput,
+    URLInputButton = _wp$blockEditor.URLInputButton;
+
+
+
+registerBlockType('gutenberg-good-guitarist/ypt-search', {
+  title: 'Youtube Post Search Box',
+  icon: 'search',
+  category: 'layout',
+  className: 'youtube-post-type-search',
+  attributes: {},
+  edit: function edit() {
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, "This is the search box for looking at.");
+  },
+  save: function save() {
+    return null;
   }
 });
 
@@ -649,6 +772,36 @@ __webpack_require__.r(__webpack_exports__);
 var youtubeAPIConfig = {
   key: 'AIzaSyAZ1ibASlnCXrLWO5UDk6Hu4hRnFtn_V9o'
 };
+
+/***/ }),
+
+/***/ "./assets/dist/images/ebook-1.png":
+/*!****************************************!*\
+  !*** ./assets/dist/images/ebook-1.png ***!
+  \****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/ebook-1.png?6ceb9c15c59ce949d4303af96df5bb6d");
+
+/***/ }),
+
+/***/ "./assets/dist/images/ebook-2.png":
+/*!****************************************!*\
+  !*** ./assets/dist/images/ebook-2.png ***!
+  \****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/ebook-2.png?e328a82c1e3d80583e70b535caf1e4ed");
 
 /***/ }),
 
@@ -740,13 +893,17 @@ var __webpack_exports__ = {};
 /**
  * Import your Gutenberg custom blocks here
  */
-__webpack_require__(/*! ./blocks/cta.js */ "./assets/src/scripts/blocks/cta.js");
+__webpack_require__(/*! ./blocks/small-cta.js */ "./assets/src/scripts/blocks/small-cta.js");
+
+__webpack_require__(/*! ./blocks/large-cta.js */ "./assets/src/scripts/blocks/large-cta.js");
 
 __webpack_require__(/*! ./blocks/cover.js */ "./assets/src/scripts/blocks/cover.js");
 
 __webpack_require__(/*! ./blocks/group.js */ "./assets/src/scripts/blocks/group.js");
 
 __webpack_require__(/*! ./blocks/youtube-post-template.js */ "./assets/src/scripts/blocks/youtube-post-template.js");
+
+__webpack_require__(/*! ./blocks/ypt-search.js */ "./assets/src/scripts/blocks/ypt-search.js");
 })();
 
 /******/ })()
