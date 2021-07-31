@@ -116,19 +116,21 @@ class Gutenberg
 	public function youtube_search_block_render( $att ) {
 		$ypt_terms = $this->get_youtube_post_taxonomies_and_terms();
 
-		error_log('hello');
-		error_log( print_r($ypt_terms, true));
 		ob_start();
 		include get_template_directory() . '/views/blocks/ypt-search.php';
 		return ob_get_clean();
 	}
 
-	public function get_youtube_post_taxonomies_and_terms() {
+	/**
+	 * Get all taxonomies related to Youtube Posts, with their terms.
+	 *
+	 * @return	array
+	 */
+	public function get_youtube_post_taxonomies_and_terms(): array {
 		$ypt_taxonomies_and_terms = [];
 		$ypt_taxonomies = get_object_taxonomies( 'youtube-post' );
 
 		if ( $ypt_taxonomies ) {
-
 			foreach ( $ypt_taxonomies as $taxonomy ) {
 				$term_list = get_terms([
 					'taxonomy' => $taxonomy,
@@ -137,13 +139,11 @@ class Gutenberg
 
 				$term_list = array_map( function( $term_object ) {
 					$term_array = (array) $term_object;
-			$term_array = array_filter( $term_array, function( $key ) {
+					$term_array = array_filter( $term_array, function( $key ) {
 						return $key === 'slug' || $key === 'name';
 					}, ARRAY_FILTER_USE_KEY );
 					return $term_array;
 				}, $term_list );
-
-
 
 				$ypt_taxonomies_and_terms[$taxonomy] = $term_list;
 			}

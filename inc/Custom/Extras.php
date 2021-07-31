@@ -14,8 +14,6 @@ class Extras
 	public function register() {
 		add_filter( 'body_class', array( $this, 'body_class' ) );
 		add_filter( 'wp_headers', array( $this, 'additional_headers' ) );
-		error_log('happening?');
-
 	}
 
 	public function body_class( $classes )
@@ -33,9 +31,11 @@ class Extras
 		return $classes;
 	}
 
+	/**
+	 * Will this work in the backend? I think it needs to be a different hook.
+	 *
+	 */
 	public function additional_headers( $headers ) {
-		error_log('going now?');
-
 		$headers['X-Frame-Options'] = 'ALLOW-FROM https://youtube.com';
 		return $headers;
 	}

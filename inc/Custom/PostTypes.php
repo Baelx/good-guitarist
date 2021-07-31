@@ -6,15 +6,17 @@ namespace GoodGuitarist\Custom;
  * Custom
  * use it to write your custom functions.
  */
-class PostTypes
-{
+class PostTypes {
 	/**
      * register default hooks and actions for WordPress
      * @return
      */
 	public function register() {
-		add_action( 'init', array( $this, 'custom_post_type'), 10 , 4 );
-		add_action( 'after_switch_theme', array( $this, 'rewrite_flush') );
+		add_action( 'init', [ $this, 'custom_post_type' ], 10 , 4 );
+		add_action( 'after_switch_theme', [ $this, 'rewrite_flush' ] );
+		add_action( 'wp_ajax_ypt_ajax_filter_search', [ $this, 'ypt_ajax_filter_search' ] );
+		add_action( 'wp_ajax_nopriv_ypt_ajax_filter_search', [ $this, 'ypt_ajax_filter_search' ] );
+		error_log('hello');
 	}
 
   /**
@@ -116,4 +118,95 @@ class PostTypes
         // Flush the rewrite rules only on theme activation
         flush_rewrite_rules();
     }
+
+	/**
+	 * Ajax search enqueue for YPT post types.
+	 *
+	 * @return void
+	 */
+	public static function ypt_ajax_filter_search_scripts(): void {
+		wp_enqueue_script( 'ypt_ajax_filter_search', mix('js/yptAjax.js'), ['jquery'], '1.0.0', true );
+		wp_add_inline_script( 'ypt_ajax_filter_search', 'const YPTSEARCHAJAX = ' . json_encode( [
+			'ajax_url' => admin_url( 'admin-ajax.php' ),
+		 ] ), 'before' );
+	}
+
+
+	/**
+	 * Handle an ajax request.
+	 *
+	 * @return void
+	 */
+	public function ypt_ajax_filter_search(): void {
+
+		error_log('is this happening');
+
+		// Set the content type.
+		header("Content-Type: application/json");
+
+		$meta_query = [ 'relation' => 'AND' ];
+		$tax_query = [];
+
+		if( isset( $_GET['songDecade'] ) ) {
+			$songDecade = sanitize_text_field( $_GET['songDecade'] );
+			$tax_query[] = array(
+				'taxonomy' => 'decade',
+				'field' => 'slug',
+				'terms' => $songDecade
+			);
+		}
+
+		$args = array(
+			'post_type' => 'youtube-post',
+			'posts_per_page' => -1,
+			'tax_query' => $tax_query,
+			// 'meta_query' => $meta_query,
+		);
+
+		// If the user didn't type a search, return "all" results.
+		if( isset( $_GET['search'] ) ) {
+			$search = sanitize_text_field( $_GET['songSearchText'] );
+			$search_query = new WP_Query( array(
+				'post_type' => 'youtube-post',
+				'posts_per_page' => -1,
+				'tax_query' => $tax_query,
+				's' => $search
+				// 'meta_query' => $meta_query,
+			) );
+		} else {
+			$search_query = new WP_Query( $args );
+		}
+
+		if ( $search_query->have_posts() ) {
+
+			$result = array();
+
+			while ( $search_query->have_posts() ) {
+				$search_query->the_post();
+
+				$cats = strip_tags( get_the_category_list(", ") );
+				$result[] = array(
+					"id" => get_the_ID(),
+					"title" => get_the_title(),
+					"content" => get_the_content(),
+					"permalink" => get_permalink(),
+					// "year" => get_field('year'),
+					// "rating" => get_field('rating'),
+					// "director" => get_field('director'),
+					// "language" => get_field('language'),
+					// "genre" => $cats,
+					// "poster" => wp_get_attachment_url(get_post_thumbnail_id($post->ID),'full')
+				);
+			}
+			wp_reset_query();
+
+			echo json_encode($result);
+
+		} else {
+			// no posts found
+			wp_send_json(['test' => 'lol']);
+		}
+	}
 }
+
+

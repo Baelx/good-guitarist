@@ -17,9 +17,7 @@ if ( has_blocks( $post->post_content ) ) {
 
     if ( $blocks[0]['blockName'] === 'core/cover' ) {
 		$header_classes .= ' transparent-header';
-    } else {
-		error_log('not sus');
-	}
+    }
 }
 ?>
 <!DOCTYPE html>
