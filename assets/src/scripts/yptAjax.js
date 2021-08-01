@@ -36,8 +36,8 @@ const verifyAndReturnSearchFormData = ( form, songFilterCheckboxes ) => {
 
 (($) => {
 
-	const yptSearchFilters = $("#ypt-ajax-filter-search");
-	const yptSearchFiltersForm = yptSearchFilters.find("form");
+	const yptSearchBlock = $("#ypt-ajax-filter-search");
+	const yptSearchFiltersForm = yptSearchBlock.find("form");
 	const songFilterCheckboxes = [
 		'songDecade',
 		'songChords',
@@ -55,8 +55,25 @@ const verifyAndReturnSearchFormData = ( form, songFilterCheckboxes ) => {
 			url : YPTSEARCHAJAX.ajax_url,
 			data : searchFormData,
 			success : (response) => {
-				console.log("haha sick", response.length);
-
+				console.log("haha sick", response);
+				yptSearchBlock.find("#ypt-ajax-search-results").empty();
+				if (response) {
+					response.forEach((post) => {
+						console.log('the post', post)
+						let html  = "<li class='ypt-result' id='ypt-" + post.id + "'>";
+						html += "  <a href='" + post.permalink + "' title='" + post.title + "'>";
+						html += "	   <img src='" + post.content[0].attrs.videoThumbnail + "' />";
+						html += "      <div class='ypt-info'>";
+						html += "          <h3>" + post.title + "</h3>";
+						html += "      </div>";
+						html += "  </a>";
+						html += "</li>";
+						yptSearchBlock.find("#ypt-ajax-search-results").append(html);
+					})
+				} else {
+					let html  = "<li class='no-result'>No matching movies found. Try a different filter or search keyword</li>";
+					yptSearchBlock.find("#ypt-ajax-search-results").append(html);
+				}
 			}
 		});
 

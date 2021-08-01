@@ -115,6 +115,7 @@ class Gutenberg
 	 */
 	public function youtube_search_block_render( $att ) {
 		$ypt_terms = $this->get_youtube_post_taxonomies_and_terms();
+		$ypt_meta = [ 'difficulty' => 'sus'];
 
 		ob_start();
 		include get_template_directory() . '/views/blocks/ypt-search.php';

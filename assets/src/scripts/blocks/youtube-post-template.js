@@ -1,9 +1,5 @@
 const { registerBlockType } = wp.blocks;
 const {
-	RichText,
-	InspectorControls
-} = wp.editor;
-const {
 	TextControl,
 	TextareaControl,
 	Button,
@@ -15,13 +11,18 @@ const {
 	ToggleControl
 } = wp.components;
 const {
+	RichText,
+	InspectorControls,
 	InnerBlocks,
 	URLInput,
 	URLInputButton,
 } = wp.blockEditor;
+const { useSelect, useDispatch } = wp.data;
+const { __ } = wp.i18n;
 import { youtubeAPIConfig } from '../../../../youtube-api-config'
 import ebook1 from '../../../dist/images/ebook-1.png'
 import ebook2 from '../../../dist/images/ebook-2.png'
+import defaultPreviewImage from '../../../dist/images/good-guitarist-preview-img.png'
 
 registerBlockType( 'gutenberg-good-guitarist/ypt', {
 	title: 'Youtube Post Template',
@@ -34,6 +35,10 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 		},
 		videoDescription: {
 			type: 'string',
+		},
+		videoThumbnail: {
+			type: 'string',
+			default: defaultPreviewImage
 		},
 		videoURL: {
 			type: 'string',
@@ -62,11 +67,14 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 			videoURL,
 			videoTitle,
 			videoDescription,
+			videoThumbnail,
 			showPatreonLink,
 			showEBookLink,
 			courseSlotOne,
 			courseSlotTwo
 		} = attributes;
+		const placeholderPostTitle = '';
+		const { editPost } = useDispatch( 'core/editor', [ placeholderPostTitle ] );
 
 		let videoInfoFetched = false;
 
@@ -79,12 +87,15 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 						part: 'snippet',
 						id : videoID
 					}).execute((response) => {
-						let fetchedTitle = response.result.items[0].snippet.title;
-						let fetchedDescription = response.result.items[0].snippet.description;
-						let descriptitonWithAnchorTags = fetchedDescription.replace(/(http:\/\/|https:\/\/).*/g, (text) => (`<a href="${text}">${text}</a>`))
+						const fetchedTitle = response.result.items[0].snippet.title;
+						const fetchedDescription = response.result.items[0].snippet.description;
+						const fetchedThumbnail = response.result.items[0].snippet.thumbnails.medium.url;
+						const descriptitonWithAnchorTags = fetchedDescription.replace(/(http:\/\/|https:\/\/).*/g, (text) => (`<a href="${text}">${text}</a>`));
+						editPost( { title: fetchedTitle } );
 						setAttributes({
 							videoTitle: fetchedTitle,
-							videoDescription: descriptitonWithAnchorTags
+							videoDescription: descriptitonWithAnchorTags,
+							videoThumbnail: fetchedThumbnail
 						})
 						videoInfoFetched = true;
 					});
@@ -149,27 +160,30 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 						</PanelRow>
 					</PanelBody>
 				</InspectorControls>
-				<URLInput
-					label="Video URL"
-					value={ videoURL }
-					className={`youtube-video-url`}
-					onChange={(url) => {
-						let parsedVideoID = null;
-						let videoIDMatch = url.match(/(\?v=)(\w|-)+/g);
-						if (videoIDMatch) {
-							parsedVideoID = videoIDMatch[0].replace('?v=', '');
-						}
-						setAttributes({
-							videoID: parsedVideoID,
-							videoURL: url
-						})
-						console.log('video url', attributes)
-					}}
-				/>
-				<Button isSecondary onClick={() => initFetch(videoID)}>Populate Post</Button>
-				<TextControl label="Video Title" value={videoTitle} />
+				<form>
+					<URLInput
+						label="Video URL"
+						value={ videoURL }
+						className={`youtube-video-url`}
+						onChange={(url) => {
+							let parsedVideoID = null;
+							let videoIDMatch = url.match(/(\?v=)(\w|-)+/g);
+							if (videoIDMatch) {
+								parsedVideoID = videoIDMatch[0].replace('?v=', '');
+							}
+							setAttributes({
+								videoID: parsedVideoID,
+								videoURL: url
+							})
+						}}
+						/>
+					<Button isSecondary onClick={() => initFetch(videoID)}>Populate Post</Button>
+				</form>
+				{/* <TextControl label="Video Title" value={videoTitle} /> */}
+				<label className="youtube-post-label">{ __('Post Thumbnail') }</label>
+				{ videoThumbnail && <img src={videoThumbnail} />}
 				<div className="youtube-post-video-area">
-					{ videoURL ? <iframe width="560" height="515" src={videoURL} title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> : null}
+					{ ( videoURL && videoInfoFetched ) && <iframe width="560" height="515" src={videoURL} title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> }
 					{ courseSlotOne ? <CourseArea slotContent={courseSlotOne} /> : null }
 					{ courseSlotTwo ? <CourseArea slotContent={courseSlotTwo} /> : null}
 				</div>

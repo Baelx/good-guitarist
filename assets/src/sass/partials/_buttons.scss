@@ -3,9 +3,9 @@ button {
 }
 
 .btn {
-	padding: ($gutter * 1.5) ($gutter * 3);
-	border: none;
-	border-radius: 2px;
+	padding: ($gutter * 1) ($gutter * 3);
+	background-color: #fff;
+	border-radius: 3px;
 
 	@extend .h3;
 

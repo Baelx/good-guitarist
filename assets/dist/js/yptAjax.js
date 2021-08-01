@@ -82,8 +82,8 @@ var getCheckedSongFilters = function getCheckedSongFilters(checkboxName) {
 };
 
 (function ($) {
-  var yptSearchFilters = $("#ypt-ajax-filter-search");
-  var yptSearchFiltersForm = yptSearchFilters.find("form");
+  var yptSearchBlock = $("#ypt-ajax-filter-search");
+  var yptSearchFiltersForm = yptSearchBlock.find("form");
   var songFilterCheckboxes = ['songDecade', 'songChords', 'songGenre', 'songBeginner'];
   yptSearchFiltersForm.on('submit', function (e) {
     e.preventDefault();
@@ -93,7 +93,26 @@ var getCheckedSongFilters = function getCheckedSongFilters(checkboxName) {
       url: YPTSEARCHAJAX.ajax_url,
       data: searchFormData,
       success: function success(response) {
-        console.log("haha sick", response.length);
+        console.log("haha sick", response);
+        yptSearchBlock.find("#ypt-ajax-search-results").empty();
+
+        if (response) {
+          response.forEach(function (post) {
+            console.log('the post', post);
+            var html = "<li class='ypt-result' id='ypt-" + post.id + "'>";
+            html += "  <a href='" + post.permalink + "' title='" + post.title + "'>";
+            html += "	   <img src='" + post.content[0].attrs.videoThumbnail + "' />";
+            html += "      <div class='ypt-info'>";
+            html += "          <h3>" + post.title + "</h3>";
+            html += "      </div>";
+            html += "  </a>";
+            html += "</li>";
+            yptSearchBlock.find("#ypt-ajax-search-results").append(html);
+          });
+        } else {
+          var html = "<li class='no-result'>No matching movies found. Try a different filter or search keyword</li>";
+          yptSearchBlock.find("#ypt-ajax-search-results").append(html);
+        }
       }
     });
   });

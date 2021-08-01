@@ -1,6 +1,5 @@
 [data-type="gutenberg-good-guitarist/ypt"] {
 
-
 	.youtube-video-url {
 		width: 100%;
 
@@ -12,6 +11,12 @@
 				border-radius: 2px;
 			}
 		}
+	}
+
+	.youtube-post-label {
+		display: inline-block;
+		margin-bottom: 8px;
+		font-size: 13px;
 	}
 
 	iframe {

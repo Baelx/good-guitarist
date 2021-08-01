@@ -16,7 +16,6 @@ class PostTypes {
 		add_action( 'after_switch_theme', [ $this, 'rewrite_flush' ] );
 		add_action( 'wp_ajax_ypt_ajax_filter_search', [ $this, 'ypt_ajax_filter_search' ] );
 		add_action( 'wp_ajax_nopriv_ypt_ajax_filter_search', [ $this, 'ypt_ajax_filter_search' ] );
-		error_log('hello');
 	}
 
   /**
@@ -131,6 +130,22 @@ class PostTypes {
 		 ] ), 'before' );
 	}
 
+	/**
+	 * Recursively sanitize text fields within arrays sent from the client.
+	 *
+	 * @param	array	$array	The array to sanitize.
+	 * @return	array
+	 */
+	public function sanitize_array( array $array ): array {
+		foreach ( $array as $key => &$value ) {
+			if ( is_array( $value ) ) {
+				$value = sanitize_array( $value );
+			} else {
+				$value = sanitize_text_field( $value );
+			}
+		}
+		return $array;
+	}
 
 	/**
 	 * Handle an ajax request.
@@ -138,57 +153,57 @@ class PostTypes {
 	 * @return void
 	 */
 	public function ypt_ajax_filter_search(): void {
-
-		error_log('is this happening');
-
 		// Set the content type.
 		header("Content-Type: application/json");
 
 		$meta_query = [ 'relation' => 'AND' ];
-		$tax_query = [];
+		$tax_query = [ 'relation' => 'AND' ];
 
-		if( isset( $_GET['songDecade'] ) ) {
-			$songDecade = sanitize_text_field( $_GET['songDecade'] );
-			$tax_query[] = array(
+		if 	( isset( $_GET['songDecade'] ) ) {
+			$song_decade = $this->sanitize_array( $_GET['songDecade'] );
+			$tax_query[] = [
 				'taxonomy' => 'decade',
 				'field' => 'slug',
-				'terms' => $songDecade
-			);
+				'terms' => $song_decade
+			];
 		}
 
 		$args = array(
 			'post_type' => 'youtube-post',
 			'posts_per_page' => -1,
-			'tax_query' => $tax_query,
+			// 'tax_query' => $tax_query,
 			// 'meta_query' => $meta_query,
 		);
 
+		error_log(print_r($_GET['songSearchText'], true));
+
 		// If the user didn't type a search, return "all" results.
-		if( isset( $_GET['search'] ) ) {
+		if ( isset( $_GET['songSearchText'] ) ) {
 			$search = sanitize_text_field( $_GET['songSearchText'] );
-			$search_query = new WP_Query( array(
+			$search_query_args = [
 				'post_type' => 'youtube-post',
 				'posts_per_page' => -1,
+				's' => $search,
 				'tax_query' => $tax_query,
-				's' => $search
 				// 'meta_query' => $meta_query,
-			) );
+			];
+			$search_query = new \WP_Query( $search_query_args );
 		} else {
-			$search_query = new WP_Query( $args );
+			$search_query = new \WP_Query( $args );
 		}
 
 		if ( $search_query->have_posts() ) {
 
-			$result = array();
+			$result = [];
 
 			while ( $search_query->have_posts() ) {
 				$search_query->the_post();
 
 				$cats = strip_tags( get_the_category_list(", ") );
-				$result[] = array(
+				$result[] = [
 					"id" => get_the_ID(),
 					"title" => get_the_title(),
-					"content" => get_the_content(),
+					"content" => parse_blocks(get_the_content()),
 					"permalink" => get_permalink(),
 					// "year" => get_field('year'),
 					// "rating" => get_field('rating'),
@@ -196,15 +211,15 @@ class PostTypes {
 					// "language" => get_field('language'),
 					// "genre" => $cats,
 					// "poster" => wp_get_attachment_url(get_post_thumbnail_id($post->ID),'full')
-				);
+				];
 			}
 			wp_reset_query();
 
-			echo json_encode($result);
+			wp_send_json($result);
 
 		} else {
 			// no posts found
-			wp_send_json(['test' => 'lol']);
+			wp_send_json('no worky');
 		}
 	}
 }

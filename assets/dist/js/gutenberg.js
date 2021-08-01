@@ -470,11 +470,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _youtube_api_config__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../youtube-api-config */ "./youtube-api-config.js");
 /* harmony import */ var _dist_images_ebook_1_png__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../dist/images/ebook-1.png */ "./assets/dist/images/ebook-1.png");
 /* harmony import */ var _dist_images_ebook_2_png__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../dist/images/ebook-2.png */ "./assets/dist/images/ebook-2.png");
+/* harmony import */ var _dist_images_good_guitarist_preview_img_png__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../dist/images/good-guitarist-preview-img.png */ "./assets/dist/images/good-guitarist-preview-img.png");
 
 var registerBlockType = wp.blocks.registerBlockType;
-var _wp$editor = wp.editor,
-    RichText = _wp$editor.RichText,
-    InspectorControls = _wp$editor.InspectorControls;
 var _wp$components = wp.components,
     TextControl = _wp$components.TextControl,
     TextareaControl = _wp$components.TextareaControl,
@@ -486,9 +484,16 @@ var _wp$components = wp.components,
     SelectControl = _wp$components.SelectControl,
     ToggleControl = _wp$components.ToggleControl;
 var _wp$blockEditor = wp.blockEditor,
+    RichText = _wp$blockEditor.RichText,
+    InspectorControls = _wp$blockEditor.InspectorControls,
     InnerBlocks = _wp$blockEditor.InnerBlocks,
     URLInput = _wp$blockEditor.URLInput,
     URLInputButton = _wp$blockEditor.URLInputButton;
+var _wp$data = wp.data,
+    useSelect = _wp$data.useSelect,
+    useDispatch = _wp$data.useDispatch;
+var __ = wp.i18n.__;
+
 
 
 
@@ -503,6 +508,10 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
     },
     videoDescription: {
       type: 'string'
+    },
+    videoThumbnail: {
+      type: 'string',
+      "default": _dist_images_good_guitarist_preview_img_png__WEBPACK_IMPORTED_MODULE_4__.default
     },
     videoURL: {
       type: 'string'
@@ -531,10 +540,16 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
         videoURL = attributes.videoURL,
         videoTitle = attributes.videoTitle,
         videoDescription = attributes.videoDescription,
+        videoThumbnail = attributes.videoThumbnail,
         showPatreonLink = attributes.showPatreonLink,
         showEBookLink = attributes.showEBookLink,
         courseSlotOne = attributes.courseSlotOne,
         courseSlotTwo = attributes.courseSlotTwo;
+    var placeholderPostTitle = '';
+
+    var _useDispatch = useDispatch('core/editor', [placeholderPostTitle]),
+        editPost = _useDispatch.editPost;
+
     var videoInfoFetched = false;
 
     var initFetch = function initFetch(videoID) {
@@ -548,12 +563,17 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
           }).execute(function (response) {
             var fetchedTitle = response.result.items[0].snippet.title;
             var fetchedDescription = response.result.items[0].snippet.description;
+            var fetchedThumbnail = response.result.items[0].snippet.thumbnails.medium.url;
             var descriptitonWithAnchorTags = fetchedDescription.replace(/(http:\/\/|https:\/\/).*/g, function (text) {
               return "<a href=\"".concat(text, "\">").concat(text, "</a>");
             });
+            editPost({
+              title: fetchedTitle
+            });
             setAttributes({
               videoTitle: fetchedTitle,
-              videoDescription: descriptitonWithAnchorTags
+              videoDescription: descriptitonWithAnchorTags,
+              videoThumbnail: fetchedThumbnail
             });
             videoInfoFetched = true;
           });
@@ -636,7 +656,7 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
           courseSlotTwo: newValue
         });
       }
-    })))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(URLInput, {
+    })))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("form", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(URLInput, {
       label: "Video URL",
       value: videoURL,
       className: "youtube-video-url",
@@ -652,19 +672,19 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
           videoID: parsedVideoID,
           videoURL: url
         });
-        console.log('video url', attributes);
       }
     }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(Button, {
       isSecondary: true,
       onClick: function onClick() {
         return initFetch(videoID);
       }
-    }, "Populate Post"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(TextControl, {
-      label: "Video Title",
-      value: videoTitle
+    }, "Populate Post")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+      className: "youtube-post-label"
+    }, __('Post Thumbnail')), videoThumbnail && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+      src: videoThumbnail
     }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "youtube-post-video-area"
-    }, videoURL ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("iframe", {
+    }, videoURL && videoInfoFetched && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("iframe", {
       width: "560",
       height: "515",
       src: videoURL,
@@ -672,7 +692,7 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
       frameborder: "0",
       allow: "accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture",
       allowfullscreen: true
-    }) : null, courseSlotOne ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(CourseArea, {
+    }), courseSlotOne ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(CourseArea, {
       slotContent: courseSlotOne
     }) : null, courseSlotTwo ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(CourseArea, {
       slotContent: courseSlotTwo
@@ -802,6 +822,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/ebook-2.png?e328a82c1e3d80583e70b535caf1e4ed");
+
+/***/ }),
+
+/***/ "./assets/dist/images/good-guitarist-preview-img.png":
+/*!***********************************************************!*\
+  !*** ./assets/dist/images/good-guitarist-preview-img.png ***!
+  \***********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/good-guitarist-preview-img.png?be9a6975d58dbba41a7fc7e6708652eb");
 
 /***/ }),
 

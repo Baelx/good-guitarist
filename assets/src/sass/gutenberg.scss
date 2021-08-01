@@ -1,3 +1,9 @@
+/** Variables, mixins, etc. **/
+@import 'base/variables';
+@import 'partials/checkbox';
+@import 'partials/radio';
+
+/** All blocks **/
 @import 'blocks/general';
 @import 'blocks/small-cta';
 @import 'blocks/large-cta';
@@ -5,3 +11,4 @@
 @import 'blocks/columns';
 @import 'blocks/group';
 @import 'blocks/youtube-post-template';
+@import 'blocks/youtube-search-block';
