@@ -16,8 +16,11 @@ const {
 	InnerBlocks,
 	URLInput,
 	URLInputButton,
+	useBlockProps
 } = wp.blockEditor;
-const { useSelect, useDispatch } = wp.data;
+// import { useEntityProp } from '@wordpress/core-data';
+const { useSelect, dispatch } = wp.data;
+const { useEntityProp } = wp.coreData;
 const { __ } = wp.i18n;
 import { youtubeAPIConfig } from '../../../../youtube-api-config'
 import ebook1 from '../../../dist/images/ebook-1.png'
@@ -60,7 +63,6 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 		}
 	},
 
-
 	edit({ attributes, className, setAttributes }) {
 		const {
 			videoID,
@@ -73,8 +75,16 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 			courseSlotOne,
 			courseSlotTwo
 		} = attributes;
-		const placeholderPostTitle = '';
-		const { editPost } = useDispatch( 'core/editor', [ placeholderPostTitle ] );
+		// const blockProps = useBlockProps();
+        const postType = useSelect(
+            ( select ) => select( 'core/editor' ).getCurrentPostType(),
+            []
+        );
+        const [ meta, setMeta ] = useEntityProp( 'postType', postType, 'meta' );
+        const metaFieldValue = meta[ 'song_difficulty' ];
+        function updateMetaValue( newValue ) {
+            setMeta( { ...meta, song_difficulty: newValue } );
+        }
 
 		let videoInfoFetched = false;
 
@@ -91,7 +101,9 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 						const fetchedDescription = response.result.items[0].snippet.description;
 						const fetchedThumbnail = response.result.items[0].snippet.thumbnails.medium.url;
 						const descriptitonWithAnchorTags = fetchedDescription.replace(/(http:\/\/|https:\/\/).*/g, (text) => (`<a href="${text}">${text}</a>`));
-						editPost( { title: fetchedTitle } );
+
+						// Update the post title.
+						dispatch('core/editor').editPost({title: fetchedTitle})
 						setAttributes({
 							videoTitle: fetchedTitle,
 							videoDescription: descriptitonWithAnchorTags,
@@ -156,6 +168,25 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 								value={courseSlotTwo}
 								options={availableCourses}
 								onChange={ (newValue) => setAttributes({ courseSlotTwo: newValue }) }
+							/>
+						</PanelRow>
+					</PanelBody>
+					<PanelBody title="Song Difficulty">
+						<PanelRow>
+							<TextControl
+								label="Enter a number from 1 to 50"
+								value={ metaFieldValue }
+								onChange={ updateMetaValue }
+							/>
+						</PanelRow>
+					</PanelBody>
+					<PanelBody title="Contains only one barre chord">
+						<PanelRow>
+							<ToggleControl
+								// id="show-patreon-form-toggle"
+								label='One barre chord song'
+								checked={ showPatreonLink }
+								onChange={(newValue) => setAttributes({ showPatreonLink: newValue }) }
 							/>
 						</PanelRow>
 					</PanelBody>

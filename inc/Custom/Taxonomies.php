@@ -92,6 +92,32 @@ class Taxonomies {
 					'G, C',
 					'G, Em, C, D'
 				]
+			],
+			[
+				'key' => 'lesson-style',
+				'singular_name' => 'Lesson Style',
+				'plural_name' => 'Lesson Styles',
+				'defaults' => [
+					'Strummer',
+					'Lead',
+					'Fingerpicker',
+					'Simple Strummer'
+				]
+			],
+			[
+				'key' => 'lesson-type',
+				'singular_name' => 'Type',
+				'plural_name' => 'Types',
+				'defaults' => [
+					'Chords/Strumming',
+					'Events',
+					'melody',
+					'Fingerstyle',
+					'Barre Chords',
+					'Easy Chords',
+					'Solo',
+					'Concept'
+				]
 			]
 		];
 	}

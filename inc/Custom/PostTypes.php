@@ -27,27 +27,27 @@ class PostTypes {
 		/**
 		 * Add the post types and their details
 		 */
-		$custom_posts = array(
-			array(
-				'slug' => 'artist',
-				'singular' => 'Artist',
-				'plural' => 'Artists',
-				'menu_icon' => 'dashicons-admin-customizer',
-				'menu_position' => 18,
-				'text_domain' => 'good-guitarist',
-				'supports' => array( 'title', /*'editor', 'thumbnail' , 'excerpt', 'author', 'comments'*/ ),
-				'description' => 'Artists Custom Post Type',
-				'public' => true,
-				'publicly_queryable' => true,
-				'show_ui' => true,
-				'show_in_menu' => true,
-				'query_var' => true,
-				'capability_type' => 'post',
-				'has_archive' => true,
-				'hierarchical' => false,
-				'show_in_rest' => true,
-			),
-			array(
+		$custom_posts = [
+			// array(
+			// 	'slug' => 'artist',
+			// 	'singular' => 'Artist',
+			// 	'plural' => 'Artists',
+			// 	'menu_icon' => 'dashicons-admin-customizer',
+			// 	'menu_position' => 18,
+			// 	'text_domain' => 'good-guitarist',
+			// 	'supports' => array( 'title', /*'editor', 'thumbnail' , 'excerpt', 'author', 'comments'*/ ),
+			// 	'description' => 'Artists Custom Post Type',
+			// 	'public' => true,
+			// 	'publicly_queryable' => true,
+			// 	'show_ui' => true,
+			// 	'show_in_menu' => true,
+			// 	'query_var' => true,
+			// 	'capability_type' => 'post',
+			// 	'has_archive' => true,
+			// 	'hierarchical' => false,
+			// 	'show_in_rest' => true,
+			// ),
+			[
 				'slug' => 'youtube-post',
 				'singular' => 'Youtube Post',
 				'plural'  => 'Youtube Posts',
@@ -65,11 +65,12 @@ class PostTypes {
 				'has_archive' => true,
 				'hierarchical' => false,
 				'show_in_rest' => true,
-			),
-		);
+				'supports' => [ 'title', 'editor', 'custom-fields']
+			],
+		];
 
 		foreach ( $custom_posts as $custom_post ) {
-			$labels = array(
+			$labels = [
 				'name'               => _x( $custom_post['plural'], 'post type general name', $custom_post['text_domain'] ),
 				'singular_name'      => _x( $custom_post['singular'], 'post type singular name', $custom_post['text_domain'] ),
 				'menu_name'          => _x( $custom_post['plural'], 'admin menu', $custom_post['text_domain'] ),
@@ -85,8 +86,8 @@ class PostTypes {
 				'parent_item_colon'  => __( 'Parent ' . $custom_post['plural'], $custom_post['text_domain'] ),
 				'not_found'          => __( 'No ' . $custom_post['plural'] . ' found.', $custom_post['text_domain'] ),
 				'not_found_in_trash' => __( 'No ' . $custom_post['plural'] . ' found in Trash.', $custom_post['text_domain'] ),
-			);
-			$args = array(
+			];
+			$args = [
 				'labels'             => $labels,
 				'description'        => __( $custom_post['description'], $custom_post['text_domain'] ),
 				'public'             => $custom_post['public'],
@@ -95,14 +96,14 @@ class PostTypes {
 				'show_in_menu'       => $custom_post['show_in_menu'],
 				'menu_icon'          => $custom_post['menu_icon'],
 				'query_var'          => $custom_post['query_var'],
-				'rewrite'            => array( 'slug' => $custom_post['slug'] ),
+				'rewrite'            => [ 'slug' => $custom_post['slug'] ],
 				'capability_type'    => $custom_post['capability_type'],
 				'has_archive'        => $custom_post['has_archive'],
 				'hierarchical'       => $custom_post['hierarchical'],
 				'menu_position'      => $custom_post['menu_position'],
 				'supports'           => $custom_post['supports'],
 				'show_in_rest'       => $custom_post['show_in_rest'],
-			);
+			];
 
 			register_post_type( $custom_post['slug'], $args );
 		}
@@ -148,6 +149,26 @@ class PostTypes {
 	}
 
 	/**
+	 * Checks if the ajax parameter is set and adds a taxonmy query to the
+	 * WP Query if so. If not, returns the taxonomy query.
+	 *
+	 * @param	string	$tax_slug	The slug of the taxonomy to search in.
+	 * @param	string	$ajax_param The parameter to check for in the GET request.
+	 * @param	array	$tax_query	The passed in taxonomy query.
+	 * @return	array
+	 */
+	private function add_tax_query_from_request( string $tax_slug, string $ajax_param, array $tax_query): array {
+		if 	( isset( $_GET[ $ajax_param ] ) ) {
+			$tax_query[] = [
+				'taxonomy' => $tax_slug,
+				'field' => 'slug',
+				'terms' => $this->sanitize_array( $_GET[ $ajax_param ] )
+			];
+		}
+		return $tax_query;
+	}
+
+	/**
 	 * Handle an ajax request.
 	 *
 	 * @return void
@@ -156,41 +177,37 @@ class PostTypes {
 		// Set the content type.
 		header("Content-Type: application/json");
 
+		$song_chords_filter = [];
 		$meta_query = [ 'relation' => 'AND' ];
 		$tax_query = [ 'relation' => 'AND' ];
 
-		if 	( isset( $_GET['songDecade'] ) ) {
-			$song_decade = $this->sanitize_array( $_GET['songDecade'] );
-			$tax_query[] = [
-				'taxonomy' => 'decade',
-				'field' => 'slug',
-				'terms' => $song_decade
-			];
+		$tax_query = $this->add_tax_query_from_request( 'decade', 'songDecade', $tax_query );
+		$tax_query = $this->add_tax_query_from_request( 'genre', 'songGenre', $tax_query );
+		$tax_query = $this->add_tax_query_from_request( 'chords', 'songChords', $tax_query );
+		$tax_query = $this->add_tax_query_from_request( 'beginner-songs-containing-only', 'songBeginner', $tax_query );
+
+		// Save for later to filter by exact chords.
+		if ( isset( $_GET['songChordsFilterType'] ) ) {
+			$song_chords_filter['chords'] = sanitize_text_field( $_GET['songChords'] );
+			$song_chords_filter['filter-type'] = sanitize_text_field( $_GET['songChordsFilterType'] );
 		}
 
-		$args = array(
+		$search_args = [
 			'post_type' => 'youtube-post',
 			'posts_per_page' => -1,
-			// 'tax_query' => $tax_query,
+			'tax_query' => $tax_query,
 			// 'meta_query' => $meta_query,
-		);
+		];
 
 		error_log(print_r($_GET['songSearchText'], true));
 
-		// If the user didn't type a search, return "all" results.
 		if ( isset( $_GET['songSearchText'] ) ) {
-			$search = sanitize_text_field( $_GET['songSearchText'] );
-			$search_query_args = [
-				'post_type' => 'youtube-post',
-				'posts_per_page' => -1,
-				's' => $search,
-				'tax_query' => $tax_query,
-				// 'meta_query' => $meta_query,
-			];
-			$search_query = new \WP_Query( $search_query_args );
-		} else {
-			$search_query = new \WP_Query( $args );
+			$search_text = sanitize_text_field( $_GET['songSearchText'] );
+			$search_args['s'] = $search_text;
 		}
+
+		// Run the query.
+		$search_query = new \WP_Query( $search_args );
 
 		if ( $search_query->have_posts() ) {
 
@@ -199,21 +216,24 @@ class PostTypes {
 			while ( $search_query->have_posts() ) {
 				$search_query->the_post();
 
-				$cats = strip_tags( get_the_category_list(", ") );
-				$result[] = [
-					"id" => get_the_ID(),
-					"title" => get_the_title(),
-					"content" => parse_blocks(get_the_content()),
-					"permalink" => get_permalink(),
-					// "year" => get_field('year'),
-					// "rating" => get_field('rating'),
-					// "director" => get_field('director'),
-					// "language" => get_field('language'),
-					// "genre" => $cats,
-					// "poster" => wp_get_attachment_url(get_post_thumbnail_id($post->ID),'full')
-				];
+				if ( $song_chords_filter['chords'] && $song_chords_filter['filter-type'] ) {
+					$the_post_chords = get_the_terms( get_the_ID(), 'chords' );
+				}
+
+				if ( ! false ) {
+					$result[] = [
+						"id" => get_the_ID(),
+						"title" => get_the_title(),
+						"content" => parse_blocks(get_the_content()),
+						"permalink" => get_permalink(),
+						// "year" => get_field('year'),
+						// "rating" => get_field('rating'),
+						// "director" => get_field('director'),
+						// "language" => get_field('language'),
+						// "genre" => $cats,
+					];
+				}
 			}
-			wp_reset_query();
 
 			wp_send_json($result);
 
@@ -221,6 +241,7 @@ class PostTypes {
 			// no posts found
 			wp_send_json('no worky');
 		}
+		wp_reset_query();
 	}
 }
 

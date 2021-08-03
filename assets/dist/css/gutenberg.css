@@ -263,8 +263,12 @@
   color: #1e1e9b;
 }
 #ypt-ajax-filter-search form .search-filter {
-  border: none;
+  border-left: none;
+  border-right: none;
+  border-top: none;
   padding: 0;
+  border-bottom: 1px solid #1e1e9b;
+  padding-bottom: 0.75rem;
 }
 #ypt-ajax-filter-search form .search-filter label {
   font-size: 1.1rem;
@@ -277,7 +281,6 @@
   display: inline;
 }
 #ypt-ajax-filter-search form .single-button-filters-container {
-  border-top: 1px solid #1e1e9b;
   padding: 1rem 0;
   margin-top: 1rem;
 }
@@ -293,8 +296,10 @@
 #ypt-ajax-filter-search #ypt-ajax-search-results {
   flex-grow: 1;
   display: flex;
+  flex-wrap: wrap;
   list-style-type: none;
 }
 #ypt-ajax-filter-search #ypt-ajax-search-results .ypt-result {
   max-width: 30%;
+  margin: 0 0.75rem 0.75rem 0.75rem;
 }

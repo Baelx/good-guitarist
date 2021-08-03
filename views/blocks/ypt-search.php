@@ -100,12 +100,12 @@ PostTypes::ypt_ajax_filter_search_scripts();
 						<div class="chord-filter-type-container">
 							<label class="radio" for="chords-include">
 								Include
-								<input type="radio" name="chords-filter-type" id="chords-include">
+								<input type="radio" name="songChordsFilterType" id="chords-include" value="include">
 								<span class="dot"></span>
 							</label>
 							<label class="radio" for="chords-exact">
 								Exact
-								<input type="radio" name="chords-filter-type" id="chords-exact">
+								<input type="radio" name="songChordsFilterType" id="chords-exact" value="exact">
 								<span class="dot"></span>
 							</label>
 						</div>

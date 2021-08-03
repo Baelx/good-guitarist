@@ -1,6 +1,46 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./node_modules/@babel/runtime/helpers/esm/arrayLikeToArray.js":
+/*!*********************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/esm/arrayLikeToArray.js ***!
+  \*********************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ _arrayLikeToArray)
+/* harmony export */ });
+function _arrayLikeToArray(arr, len) {
+  if (len == null || len > arr.length) len = arr.length;
+
+  for (var i = 0, arr2 = new Array(len); i < len; i++) {
+    arr2[i] = arr[i];
+  }
+
+  return arr2;
+}
+
+/***/ }),
+
+/***/ "./node_modules/@babel/runtime/helpers/esm/arrayWithHoles.js":
+/*!*******************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/esm/arrayWithHoles.js ***!
+  \*******************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ _arrayWithHoles)
+/* harmony export */ });
+function _arrayWithHoles(arr) {
+  if (Array.isArray(arr)) return arr;
+}
+
+/***/ }),
+
 /***/ "./node_modules/@babel/runtime/helpers/esm/defineProperty.js":
 /*!*******************************************************************!*\
   !*** ./node_modules/@babel/runtime/helpers/esm/defineProperty.js ***!
@@ -25,6 +65,112 @@ function _defineProperty(obj, key, value) {
   }
 
   return obj;
+}
+
+/***/ }),
+
+/***/ "./node_modules/@babel/runtime/helpers/esm/iterableToArrayLimit.js":
+/*!*************************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/esm/iterableToArrayLimit.js ***!
+  \*************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ _iterableToArrayLimit)
+/* harmony export */ });
+function _iterableToArrayLimit(arr, i) {
+  if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;
+  var _arr = [];
+  var _n = true;
+  var _d = false;
+  var _e = undefined;
+
+  try {
+    for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+      _arr.push(_s.value);
+
+      if (i && _arr.length === i) break;
+    }
+  } catch (err) {
+    _d = true;
+    _e = err;
+  } finally {
+    try {
+      if (!_n && _i["return"] != null) _i["return"]();
+    } finally {
+      if (_d) throw _e;
+    }
+  }
+
+  return _arr;
+}
+
+/***/ }),
+
+/***/ "./node_modules/@babel/runtime/helpers/esm/nonIterableRest.js":
+/*!********************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/esm/nonIterableRest.js ***!
+  \********************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ _nonIterableRest)
+/* harmony export */ });
+function _nonIterableRest() {
+  throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+
+/***/ }),
+
+/***/ "./node_modules/@babel/runtime/helpers/esm/slicedToArray.js":
+/*!******************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/esm/slicedToArray.js ***!
+  \******************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ _slicedToArray)
+/* harmony export */ });
+/* harmony import */ var _arrayWithHoles_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./arrayWithHoles.js */ "./node_modules/@babel/runtime/helpers/esm/arrayWithHoles.js");
+/* harmony import */ var _iterableToArrayLimit_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./iterableToArrayLimit.js */ "./node_modules/@babel/runtime/helpers/esm/iterableToArrayLimit.js");
+/* harmony import */ var _unsupportedIterableToArray_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./unsupportedIterableToArray.js */ "./node_modules/@babel/runtime/helpers/esm/unsupportedIterableToArray.js");
+/* harmony import */ var _nonIterableRest_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./nonIterableRest.js */ "./node_modules/@babel/runtime/helpers/esm/nonIterableRest.js");
+
+
+
+
+function _slicedToArray(arr, i) {
+  return (0,_arrayWithHoles_js__WEBPACK_IMPORTED_MODULE_0__.default)(arr) || (0,_iterableToArrayLimit_js__WEBPACK_IMPORTED_MODULE_1__.default)(arr, i) || (0,_unsupportedIterableToArray_js__WEBPACK_IMPORTED_MODULE_2__.default)(arr, i) || (0,_nonIterableRest_js__WEBPACK_IMPORTED_MODULE_3__.default)();
+}
+
+/***/ }),
+
+/***/ "./node_modules/@babel/runtime/helpers/esm/unsupportedIterableToArray.js":
+/*!*******************************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/esm/unsupportedIterableToArray.js ***!
+  \*******************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ _unsupportedIterableToArray)
+/* harmony export */ });
+/* harmony import */ var _arrayLikeToArray_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./arrayLikeToArray.js */ "./node_modules/@babel/runtime/helpers/esm/arrayLikeToArray.js");
+
+function _unsupportedIterableToArray(o, minLen) {
+  if (!o) return;
+  if (typeof o === "string") return (0,_arrayLikeToArray_js__WEBPACK_IMPORTED_MODULE_0__.default)(o, minLen);
+  var n = Object.prototype.toString.call(o).slice(8, -1);
+  if (n === "Object" && o.constructor) n = o.constructor.name;
+  if (n === "Map" || n === "Set") return Array.from(o);
+  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return (0,_arrayLikeToArray_js__WEBPACK_IMPORTED_MODULE_0__.default)(o, minLen);
 }
 
 /***/ }),
@@ -465,12 +611,51 @@ registerBlockType('gutenberg-good-guitarist/small-cta', {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _youtube_api_config__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../youtube-api-config */ "./youtube-api-config.js");
-/* harmony import */ var _dist_images_ebook_1_png__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../dist/images/ebook-1.png */ "./assets/dist/images/ebook-1.png");
-/* harmony import */ var _dist_images_ebook_2_png__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../dist/images/ebook-2.png */ "./assets/dist/images/ebook-2.png");
-/* harmony import */ var _dist_images_good_guitarist_preview_img_png__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../dist/images/good-guitarist-preview-img.png */ "./assets/dist/images/good-guitarist-preview-img.png");
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/esm/defineProperty.js");
+/* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ "./node_modules/@babel/runtime/helpers/esm/slicedToArray.js");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _youtube_api_config__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../youtube-api-config */ "./youtube-api-config.js");
+/* harmony import */ var _dist_images_ebook_1_png__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../dist/images/ebook-1.png */ "./assets/dist/images/ebook-1.png");
+/* harmony import */ var _dist_images_ebook_2_png__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../dist/images/ebook-2.png */ "./assets/dist/images/ebook-2.png");
+/* harmony import */ var _dist_images_good_guitarist_preview_img_png__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../dist/images/good-guitarist-preview-img.png */ "./assets/dist/images/good-guitarist-preview-img.png");
+
+
+
+
+function ownKeys(object, enumerableOnly) {
+  var keys = Object.keys(object);
+
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    if (enumerableOnly) symbols = symbols.filter(function (sym) {
+      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+    });
+    keys.push.apply(keys, symbols);
+  }
+
+  return keys;
+}
+
+function _objectSpread(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+
+    if (i % 2) {
+      ownKeys(Object(source), true).forEach(function (key) {
+        (0,_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__.default)(target, key, source[key]);
+      });
+    } else if (Object.getOwnPropertyDescriptors) {
+      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+    } else {
+      ownKeys(Object(source)).forEach(function (key) {
+        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+      });
+    }
+  }
+
+  return target;
+}
 
 var registerBlockType = wp.blocks.registerBlockType;
 var _wp$components = wp.components,
@@ -488,10 +673,13 @@ var _wp$blockEditor = wp.blockEditor,
     InspectorControls = _wp$blockEditor.InspectorControls,
     InnerBlocks = _wp$blockEditor.InnerBlocks,
     URLInput = _wp$blockEditor.URLInput,
-    URLInputButton = _wp$blockEditor.URLInputButton;
+    URLInputButton = _wp$blockEditor.URLInputButton,
+    useBlockProps = _wp$blockEditor.useBlockProps; // import { useEntityProp } from '@wordpress/core-data';
+
 var _wp$data = wp.data,
     useSelect = _wp$data.useSelect,
-    useDispatch = _wp$data.useDispatch;
+    dispatch = _wp$data.dispatch;
+var useEntityProp = wp.coreData.useEntityProp;
 var __ = wp.i18n.__;
 
 
@@ -511,7 +699,7 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
     },
     videoThumbnail: {
       type: 'string',
-      "default": _dist_images_good_guitarist_preview_img_png__WEBPACK_IMPORTED_MODULE_4__.default
+      "default": _dist_images_good_guitarist_preview_img_png__WEBPACK_IMPORTED_MODULE_6__.default
     },
     videoURL: {
       type: 'string'
@@ -544,18 +732,31 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
         showPatreonLink = attributes.showPatreonLink,
         showEBookLink = attributes.showEBookLink,
         courseSlotOne = attributes.courseSlotOne,
-        courseSlotTwo = attributes.courseSlotTwo;
-    var placeholderPostTitle = '';
+        courseSlotTwo = attributes.courseSlotTwo; // const blockProps = useBlockProps();
 
-    var _useDispatch = useDispatch('core/editor', [placeholderPostTitle]),
-        editPost = _useDispatch.editPost;
+    var postType = useSelect(function (select) {
+      return select('core/editor').getCurrentPostType();
+    }, []);
+
+    var _useEntityProp = useEntityProp('postType', postType, 'meta'),
+        _useEntityProp2 = (0,_babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_1__.default)(_useEntityProp, 2),
+        meta = _useEntityProp2[0],
+        setMeta = _useEntityProp2[1];
+
+    var metaFieldValue = meta['song_difficulty'];
+
+    function updateMetaValue(newValue) {
+      setMeta(_objectSpread(_objectSpread({}, meta), {}, {
+        song_difficulty: newValue
+      }));
+    }
 
     var videoInfoFetched = false;
 
     var initFetch = function initFetch(videoID) {
       gapi.load('client', function () {
         console.log('the vid id', videoID);
-        gapi.client.setApiKey(_youtube_api_config__WEBPACK_IMPORTED_MODULE_1__.youtubeAPIConfig.key);
+        gapi.client.setApiKey(_youtube_api_config__WEBPACK_IMPORTED_MODULE_3__.youtubeAPIConfig.key);
         gapi.client.load('youtube', 'v3', function () {
           gapi.client.youtube.videos.list({
             part: 'snippet',
@@ -566,8 +767,9 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
             var fetchedThumbnail = response.result.items[0].snippet.thumbnails.medium.url;
             var descriptitonWithAnchorTags = fetchedDescription.replace(/(http:\/\/|https:\/\/).*/g, function (text) {
               return "<a href=\"".concat(text, "\">").concat(text, "</a>");
-            });
-            editPost({
+            }); // Update the post title.
+
+            dispatch('core/editor').editPost({
               title: fetchedTitle
             });
             setAttributes({
@@ -584,11 +786,11 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
     var availableCourses = [{
       label: 'Select a course',
       value: null,
-      img: _dist_images_ebook_1_png__WEBPACK_IMPORTED_MODULE_2__.default
+      img: _dist_images_ebook_1_png__WEBPACK_IMPORTED_MODULE_4__.default
     }, {
       label: 'Beginner Course',
       value: 'beginner-course',
-      img: _dist_images_ebook_2_png__WEBPACK_IMPORTED_MODULE_3__.default
+      img: _dist_images_ebook_2_png__WEBPACK_IMPORTED_MODULE_5__.default
     }, {
       label: 'Intermediate Course',
       value: 'intermediate-course',
@@ -608,19 +810,19 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
         return item.value === props.slotContent;
       });
       var imgSrc = selectedCourse.img;
-      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("div", {
         className: ""
-      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
-        src: _dist_images_ebook_1_png__WEBPACK_IMPORTED_MODULE_2__.default,
+      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("img", {
+        src: _dist_images_ebook_1_png__WEBPACK_IMPORTED_MODULE_4__.default,
         alt: ""
-      }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, props.slotContent), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", null));
+      }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("h3", null, props.slotContent), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("button", null));
     };
 
-    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("div", {
       className: className
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(InspectorControls, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(PanelBody, {
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(InspectorControls, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(PanelBody, {
       title: "Courses and Links"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(PanelRow, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(ToggleControl, {
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(PanelRow, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(ToggleControl, {
       id: "show-patreon-form-toggle",
       label: "Show Patreon Link",
       checked: showPatreonLink,
@@ -629,7 +831,7 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
           showPatreonLink: newValue
         });
       }
-    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(PanelRow, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(ToggleControl, {
+    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(PanelRow, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(ToggleControl, {
       id: "high-contrast-form-toggle",
       label: "Show E-Book Link",
       checked: showEBookLink,
@@ -638,7 +840,7 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
           showEBookLink: newValue
         });
       }
-    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(PanelRow, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(SelectControl, {
+    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(PanelRow, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(SelectControl, {
       label: "Course Slot 1",
       value: courseSlotOne,
       options: availableCourses,
@@ -647,7 +849,7 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
           courseSlotOne: newValue
         });
       }
-    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(PanelRow, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(SelectControl, {
+    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(PanelRow, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(SelectControl, {
       label: "Course slot 2",
       value: courseSlotTwo,
       options: availableCourses,
@@ -656,7 +858,24 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
           courseSlotTwo: newValue
         });
       }
-    })))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("form", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(URLInput, {
+    }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(PanelBody, {
+      title: "Song Difficulty"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(PanelRow, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(TextControl, {
+      label: "Enter a number from 1 to 50",
+      value: metaFieldValue,
+      onChange: updateMetaValue
+    }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(PanelBody, {
+      title: "Contains only one barre chord"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(PanelRow, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(ToggleControl // id="show-patreon-form-toggle"
+    , {
+      label: "One barre chord song",
+      checked: showPatreonLink,
+      onChange: function onChange(newValue) {
+        return setAttributes({
+          showPatreonLink: newValue
+        });
+      }
+    })))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("form", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(URLInput, {
       label: "Video URL",
       value: videoURL,
       className: "youtube-video-url",
@@ -673,18 +892,18 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
           videoURL: url
         });
       }
-    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(Button, {
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(Button, {
       isSecondary: true,
       onClick: function onClick() {
         return initFetch(videoID);
       }
-    }, "Populate Post")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    }, "Populate Post")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("label", {
       className: "youtube-post-label"
-    }, __('Post Thumbnail')), videoThumbnail && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+    }, __('Post Thumbnail')), videoThumbnail && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("img", {
       src: videoThumbnail
-    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("div", {
       className: "youtube-post-video-area"
-    }, videoURL && videoInfoFetched && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("iframe", {
+    }, videoURL && videoInfoFetched && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("iframe", {
       width: "560",
       height: "515",
       src: videoURL,
@@ -692,13 +911,13 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
       frameborder: "0",
       allow: "accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture",
       allowfullscreen: true
-    }), courseSlotOne ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(CourseArea, {
+    }), courseSlotOne ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(CourseArea, {
       slotContent: courseSlotOne
-    }) : null, courseSlotTwo ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(CourseArea, {
+    }) : null, courseSlotTwo ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(CourseArea, {
       slotContent: courseSlotTwo
-    }) : null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    }) : null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("div", {
       claclassNamess: "post-content-video-description"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(RichText, {
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(RichText, {
       value: videoDescription
     })));
   },
@@ -707,9 +926,9 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
         className = _ref2.className;
     var videoURL = attributes.videoURL,
         videoDescription = attributes.videoDescription;
-    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("div", {
       className: className
-    }, videoURL ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("iframe", {
+    }, videoURL ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("iframe", {
       width: "560",
       height: "515",
       src: videoURL,
@@ -717,9 +936,9 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
       frameborder: "0",
       allow: "accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture",
       allowfullscreen: true
-    }) : '', (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    }) : '', (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("div", {
       className: "post-content-video-description"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(RichText.Content, {
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(RichText.Content, {
       value: videoDescription
     })));
   }

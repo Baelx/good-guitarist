@@ -45,12 +45,14 @@ var __webpack_exports__ = {};
 /*!***************************************!*\
   !*** ./assets/src/scripts/yptAjax.js ***!
   \***************************************/
+/* provided dependency */ var $ = __webpack_require__(/*! jquery */ "jquery");
 /* provided dependency */ var jQuery = __webpack_require__(/*! jquery */ "jquery");
 
 /**
  * Add search action and verify the form checkboxes. Return their data.
  *
- * @param {*} form
+ * @param {Element} form
+ * @param {Array|null} songFilterCheckboxes
  * @returns {array}
  */
 
@@ -59,46 +61,60 @@ var verifyAndReturnSearchFormData = function verifyAndReturnSearchFormData(form,
     action: "ypt_ajax_filter_search",
     songSearchText: 0 !== form.find("#songSearchText").val().length ? form.find("#songSearchText").val() : null
   };
-  songFilterCheckboxes.forEach(function (val) {
-    formData[val] = getCheckedSongFilters(val);
-  });
+
+  if (songFilterCheckboxes) {
+    songFilterCheckboxes.forEach(function (val) {
+      formData[val] = getCheckedSongFilters(val);
+    });
+  }
+
   return formData;
 };
 /**
  * Find all the checked song filters and return the selections.
  *
- * @param {string} checkboxName The name of the checkbox fieldset to get data from.
- * @returns {array}
+ * @param {string} inputName The name of the checkbox fieldset to get data from.
+ * @returns {Array}
  */
 
 
-var getCheckedSongFilters = function getCheckedSongFilters(checkboxName) {
-  var checkboxes = document.querySelectorAll("#ypt-ajax-filter-search input[name=\"".concat(checkboxName, "\"]:checked")),
-      values = [];
-  Array.prototype.forEach.call(checkboxes, function (element) {
-    values.push(element.value);
+var getCheckedSongFilters = function getCheckedSongFilters(inputName) {
+  var value = [];
+  var inputs = document.querySelectorAll("#ypt-ajax-filter-search input[name=\"".concat(inputName, "\"]:checked"));
+  Array.prototype.forEach.call(inputs, function (element) {
+    if ('radio' === element.type) {
+      value = element.value;
+    } else if ('checkbox' === element.type) {
+      value.push(element.value);
+    }
   });
-  return values;
+  return value;
 };
+/**
+ * Send the AJAX request to the server. Check if the search results element
+ * can be found before making the request.
+ *
+ * @param {Element} yptSearchResultsElement
+ * @param {Object} searchFormData
+ * @returns {undefined}
+ */
 
-(function ($) {
-  var yptSearchBlock = $("#ypt-ajax-filter-search");
-  var yptSearchFiltersForm = yptSearchBlock.find("form");
-  var songFilterCheckboxes = ['songDecade', 'songChords', 'songGenre', 'songBeginner'];
-  yptSearchFiltersForm.on('submit', function (e) {
-    e.preventDefault();
-    var searchFormData = verifyAndReturnSearchFormData(yptSearchFiltersForm, songFilterCheckboxes);
-    console.log('form data', searchFormData);
+
+var sendAjaxRequest = function sendAjaxRequest(yptSearchResultsElement, searchFormData) {
+  console.log('the datae', searchFormData);
+
+  if (yptSearchResultsElement) {
     $.ajax({
+      // Global variable YPTSEARCHAJAX created by wp_inline_script()
       url: YPTSEARCHAJAX.ajax_url,
       data: searchFormData,
       success: function success(response) {
-        console.log("haha sick", response);
-        yptSearchBlock.find("#ypt-ajax-search-results").empty();
+        console.log("haha sick the response is", response);
+        yptSearchResultsElement.empty();
 
-        if (response) {
+        if (response && response[0] && response[0].hasOwnProperty('id')) {
           response.forEach(function (post) {
-            console.log('the post', post);
+            // console.log('the post', post)
             var html = "<li class='ypt-result' id='ypt-" + post.id + "'>";
             html += "  <a href='" + post.permalink + "' title='" + post.title + "'>";
             html += "	   <img src='" + post.content[0].attrs.videoThumbnail + "' />";
@@ -107,15 +123,37 @@ var getCheckedSongFilters = function getCheckedSongFilters(checkboxName) {
             html += "      </div>";
             html += "  </a>";
             html += "</li>";
-            yptSearchBlock.find("#ypt-ajax-search-results").append(html);
+            yptSearchResultsElement.append(html);
           });
         } else {
-          var html = "<li class='no-result'>No matching movies found. Try a different filter or search keyword</li>";
-          yptSearchBlock.find("#ypt-ajax-search-results").append(html);
+          var html = "<li class='no-result'>No matching songs found. Try a different filter or search keyword</li>";
+          yptSearchResultsElement.append(html);
         }
       }
     });
-  });
+  }
+};
+/**
+ * IIFE.
+ *
+ *
+ */
+
+
+(function ($) {
+  var songFilterCheckboxes = ['songDecade', 'songChords', 'songChordsFilterType', 'songGenre', 'songBeginner'];
+  var yptSearchBlock = $("#ypt-ajax-filter-search");
+  var yptSearchFiltersForm = yptSearchBlock.find("form");
+  var yptSearchResultsElement = yptSearchBlock.find("#ypt-ajax-search-results");
+  yptSearchFiltersForm.on('submit', function (e) {
+    var searchFormData = verifyAndReturnSearchFormData(yptSearchFiltersForm, songFilterCheckboxes);
+    console.log('form data', searchFormData);
+    e.preventDefault();
+    sendAjaxRequest(yptSearchResultsElement, searchFormData);
+  }); // Run request on page load for initial results.
+
+  var searchFormData = verifyAndReturnSearchFormData(yptSearchFiltersForm, null);
+  sendAjaxRequest(yptSearchResultsElement, searchFormData);
 })(jQuery);
 })();
 
