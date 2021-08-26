@@ -57,7 +57,7 @@ const sendAjaxRequest = ( yptSearchResultsElement, searchFormData ) => {
 			url : YPTSEARCHAJAX.ajax_url,
 			data : searchFormData,
 			success : (response) => {
-				console.log("haha sick the response is", response);
+				console.log(" the response is", response);
 				yptSearchResultsElement.empty();
 				if (response && response[0] && response[0].hasOwnProperty('id')) {
 					response.forEach((post) => {
@@ -96,6 +96,7 @@ const sendAjaxRequest = ( yptSearchResultsElement, searchFormData ) => {
 		'songChordsFilterType',
 		'songGenre',
 		'songBeginner',
+		'songDifficulty'
 	];
 	const yptSearchBlock = $("#ypt-ajax-filter-search");
 	const yptSearchFiltersForm = yptSearchBlock.find("form");

@@ -193,6 +193,14 @@
   color: #333;
 }
 
+.wp-block-gutenberg-good-guitarist-latest-lessons {
+  display: flex;
+  align-items: center;
+}
+.wp-block-gutenberg-good-guitarist-latest-lessons .lesson-thumbnail {
+  width: 100px;
+}
+
 [data-type="core/cover"] {
   margin: 0;
   padding: 0 20%;

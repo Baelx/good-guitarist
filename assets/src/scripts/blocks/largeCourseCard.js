@@ -11,10 +11,11 @@ const {
 } = wp.editor;
 const { IconButton, RangeControl, PanelBody } = wp.components;
 
-registerBlockType( 'gutenberg-good-guitarist/large-cta', {
-	title: 'Large Call to Action',
+registerBlockType( 'gutenberg-good-guitarist/large-course-card', {
+	title: 'Large Course Card',
 	icon: 'format-image',
 	category: 'layout',
+	className: 'large-course-card',
 
 	attributes: {
 		title: {

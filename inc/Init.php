@@ -26,6 +26,7 @@ final class Init
 			Setup\Enqueue::class,
 			Custom\Taxonomies::class,
 			Custom\PostTypes::class,
+			Custom\MetaBox::class,
 			Custom\Admin::class,
 			Custom\Extras::class,
 			Api\Customizer::class,

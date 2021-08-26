@@ -2,6 +2,7 @@
 
 namespace GoodGuitarist\Custom;
 
+
 /**
  * Custom
  * use it to write your custom functions.
@@ -28,25 +29,25 @@ class PostTypes {
 		 * Add the post types and their details
 		 */
 		$custom_posts = [
-			// array(
-			// 	'slug' => 'artist',
-			// 	'singular' => 'Artist',
-			// 	'plural' => 'Artists',
-			// 	'menu_icon' => 'dashicons-admin-customizer',
-			// 	'menu_position' => 18,
-			// 	'text_domain' => 'good-guitarist',
-			// 	'supports' => array( 'title', /*'editor', 'thumbnail' , 'excerpt', 'author', 'comments'*/ ),
-			// 	'description' => 'Artists Custom Post Type',
-			// 	'public' => true,
-			// 	'publicly_queryable' => true,
-			// 	'show_ui' => true,
-			// 	'show_in_menu' => true,
-			// 	'query_var' => true,
-			// 	'capability_type' => 'post',
-			// 	'has_archive' => true,
-			// 	'hierarchical' => false,
-			// 	'show_in_rest' => true,
-			// ),
+			[
+				'slug' => 'course',
+				'singular' => 'Course',
+				'plural' => 'Courses',
+				'menu_icon' => 'dashicons-admin-customizer',
+				'menu_position' => 18,
+				'text_domain' => 'good-guitarist',
+				'supports' => [ 'title', 'editor', 'thumbnail' , 'excerpt', 'author', 'custom-fields'],
+				'description' => 'Course Custom Post Type',
+				'public' => true,
+				'publicly_queryable' => true,
+				'show_ui' => true,
+				'show_in_menu' => true,
+				'query_var' => true,
+				'capability_type' => 'post',
+				'has_archive' => true,
+				'hierarchical' => false,
+				'show_in_rest' => true,
+			],
 			[
 				'slug' => 'youtube-post',
 				'singular' => 'Youtube Post',
@@ -54,7 +55,7 @@ class PostTypes {
 				'menu_icon' => 'dashicons-video-alt3',
 				'menu_position' => 18,
 				'text_domain' => 'awps',
-				'supports' => array( 'title', 'editor', 'thumbnail' , 'excerpt', 'author', /*'comments'*/ ),
+				'supports' => [ 'title', 'editor', 'thumbnail' , 'excerpt', 'author', 'custom-fields'],
 				'description' => 'Youtube Post Custom Post Type',
 				'public' => true,
 				'publicly_queryable' => true,
@@ -65,7 +66,6 @@ class PostTypes {
 				'has_archive' => true,
 				'hierarchical' => false,
 				'show_in_rest' => true,
-				'supports' => [ 'title', 'editor', 'custom-fields']
 			],
 		];
 
@@ -132,23 +132,6 @@ class PostTypes {
 	}
 
 	/**
-	 * Recursively sanitize text fields within arrays sent from the client.
-	 *
-	 * @param	array	$array	The array to sanitize.
-	 * @return	array
-	 */
-	public function sanitize_array( array $array ): array {
-		foreach ( $array as $key => &$value ) {
-			if ( is_array( $value ) ) {
-				$value = sanitize_array( $value );
-			} else {
-				$value = sanitize_text_field( $value );
-			}
-		}
-		return $array;
-	}
-
-	/**
 	 * Checks if the ajax parameter is set and adds a taxonmy query to the
 	 * WP Query if so. If not, returns the taxonomy query.
 	 *
@@ -162,10 +145,35 @@ class PostTypes {
 			$tax_query[] = [
 				'taxonomy' => $tax_slug,
 				'field' => 'slug',
-				'terms' => $this->sanitize_array( $_GET[ $ajax_param ] )
+				// sanitize_array() moved to Helpers.php
+				'terms' => sanitize_array( $_GET[ $ajax_param ] )
 			];
 		}
 		return $tax_query;
+	}
+
+	private function add_song_difficulty_meta_query() {
+		$meta_query = [];
+
+		$difficulty_to_numerical_range_map = [
+			'very-beginner' 			=> [ 0, 10 ],
+			'beginner'					=> [ 11, 20 ],
+			'beginner-to-intermediate'  => [ 21, 30 ],
+			'intermediate'				=> [ 31, 40 ],
+			'advanced'					=> [ 41, 50 ]
+		];
+
+		if ( isset( $_GET['songDifficulty'] ) ) {
+			$song_difficulty_string = sanitize_text_field( $_GET['songDifficulty'] );
+			$difficulty_range = $difficulty_to_numerical_range_map[$song_difficulty_string];
+
+			$meta_query = array(
+				'key' => 'song-difficulty',
+				'value' => $difficulty_range,
+				'compare' => 'BETWEEN'
+			);
+		}
+		return $meta_query;
 	}
 
 	/**
@@ -181,6 +189,7 @@ class PostTypes {
 		$meta_query = [ 'relation' => 'AND' ];
 		$tax_query = [ 'relation' => 'AND' ];
 
+		// Append additional taxonomy queries to $tax_query.
 		$tax_query = $this->add_tax_query_from_request( 'decade', 'songDecade', $tax_query );
 		$tax_query = $this->add_tax_query_from_request( 'genre', 'songGenre', $tax_query );
 		$tax_query = $this->add_tax_query_from_request( 'chords', 'songChords', $tax_query );
@@ -192,20 +201,14 @@ class PostTypes {
 			$song_chords_filter['filter-type'] = sanitize_text_field( $_GET['songChordsFilterType'] );
 		}
 
+		$meta_query[] = $this->add_song_difficulty_meta_query();
+
 		$search_args = [
 			'post_type' => 'youtube-post',
 			'posts_per_page' => -1,
 			'tax_query' => $tax_query,
 			// 'meta_query' => $meta_query,
 		];
-
-		error_log(print_r($_GET['songSearchText'], true));
-
-		if ( isset( $_GET['songSearchText'] ) ) {
-			$search_text = sanitize_text_field( $_GET['songSearchText'] );
-			$search_args['s'] = $search_text;
-		}
-
 		// Run the query.
 		$search_query = new \WP_Query( $search_args );
 

@@ -109,7 +109,7 @@ var sendAjaxRequest = function sendAjaxRequest(yptSearchResultsElement, searchFo
       url: YPTSEARCHAJAX.ajax_url,
       data: searchFormData,
       success: function success(response) {
-        console.log("haha sick the response is", response);
+        console.log(" the response is", response);
         yptSearchResultsElement.empty();
 
         if (response && response[0] && response[0].hasOwnProperty('id')) {
@@ -141,7 +141,7 @@ var sendAjaxRequest = function sendAjaxRequest(yptSearchResultsElement, searchFo
 
 
 (function ($) {
-  var songFilterCheckboxes = ['songDecade', 'songChords', 'songChordsFilterType', 'songGenre', 'songBeginner'];
+  var songFilterCheckboxes = ['songDecade', 'songChords', 'songChordsFilterType', 'songGenre', 'songBeginner', 'songDifficulty'];
   var yptSearchBlock = $("#ypt-ajax-filter-search");
   var yptSearchFiltersForm = yptSearchBlock.find("form");
   var yptSearchResultsElement = yptSearchBlock.find("#ypt-ajax-search-results");

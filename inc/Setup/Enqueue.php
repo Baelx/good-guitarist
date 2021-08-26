@@ -2,6 +2,7 @@
 
 namespace GoodGuitarist\Setup;
 
+
 /**
  * Enqueue.
  */

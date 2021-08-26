@@ -2,7 +2,6 @@
 
 namespace GoodGuitarist\Custom;
 
-
 class MetaBox {
 
     /**
@@ -11,7 +10,7 @@ class MetaBox {
      * @return	void
      */
     public function register(): void {
-		  add_action( 'init', [ $this, 'register_all_taxonomies' ] );
+		  add_action( 'init', [ $this, 'register_meta_fields' ] );
     }
 
 	public function register_meta_fields() {
@@ -21,22 +20,17 @@ class MetaBox {
 			[
 				'show_in_rest' => true,
 				'single'       => true,
-				'type'         => 'string',
-				'auth_callback' => function() {
-					return current_user_can( 'edit_posts' );
-				},
+				'type'         => 'string'
 			]
 		);
 		register_post_meta(
 			'youtube-post',
-			'song_containing_one_barre',
+			'contains_one_barre',
 			[
 				'show_in_rest' => true,
 				'single'       => true,
-				'type'         => 'string',
-				'auth_callback' => function() {
-					return current_user_can( 'edit_posts' );
-				},
+				'type'         => 'boolean',
+				'default'	   => false
 			]
 		);
 	}

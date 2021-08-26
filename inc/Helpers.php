@@ -117,3 +117,24 @@ if ( ! function_exists('svg') ) {
 		echo get_template_part('assets/dist/svg/inline', $path . '.svg');
 	}
 }
+
+if ( ! function_exists('sanitize_array') ) {
+	/**
+	 * Sanitize an array and the text fields within.
+	 *
+	 * Good for use with processing GET_$ data.
+	 *
+	 */
+	function sanitize_array( $array ) {
+		foreach ( $array as $key => &$value ) {
+			if ( is_array( $value ) ) {
+				$value = sanitize_array($value);
+			}
+			else {
+				$value = sanitize_text_field( $value );
+			}
+		}
+
+		return $array;
+	}
+}

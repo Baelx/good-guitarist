@@ -22,6 +22,7 @@ const {
 const { useSelect, dispatch } = wp.data;
 const { useEntityProp } = wp.coreData;
 const { __ } = wp.i18n;
+import { stringify } from 'postcss';
 import { youtubeAPIConfig } from '../../../../youtube-api-config'
 import ebook1 from '../../../dist/images/ebook-1.png'
 import ebook2 from '../../../dist/images/ebook-2.png'
@@ -76,15 +77,26 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 			courseSlotTwo
 		} = attributes;
 		// const blockProps = useBlockProps();
+
         const postType = useSelect(
             ( select ) => select( 'core/editor' ).getCurrentPostType(),
             []
         );
         const [ meta, setMeta ] = useEntityProp( 'postType', postType, 'meta' );
-        const metaFieldValue = meta[ 'song_difficulty' ];
-        function updateMetaValue( newValue ) {
+
+		const songDifficulty = meta[ 'song_difficulty' ];
+        function updateSongDifficulty( newValue ) {
             setMeta( { ...meta, song_difficulty: newValue } );
         }
+
+		const containsOneBarre = meta[ 'contains_one_barre' ];
+        function updateContainsOneBarre( newValue ) {
+			console.log('new', newValue)
+			// Not working...
+            setMeta( { ...meta, contains_one_barre: ! newValue } );
+        }
+
+		console.log('the meta', meta)
 
 		let videoInfoFetched = false;
 
@@ -175,8 +187,8 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 						<PanelRow>
 							<TextControl
 								label="Enter a number from 1 to 50"
-								value={ metaFieldValue }
-								onChange={ updateMetaValue }
+								value={ songDifficulty }
+								onChange={ updateSongDifficulty }
 							/>
 						</PanelRow>
 					</PanelBody>
@@ -185,8 +197,8 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 							<ToggleControl
 								// id="show-patreon-form-toggle"
 								label='One barre chord song'
-								checked={ showPatreonLink }
-								onChange={(newValue) => setAttributes({ showPatreonLink: newValue }) }
+								checked={ containsOneBarre }
+								onChange={ updateContainsOneBarre }
 							/>
 						</PanelRow>
 					</PanelBody>
