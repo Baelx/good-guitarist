@@ -175,6 +175,114 @@ function _unsupportedIterableToArray(o, minLen) {
 
 /***/ }),
 
+/***/ "./assets/src/scripts/blocks/courseTemplate.js":
+/*!*****************************************************!*\
+  !*** ./assets/src/scripts/blocks/courseTemplate.js ***!
+  \*****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/esm/defineProperty.js");
+/* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ "./node_modules/@babel/runtime/helpers/esm/slicedToArray.js");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
+
+
+
+
+function ownKeys(object, enumerableOnly) {
+  var keys = Object.keys(object);
+
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    if (enumerableOnly) symbols = symbols.filter(function (sym) {
+      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+    });
+    keys.push.apply(keys, symbols);
+  }
+
+  return keys;
+}
+
+function _objectSpread(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+
+    if (i % 2) {
+      ownKeys(Object(source), true).forEach(function (key) {
+        (0,_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__.default)(target, key, source[key]);
+      });
+    } else if (Object.getOwnPropertyDescriptors) {
+      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+    } else {
+      ownKeys(Object(source)).forEach(function (key) {
+        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+      });
+    }
+  }
+
+  return target;
+}
+
+var registerBlockType = wp.blocks.registerBlockType;
+var TextControl = wp.components.TextControl;
+var _wp$blockEditor = wp.blockEditor,
+    RichText = _wp$blockEditor.RichText,
+    useBlockProps = _wp$blockEditor.useBlockProps;
+var useSelect = wp.data.useSelect;
+var useEntityProp = wp.coreData.useEntityProp;
+var __ = wp.i18n.__;
+registerBlockType('myguten/course-template', {
+  title: 'Course Template',
+  icon: 'admin-customizer',
+  category: 'text',
+  attributes: {
+    courseDescription: {
+      type: 'string'
+    }
+  },
+  edit: function edit(_ref) {
+    var setAttributes = _ref.setAttributes,
+        attributes = _ref.attributes;
+    var blockProps = useBlockProps();
+    var postType = useSelect(function (select) {
+      return select('core/editor').getCurrentPostType();
+    }, []);
+
+    var _useEntityProp = useEntityProp('postType', postType, 'meta'),
+        _useEntityProp2 = (0,_babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_1__.default)(_useEntityProp, 2),
+        meta = _useEntityProp2[0],
+        setMeta = _useEntityProp2[1];
+
+    var ctaUrlField = meta['cta_url'];
+
+    function updateCtaUrlField(newValue) {
+      setMeta(_objectSpread(_objectSpread({}, meta), {}, {
+        cta_url: newValue
+      }));
+    }
+
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("div", blockProps, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(RichText, {
+      value: courseDescription,
+      onChange: function onChange(courseDescription) {
+        return setAttributes({
+          courseDescription: courseDescription
+        });
+      }
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(TextControl, {
+      label: "Button URL",
+      value: ctaUrlField,
+      onChange: updateCtaUrlField
+    }));
+  },
+  save: function save() {
+    return null;
+  }
+});
+
+/***/ }),
+
 /***/ "./assets/src/scripts/blocks/cover.js":
 /*!********************************************!*\
   !*** ./assets/src/scripts/blocks/cover.js ***!
@@ -864,6 +972,10 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
     },
     courseSlotTwo: {
       type: 'string'
+    },
+    testBoolean: {
+      type: 'boolean',
+      "default": false
     }
   },
   edit: function edit(_ref) {
@@ -900,10 +1012,8 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
     var containsOneBarre = meta['contains_one_barre'];
 
     function updateContainsOneBarre(newValue) {
-      console.log('new', newValue); // Not working...
-
       setMeta(_objectSpread(_objectSpread({}, meta), {}, {
-        contains_one_barre: !newValue
+        contains_one_barre: newValue
       }));
     }
 
@@ -10932,6 +11042,8 @@ __webpack_require__(/*! ./blocks/smallCourseCard.js */ "./assets/src/scripts/blo
 __webpack_require__(/*! ./blocks/largeCourseCard.js */ "./assets/src/scripts/blocks/largeCourseCard.js");
 
 __webpack_require__(/*! ./blocks/cover.js */ "./assets/src/scripts/blocks/cover.js");
+
+__webpack_require__(/*! ./blocks/courseTemplate.js */ "./assets/src/scripts/blocks/courseTemplate.js");
 
 __webpack_require__(/*! ./blocks/group.js */ "./assets/src/scripts/blocks/group.js");
 

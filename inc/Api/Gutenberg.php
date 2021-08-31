@@ -97,6 +97,10 @@ class Gutenberg
 			'editor_script' => 'gutenberg-good-guitarist'
 		) );
 
+		register_block_type( 'gutenberg-good-guitarist/course-template', array(
+			'editor_script' => 'gutenberg-good-guitarist'
+		) );
+
 		register_block_type( 'gutenberg-good-guitarist/ypt-search', array(
 			'editor_script' => 'gutenberg-good-guitarist',
 			'render_callback' => [ $this, 'youtube_search_block_render' ]

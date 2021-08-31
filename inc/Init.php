@@ -27,6 +27,7 @@ final class Init
 			Custom\Taxonomies::class,
 			Custom\PostTypes::class,
 			Custom\MetaBox::class,
+			Custom\AjaxHandler::class,
 			Custom\Admin::class,
 			Custom\Extras::class,
 			Api\Customizer::class,

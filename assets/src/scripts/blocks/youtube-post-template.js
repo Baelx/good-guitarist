@@ -61,6 +61,10 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 		},
 		courseSlotTwo: {
 			type: 'string'
+		},
+		testBoolean:  {
+			type: 'boolean',
+			default: false
 		}
 	},
 
@@ -91,9 +95,7 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 
 		const containsOneBarre = meta[ 'contains_one_barre' ];
         function updateContainsOneBarre( newValue ) {
-			console.log('new', newValue)
-			// Not working...
-            setMeta( { ...meta, contains_one_barre: ! newValue } );
+            setMeta( { ...meta, contains_one_barre: newValue } );
         }
 
 		console.log('the meta', meta)

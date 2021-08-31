@@ -1,7 +1,7 @@
 <?php
 // var_dump( $ypt_terms )
-use GoodGuitarist\Custom\PostTypes;
-PostTypes::ypt_ajax_filter_search_scripts();
+use GoodGuitarist\Custom\AjaxHandler;
+AjaxHandler::ypt_ajax_filter_search_scripts();
 
 ?>
 <div id="ypt-ajax-filter-search">
@@ -142,9 +142,8 @@ PostTypes::ypt_ajax_filter_search_scripts();
 				<label class="checkbox single-button-filter-label" for="contains-one-barre-chord">
 					Songs that contain only one barre chord
 					<input type="checkbox"
-					name="songBeginner"
-					id="contains-one-barre-chord"
-					value="contains-one-barre-chord"
+							name="songContainsOneBarre"
+							id="contains-one-barre-chord"
 					>
 					<span class="checkmark">
 				</label>

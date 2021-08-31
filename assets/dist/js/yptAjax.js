@@ -82,10 +82,14 @@ var getCheckedSongFilters = function getCheckedSongFilters(inputName) {
   var value = [];
   var inputs = document.querySelectorAll("#ypt-ajax-filter-search input[name=\"".concat(inputName, "\"]:checked"));
   Array.prototype.forEach.call(inputs, function (element) {
+    console.log('the element', element.id);
+
     if ('radio' === element.type) {
       value = element.value;
-    } else if ('checkbox' === element.type) {
+    } else if ('checkbox' === element.type && "contains-one-barre-chord" !== element.id) {
       value.push(element.value);
+    } else if ("contains-one-barre-chord" === element.id) {
+      value = element.checked;
     }
   });
   return value;
@@ -141,7 +145,7 @@ var sendAjaxRequest = function sendAjaxRequest(yptSearchResultsElement, searchFo
 
 
 (function ($) {
-  var songFilterCheckboxes = ['songDecade', 'songChords', 'songChordsFilterType', 'songGenre', 'songBeginner', 'songDifficulty'];
+  var songFilterCheckboxes = ['songDecade', 'songChords', 'songChordsFilterType', 'songGenre', 'songBeginner', 'songDifficulty', 'songContainsOneBarre'];
   var yptSearchBlock = $("#ypt-ajax-filter-search");
   var yptSearchFiltersForm = yptSearchBlock.find("form");
   var yptSearchResultsElement = yptSearchBlock.find("#ypt-ajax-search-results");

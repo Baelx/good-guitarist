@@ -32,10 +32,13 @@ const getCheckedSongFilters = ( inputName ) => {
 	let value = [];
 	const inputs = document.querySelectorAll(`#ypt-ajax-filter-search input[name="${inputName}"]:checked`);
 	Array.prototype.forEach.call(inputs, (element) => {
+		console.log('the element', element.id)
 		if ('radio' === element.type) {
 			value = element.value;
-		} else if ('checkbox' === element.type) {
+		} else if ('checkbox' === element.type && "contains-one-barre-chord" !== element.id) {
 			value.push(element.value);
+		} else if ("contains-one-barre-chord" === element.id) {
+			value = element.checked;
 		}
 	});
 	return value;
@@ -96,7 +99,8 @@ const sendAjaxRequest = ( yptSearchResultsElement, searchFormData ) => {
 		'songChordsFilterType',
 		'songGenre',
 		'songBeginner',
-		'songDifficulty'
+		'songDifficulty',
+		'songContainsOneBarre'
 	];
 	const yptSearchBlock = $("#ypt-ajax-filter-search");
 	const yptSearchFiltersForm = yptSearchBlock.find("form");
