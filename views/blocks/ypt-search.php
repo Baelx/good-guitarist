@@ -1,8 +1,6 @@
 <?php
-// var_dump( $ypt_terms )
 use GoodGuitarist\Custom\AjaxHandler;
 AjaxHandler::ypt_ajax_filter_search_scripts();
-
 ?>
 <div id="ypt-ajax-filter-search">
         <form action="" method="get">

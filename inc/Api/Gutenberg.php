@@ -78,33 +78,38 @@ class Gutenberg
 	 */
 	public function gutenberg_enqueue()
 	{
-		wp_enqueue_script( 'gutenberg-good-guitarist-youtube-js', 'https://apis.google.com/js/api.js', array(), );
-		wp_register_script( 'gutenberg-good-guitarist', get_template_directory_uri() . '/assets/dist/js/gutenberg.js', array( 'wp-blocks', 'wp-element', 'wp-editor', 'gutenberg-good-guitarist-youtube-js' ) );
+		wp_enqueue_script( 'gutenberg-good-guitarist-youtube-js', 'https://apis.google.com/js/api.js', [] );
+		wp_register_script( 'gutenberg-good-guitarist', get_template_directory_uri() . '/assets/dist/js/gutenberg.js', [ 'wp-blocks', 'wp-element', 'wp-editor', 'gutenberg-good-guitarist-youtube-js' ] );
 
-		register_block_type( 'gutenberg-good-guitarist/small-course-card', array(
-			'editor_script' => 'gutenberg-good-guitarist', // Load script in the editor.
-		) );
+		wp_localize_script( 'gutenberg-good-guitarist', 'gutenbergVars', [
+			'image_dir' => get_template_directory_uri() . '/assets/dist/images'
+		]);
 
-		register_block_type( 'gutenberg-good-guitarist/large-course-card', array(
-			'editor_script' => 'gutenberg-good-guitarist', // Load script in the editor.
-		) );
+		register_block_type( 'gutenberg-good-guitarist/small-course-card', [
+			'editor_script' => 'gutenberg-good-guitarist',
+		]);
 
-		register_block_type( 'gutenberg-good-guitarist/latest-lessons', array(
-			'editor_script' => 'gutenberg-good-guitarist', // Load script in the editor.
-		) );
+		register_block_type( 'gutenberg-good-guitarist/large-course-card', [
+			'editor_script' => 'gutenberg-good-guitarist',
+			'render_callback' => [ $this, 'large_course_card_render' ]
+		]);
 
-		register_block_type( 'gutenberg-good-guitarist/ypt', array(
+		register_block_type( 'gutenberg-good-guitarist/latest-lessons', [
+			'editor_script' => 'gutenberg-good-guitarist',
+		]);
+
+		register_block_type( 'gutenberg-good-guitarist/ypt', [
 			'editor_script' => 'gutenberg-good-guitarist'
-		) );
+		]);
 
-		register_block_type( 'gutenberg-good-guitarist/course-template', array(
+		register_block_type( 'gutenberg-good-guitarist/course-template', [
 			'editor_script' => 'gutenberg-good-guitarist'
-		) );
+		]);
 
-		register_block_type( 'gutenberg-good-guitarist/ypt-search', array(
+		register_block_type( 'gutenberg-good-guitarist/ypt-search', [
 			'editor_script' => 'gutenberg-good-guitarist',
 			'render_callback' => [ $this, 'youtube_search_block_render' ]
-		) );
+		]);
 	}
 
 	/**
@@ -158,5 +163,18 @@ class Gutenberg
 			}
 		}
 		return $ypt_taxonomies_and_terms;
+	}
+
+	/**
+	 * Render the large course card block.
+	 *
+	 * @param	array	$atts   	Block attributes.
+	 * @param	string	$content	Block content
+	 */
+	public function large_course_card_render( $atts, $content ) {
+		error_log('sus?');
+		ob_start();
+		include get_template_directory() . '/views/blocks/large-course-card.php';
+		return ob_get_clean();
 	}
 }

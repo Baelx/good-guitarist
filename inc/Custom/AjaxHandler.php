@@ -47,8 +47,11 @@ class AjaxHandler {
 	}
 
 	/**
+	 * Take a string input from the GET request, convert it to a numerical
+	 * array and and populate a meta query for each difficulty range.
 	 *
-	 *
+	 * @param	array	$meta_query		Append to an existing meta query.
+	 * @return	array
 	 */
 	private function add_song_difficulty_meta_query( array $meta_query ): array {
 		$difficulty_to_numerical_range_map = [
@@ -61,6 +64,7 @@ class AjaxHandler {
 
 		if ( isset( $_GET['songDifficulty'] ) ) {
 			$song_difficulties = sanitize_array( $_GET['songDifficulty'] );
+			error_log('hello');
 
 			foreach( $song_difficulties as $difficulty ) {
 				$difficulty_range = $difficulty_to_numerical_range_map[$difficulty];
@@ -68,7 +72,7 @@ class AjaxHandler {
 				$meta_query[] = [
 					'key'     => 'song_difficulty',
 					'value'   => $difficulty_range,
-					'type'    => 'numeric',
+					'type'    => 'NUMERIC',
 					'compare' => 'BETWEEN'
 				];
 			}
@@ -102,7 +106,7 @@ class AjaxHandler {
 		}
 
 		// Add song difficulty meta query.
-		// $meta_query = $this->add_song_difficulty_meta_query( $meta_query );
+		$meta_query = $this->add_song_difficulty_meta_query( $meta_query );
 
 		// Add song contains one barre chord meta query.
 		if ( isset( $_GET['songContainsOneBarre'] ) ) {
@@ -126,9 +130,13 @@ class AjaxHandler {
 		// Run the query.
 		$search_query = new \WP_Query( $search_args );
 
+		// For debugging.
 		if ( $search_query->have_posts() ) {
 
-			$result = [];
+			$result["data"] = [];
+			$result["status"] = 200;
+			// For debugging.
+			$result["search_args"] = $search_args;
 
 			while ( $search_query->have_posts() ) {
 				$search_query->the_post();
@@ -137,26 +145,30 @@ class AjaxHandler {
 					$the_post_chords = get_the_terms( get_the_ID(), 'chords' );
 				}
 
-				if ( ! false ) {
-					$result[] = [
-						"id" => get_the_ID(),
-						"title" => get_the_title(),
-						"content" => parse_blocks(get_the_content()),
-						"permalink" => get_permalink(),
-						// "year" => get_field('year'),
-						// "rating" => get_field('rating'),
-						// "director" => get_field('director'),
-						// "language" => get_field('language'),
-						// "genre" => $cats,
-					];
-				}
+				$result["data"][] = [
+					"id" => get_the_ID(),
+					"title" => get_the_title(),
+					"content" => parse_blocks(get_the_content()),
+					"permalink" => get_permalink(),
+					// "year" => get_field('year'),
+					// "rating" => get_field('rating'),
+					// "director" => get_field('director'),
+					// "language" => get_field('language'),
+					// "genre" => $cats,
+				];
 			}
 
 			wp_send_json($result);
 
 		} else {
-			// no posts found
-			wp_send_json('no worky');
+			// no posts found.
+			$result["data"] = [];
+			$result["status"] = 404;
+
+			// For debugging.
+			$result["search_args"] = $search_args;
+
+			wp_send_json($result);
 		}
 		wp_reset_query();
 	}

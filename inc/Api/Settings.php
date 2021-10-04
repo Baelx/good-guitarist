@@ -10,8 +10,7 @@ namespace GoodGuitarist\Api;
 /**
  * Settings API Class
  */
-class Settings
-{
+class Settings {
 	/**
 	 * Settings array
 	 * @var private array
@@ -64,10 +63,10 @@ class Settings
 	 * Constructor
 	 */
 	public function __construct() {
+
 	}
 
-	public function register()
-	{
+	public function register() {
 		if ( !empty( $this->enqueues ) )
 			add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );
 
@@ -84,8 +83,7 @@ class Settings
 	 * @param  array  $scripts file paths or wp related keywords of embedded files
 	 * @param  array  $pages    pages id where to load scripts
 	 */
-	public function admin_enqueue( $scripts = array(), $pages = array() )
-	{
+	public function admin_enqueue( $scripts = array(), $pages = array() ) {
 		if ( empty( $scripts ) )
 			return;
 
@@ -104,7 +102,10 @@ class Settings
 		return $this;
 	}
 
-	public function app_enqueue( ) {
+	/**
+	 *
+	 */
+	public function app_enqueue() {
 		['script' => array(
 			'font-awesome',
 			'https://use.fontawesome.com/d156204254.js',
@@ -132,8 +133,7 @@ class Settings
 	 *
 	 * @param  var $hook      page id or filename passed by admin_enqueue_scripts
 	 */
-	public function admin_scripts( $hook )
-	{
+	public function admin_scripts( $hook ) {
 		$this->enqueue_on_pages = ( !empty( $this->enqueue_on_pages ) ) ? $this->enqueue_on_pages : array( $hook );
 
 		if ( in_array( $hook, $this->enqueue_on_pages ) ) :
@@ -154,15 +154,13 @@ class Settings
 	 *
 	 * @param  var $pages      array of user's defined pages
 	 */
-	public function addPages( $pages )
-	{
+	public function addPages( $pages ) {
 		$this->admin_pages = $pages;
 
 		return $this;
 	}
 
-	public function withSubPage( $title = null )
-	{
+	public function withSubPage( $title = null ) {
 		if ( empty( $this->admin_pages ) ) {
 			return $this;
 		}
@@ -190,8 +188,7 @@ class Settings
 	 *
 	 * @param  var $pages      array of user's defined pages
 	 */
-	public function addSubPages( $pages )
-	{
+	public function addSubPages( $pages ) {
 		$this->admin_subpages = ( count( $this->admin_subpages ) == 0 ) ? $pages : array_merge( $this->admin_subpages, $pages );
 
 		return $this;
@@ -200,8 +197,7 @@ class Settings
 	/**
 	 * Call WordPress methods to generate Admin pages and subpages
 	 */
-	public function add_admin_menu()
-	{
+	public function add_admin_menu() {
 		foreach( $this->admin_pages as $page ) {
 			add_menu_page( $page['page_title'], $page['menu_title'], $page['capability'], $page['menu_slug'], $page['callback'], $page['icon_url'], $page['position'] );
 		}
@@ -216,8 +212,7 @@ class Settings
 	 *
 	 * @param  var $args      array of user's defined settings
 	 */
-	public function add_settings( $args )
-	{
+	public function add_settings( $args ) {
 		$this->settings = $args;
 
 		return $this;
@@ -228,8 +223,7 @@ class Settings
 	 *
 	 * @param  var $args      array of user's defined sections
 	 */
-	public function add_sections( $args )
-	{
+	public function add_sections( $args ) {
 		$this->sections = $args;
 
 		return $this;
@@ -240,8 +234,7 @@ class Settings
 	 *
 	 * @param  var $args      array of user's defined fields
 	 */
-	public function add_fields( $args )
-	{
+	public function add_fields( $args ) {
 		$this->fields = $args;
 
 		return $this;
@@ -250,8 +243,7 @@ class Settings
 	/**
 	 * Call WordPress methods to register settings, sections, and fields
 	 */
-	public function register_custom_settings()
-	{
+	public function register_custom_settings() {
 		foreach( $this->settings as $setting ) {
 			register_setting( $setting["option_group"], $setting["option_name"], ( isset( $setting["callback"] ) ? $setting["callback"] : '' ) );
 		}

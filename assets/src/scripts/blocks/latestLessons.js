@@ -8,25 +8,25 @@ const {
 	PanelBody,
 	PanelRow,
 } = wp.components;
-const {
-    element: {
-        useState,
-    },
-} = wp;
-
-
-// const {
-// 	URLInput,
-// 	URLInputButton,
-// } = wp.blockEditor;
+// const { useSelect, useEffect } = wp.element;
+const { select, useSelect } = wp.data;
 
 registerBlockType( 'gutenberg-good-guitarist/latest-lessons', {
 	title: 'Latest Lessons',
 	icon: 'list',
 	category: 'layout',
 	className: 'latest-lessons',
-	attributes: {},
-	edit: ({className}) => {
+	attributes: {
+		lessons: {
+			type: 'string',
+		}
+	},
+	edit: ({ attributes, className}) => {
+		const { lessons } = attributes;
+		lessons = useSelect((select) => {
+			return select('core').getEntityRecords('postType', 'post');
+		});
+
 
 		const mockLessons = [
 			{
@@ -59,8 +59,6 @@ registerBlockType( 'gutenberg-good-guitarist/latest-lessons', {
 			},
 		];
 
-		const [scrollPosition, setScrollPosition] = useState(0);
-
 		return (
 			<div className={className}>
 				{scrollPosition > 0 &&
@@ -68,18 +66,18 @@ registerBlockType( 'gutenberg-good-guitarist/latest-lessons', {
 						className="more-lessons-left-arrow"
 						onClick={() => {
 							setScrollPosition( (newScrollPosition) => newScrollPosition - 1)
-							console.log('sup', scrollPosition)
 						}}
 					>
 						<i>{"<"}</i>
 					</Button>
 				}
-				{mockLessons.map((lesson) => (
-					<a href={lesson.slug}>
+				{lessons && lessons.map(() => <div>test</div>)}
+				{/* {lessons && lessons.map((lesson) => (
+					<a href="">
 						<img className="lesson-thumbnail" src={lesson.thumbnail}></img>
 					</a>
-				))}
-				{mockLessons.length > 5 &&
+				))} */}
+				{/* {mockLessons.length > 5 &&
 					<Button
 						className="more-lessons-right-arrow"
 						onClick={() => {
@@ -89,7 +87,7 @@ registerBlockType( 'gutenberg-good-guitarist/latest-lessons', {
 					>
 						<i>{">"}</i>
 					</Button>
-				}
+				} */}
 			</div>
 		)
 	},
@@ -141,8 +139,9 @@ registerBlockType( 'gutenberg-good-guitarist/latest-lessons', {
 						<i>{"<"}</i>
 					</Button>
 				}
-				{mockLessons.map((lesson) => (
-					<a href={lesson.slug}>
+
+				{/* {lessons && lessons.map((lesson) => (
+					<a href="">
 						<img className="lesson-thumbnail" src={lesson.thumbnail}></img>
 					</a>
 				))}
@@ -156,7 +155,7 @@ registerBlockType( 'gutenberg-good-guitarist/latest-lessons', {
 					>
 						<i>{">"}</i>
 					</Button>
-				}
+				} */}
 			</div>
 		)
 	}

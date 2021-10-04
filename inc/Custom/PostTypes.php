@@ -15,7 +15,7 @@ class PostTypes {
 	public function register() {
 		add_action( 'init', [ $this, 'custom_post_type' ], 10 , 4 );
 		add_action( 'after_switch_theme', [ $this, 'rewrite_flush' ] );
-        // add_filter( 'register_post_type_args', [ $this, 'register_post_type_args' ], 10, 2 );
+        add_filter( 'register_post_type_args', [ $this, 'register_post_type_args' ], 10, 2 );
 	}
 
   /**
@@ -30,13 +30,13 @@ class PostTypes {
 		$custom_posts = [
 			[
 				'slug' => 'course',
-				'singular' => 'Course',
-				'plural' => 'Courses',
+				'singular' => 'Course or Ebook',
+				'plural' => 'Courses & Ebooks',
 				'menu_icon' => 'dashicons-admin-customizer',
 				'menu_position' => 18,
 				'text_domain' => 'good-guitarist',
 				'supports' => [ 'title', 'editor', 'thumbnail' , 'excerpt', 'author', 'custom-fields'],
-				'description' => 'Course Custom Post Type',
+				'description' => 'Course & Ebook Custom Post Type',
 				'public' => true,
 				'publicly_queryable' => true,
 				'show_ui' => true,
@@ -128,14 +128,14 @@ class PostTypes {
     public function register_post_type_args( $args, $post_type ) {
 		if ( 'youtube-post' === $post_type ) {
 			$args['template'] = [
-				[
-				'gutenberg-good-guitarist/ypt', []
-				]
+				[ 'gutenberg-good-guitarist/ypt', [] ]
 			];
 		}
 
 		if ( 'course' === $post_type ) {
-
+			$args['template'] = [
+				[ 'gutenberg-good-guitarist/course-template', [] ]
+			];
 		}
 
 		return $args;

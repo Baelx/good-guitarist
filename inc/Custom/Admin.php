@@ -56,8 +56,7 @@ class Admin
 	 * Enqueue scripts in specific admin pages
 	 * @return $this
 	 */
-	private function enqueue()
-	{
+	private function enqueue() {
 		// Scripts multidimensional array with styles and scripts
 		$scripts = array(
 			'script' => array(
@@ -85,8 +84,7 @@ class Admin
 	 * @param  Settings $settings 	a new instance of the Settings API class
 	 * @return
 	 */
-	private function enqueue_faq( Settings $settings )
-	{
+	private function enqueue_faq( Settings $settings ) {
 		// Scripts multidimensional array with styles and scripts
 		$scripts = array(
 			'style' => array(
@@ -105,8 +103,7 @@ class Admin
 	 * Register admin pages and subpages at once
 	 * @return $this
 	 */
-	private function pages()
-	{
+	private function pages() {
 		$admin_pages = array(
 			array(
 				'page_title' => 'AWPS Admin Page',
@@ -140,8 +137,7 @@ class Admin
 	 * Register settings in preparation of custom fields
 	 * @return $this
 	 */
-	private function settings()
-	{
+	private function settings() {
 		// Register settings
 		$args = array(
 			array(

@@ -13,22 +13,17 @@ const {
 const {
 	RichText,
 	InspectorControls,
-	InnerBlocks,
 	URLInput,
-	URLInputButton,
 	useBlockProps
 } = wp.blockEditor;
-// import { useEntityProp } from '@wordpress/core-data';
-const { useSelect, dispatch } = wp.data;
+const { useSelect, useEffect, dispatch, useDispatch } = wp.data;
 const { useEntityProp } = wp.coreData;
+const { useState } = wp.element;
 const { __ } = wp.i18n;
-import { stringify } from 'postcss';
 import { youtubeAPIConfig } from '../../../../youtube-api-config'
-import ebook1 from '../../../dist/images/ebook-1.png'
-import ebook2 from '../../../dist/images/ebook-2.png'
-import defaultPreviewImage from '../../../dist/images/good-guitarist-preview-img.png'
 
 registerBlockType( 'gutenberg-good-guitarist/ypt', {
+	apiVersion: 2,
 	title: 'Youtube Post Template',
 	icon: 'playlist-video',
 	category: 'layout',
@@ -42,7 +37,7 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 		},
 		videoThumbnail: {
 			type: 'string',
-			default: defaultPreviewImage
+			default: gutenbergVars.image_dir + '/good-guitarist-preview-img.png'
 		},
 		videoURL: {
 			type: 'string',
@@ -50,17 +45,11 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 		videoID: {
 			type: 'string',
 		},
-		showPatreonLink: {
-			type: 'boolean'
-		},
-		showEBookLink: {
-			type: 'boolean'
-		},
 		courseSlotOne: {
-			type: 'string'
+			type: 'integer'
 		},
 		courseSlotTwo: {
-			type: 'string'
+			type: 'integer'
 		},
 		testBoolean:  {
 			type: 'boolean',
@@ -75,34 +64,59 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 			videoTitle,
 			videoDescription,
 			videoThumbnail,
-			showPatreonLink,
-			showEBookLink,
 			courseSlotOne,
 			courseSlotTwo
 		} = attributes;
-		// const blockProps = useBlockProps();
+		const blockProps = useBlockProps();
 
-        const postType = useSelect(
-            ( select ) => select( 'core/editor' ).getCurrentPostType(),
-            []
-        );
-        const [ meta, setMeta ] = useEntityProp( 'postType', postType, 'meta' );
+		const courseOptions = [{
+			label: 'None',
+			value: null
+		}];
 
-		const songDifficulty = meta[ 'song_difficulty' ];
-        function updateSongDifficulty( newValue ) {
-            setMeta( { ...meta, song_difficulty: newValue } );
-        }
+		const [fetchStatus, setFetchStatus] = useState({
+			class: 'fetch-message-hidden',
+			message: ''
+		});
 
-		const containsOneBarre = meta[ 'contains_one_barre' ];
-        function updateContainsOneBarre( newValue ) {
-            setMeta( { ...meta, contains_one_barre: newValue } );
-        }
+		const { postMeta, courses } = useSelect( ( select ) => {
+			return {
+				postMeta: select( 'core/editor' ).getEditedPostAttribute( 'meta' ),
+				courses: select( 'core' ).getEntityRecords( 'postType', 'course' ),
+			};
+		} );
+		const { editPost } = useDispatch( 'core/editor', [ postMeta.difficulty ] );
 
-		console.log('the meta', meta)
+		if ( courses ) {
+			courses.forEach((course) => {
+				courseOptions.push({
+					label: course.title.raw,
+					value: parseInt(course.id),
+					// imageURL:
+				})
+			})
+		}
 
 		let videoInfoFetched = false;
 
-		const initFetch = (videoID) => {
+		const handleURLChange = (url) => {
+			let parsedVideoID = null;
+			let videoIDMatch = url.match(/(\?v=)(\w|-)+/g);
+			if (videoIDMatch) {
+				parsedVideoID = videoIDMatch[0].replace('?v=', '');
+			}
+			setAttributes({
+				videoID: parsedVideoID,
+				videoURL: url
+			})
+		}
+
+		const initFetch = (event, videoID) => {
+			event.preventDefault();
+			setFetchStatus({
+				class: 'fetch-message-hidden',
+				message: ''
+			});
 			gapi.load('client', () => {
 				console.log('the vid id', videoID)
 				gapi.client.setApiKey(youtubeAPIConfig.key);
@@ -124,113 +138,107 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 							videoThumbnail: fetchedThumbnail
 						})
 						videoInfoFetched = true;
-					});
-				});
+						setFetchStatus({
+							class: 'fetch-message-success',
+							message: 'Video information fetched successfully.'
+						});
+						setTimeout(() => {
+							setFetchStatus({
+								class: 'fetch-message-hidden',
+								message: ''
+							})
+						}, 3000)
+					})
+				})
 			})
 		}
 
-		const availableCourses = [
-			{ label: 'Select a course', value: null, img: ebook1 },
-			{ label: 'Beginner Course', value: 'beginner-course', img: ebook2 },
-			{ label: 'Intermediate Course', value: 'intermediate-course', img: '' },
-			{ label: 'Advanced Course', value: 'advanced-course', img: '' },
-			{ label: 'Expert Course', value: 'expert-course', img: '' }
-		];
+		const handleCourseChange = (newValue, id) => {
+			if ('first-course-slot' === id) {
+				setAttributes({ courseSlotOne: newValue })
+			}
+			if ('second-course-slot' === id) {
+				setAttributes({ courseSlotTwo: newValue })
+			}
+		}
 
 		const CourseArea = ( props ) => {
-			const selectedCourse = availableCourses.filter(item => item.value === props.slotContent);
-			const imgSrc = selectedCourse.img;
+			const filteredCourses = courses.filter(course => course.id === parseInt(props.courseID));
+			const selectedCourse = filteredCourses[0];
+
 			return (
-				<div className="">
-					<img src={ebook1} alt="" />
+				<div className="small-course-card">
+					{/* <img src={ebook1} alt="" /> */}
 					<h3>{props.slotContent}</h3>
 					<button></button>
 				</div>
 			)
 		}
 		return (
-			<div className={ className }>
+			<div { ...blockProps } className={ className }>
 				<InspectorControls>
-					<PanelBody title='Courses and Links'>
-						<PanelRow>
-							<ToggleControl
-								id="show-patreon-form-toggle"
-								label='Show Patreon Link'
-								checked={ showPatreonLink }
-								onChange={(newValue) => setAttributes({ showPatreonLink: newValue }) }
-							/>
-						</PanelRow>
-						<PanelRow>
-							<ToggleControl
-								id="high-contrast-form-toggle"
-								label='Show E-Book Link'
-								checked={ showEBookLink }
-								onChange={ (newValue) => setAttributes({ showEBookLink: newValue }) }
-							/>
-						</PanelRow>
-						<PanelRow>
+					<PanelBody title={__('Courses and Links')}>
+						{ courses && <PanelRow>
 							<SelectControl
-								label="Course Slot 1"
-								value={ courseSlotOne }
-								options={availableCourses}
-								onChange={ (newValue) => setAttributes({ courseSlotOne: newValue }) }
+								id="first-course-slot"
+								label={__('First course slot')}
+								value={courseSlotOne}
+								options={courseOptions}
+								onChange={ (newValue) => handleCourseChange(newValue, 'first-course-slot') }
 							/>
-						</PanelRow>
-						<PanelRow>
+						</PanelRow> }
+						{ courses && <PanelRow>
 							<SelectControl
-								label="Course slot 2"
+								id="second-course-slot"
+								label={__('Second course slot')}
 								value={courseSlotTwo}
-								options={availableCourses}
-								onChange={ (newValue) => setAttributes({ courseSlotTwo: newValue }) }
+								options={courseOptions}
+								onChange={ (newValue) => handleCourseChange(newValue, 'second-course-slot') }
 							/>
-						</PanelRow>
+						</PanelRow> }
 					</PanelBody>
-					<PanelBody title="Song Difficulty">
+					<PanelBody title={__('Song Difficulty')}>
 						<PanelRow>
 							<TextControl
-								label="Enter a number from 1 to 50"
-								value={ songDifficulty }
-								onChange={ updateSongDifficulty }
+								label={__('Enter a number from 1 to 50')}
+								value={ postMeta.song_difficulty }
+								onChange={ (newValue) => editPost({meta: { song_difficulty: newValue }}) }
 							/>
 						</PanelRow>
 					</PanelBody>
-					<PanelBody title="Contains only one barre chord">
+					<PanelBody title={__('Contains only one barre chord')}>
 						<PanelRow>
 							<ToggleControl
-								// id="show-patreon-form-toggle"
-								label='One barre chord song'
-								checked={ containsOneBarre }
-								onChange={ updateContainsOneBarre }
+								label={__('One barre chord song')}
+								checked={ postMeta.contains_one_barre }
+								onChange={ (newValue) => editPost({meta: { contains_one_barre: newValue }}) }
 							/>
 						</PanelRow>
 					</PanelBody>
 				</InspectorControls>
-				<form>
+				<span className={`fetch-message ${fetchStatus.class}`}>{fetchStatus.message}</span>
+				<form onSubmit={(event) => initFetch(event, videoID)}>
 					<URLInput
-						label="Video URL"
+						label={__('Video URL')}
 						value={ videoURL }
 						className={`youtube-video-url`}
-						onChange={(url) => {
-							let parsedVideoID = null;
-							let videoIDMatch = url.match(/(\?v=)(\w|-)+/g);
-							if (videoIDMatch) {
-								parsedVideoID = videoIDMatch[0].replace('?v=', '');
-							}
-							setAttributes({
-								videoID: parsedVideoID,
-								videoURL: url
-							})
-						}}
+						onChange={handleURLChange}
 						/>
-					<Button isSecondary onClick={() => initFetch(videoID)}>Populate Post</Button>
+                	<input type="submit" value="Submit" />
 				</form>
-				{/* <TextControl label="Video Title" value={videoTitle} /> */}
-				<label className="youtube-post-label">{ __('Post Thumbnail') }</label>
-				{ videoThumbnail && <img src={videoThumbnail} />}
+				{ videoTitle && <TextControl label={__('Video Title')} value={videoTitle} />}
+				{ videoThumbnail &&
+					<>
+						<label className="youtube-post-label">{__('Post Thumbnail')}</label>
+						<img src={videoThumbnail} />
+					</>
+				}
 				<div className="youtube-post-video-area">
-					{ ( videoURL && videoInfoFetched ) && <iframe width="560" height="515" src={videoURL} title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> }
-					{ courseSlotOne ? <CourseArea slotContent={courseSlotOne} /> : null }
-					{ courseSlotTwo ? <CourseArea slotContent={courseSlotTwo} /> : null}
+					{ ( videoURL ) && <iframe width="560" height="515" src={videoURL} title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> }
+					{ ( courseSlotOne || courseSlotTwo ) && <div className="course-sidebar">
+						{ courseSlotOne && <CourseArea courseID={courseSlotOne} />}
+						{ courseSlotTwo && <CourseArea courseID={courseSlotTwo} />}
+					</div> }
 				</div>
 				<div claclassNamess="post-content-video-description">
 					<RichText value={videoDescription} />

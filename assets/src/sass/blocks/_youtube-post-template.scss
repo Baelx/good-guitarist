@@ -1,4 +1,7 @@
 [data-type="gutenberg-good-guitarist/ypt"] {
+	border: 1px solid $block-border-color;
+	border-radius: 4px;
+	padding: 1rem 2rem;
 
 	.youtube-video-url {
 		width: 100%;
@@ -14,7 +17,7 @@
 	}
 
 	.youtube-post-label {
-		display: inline-block;
+		display: block;
 		margin-bottom: 8px;
 		font-size: 13px;
 	}
@@ -36,6 +39,28 @@
 				width: 100%;
 				min-height: 400px;
 			}
+		}
+	}
+
+	.fetch-message {
+		height: 22px;
+		display: block;
+
+		&-hidden {
+			opacity: 0;
+			transition: opacity 1s;
+		}
+
+		&-success {
+			color: $success-green;
+			opacity: 100;
+			transition: opacity 0.25s;
+		}
+
+		&-fail {
+			color: $error-red;
+			opacity: 100;
+			transition: opacity 0.25s;
 		}
 	}
 

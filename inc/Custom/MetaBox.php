@@ -40,13 +40,23 @@ class MetaBox {
 		);
 		register_post_meta(
 			'course',
-			'cta_url',
+			'course_url',
+			[
+				'show_in_rest' => true,
+				'single'       => true,
+				'type'         => 'string'
+			],
+		);
+		register_post_meta(
+			'course',
+			'course_description',
 			[
 				'show_in_rest' => true,
 				'single'       => true,
 				'type'         => 'string'
 			]
 		);
+
 	}
 
 }

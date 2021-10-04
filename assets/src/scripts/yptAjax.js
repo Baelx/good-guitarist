@@ -62,8 +62,8 @@ const sendAjaxRequest = ( yptSearchResultsElement, searchFormData ) => {
 			success : (response) => {
 				console.log(" the response is", response);
 				yptSearchResultsElement.empty();
-				if (response && response[0] && response[0].hasOwnProperty('id')) {
-					response.forEach((post) => {
+				if (200 === response.status) {
+					response.data.forEach((post) => {
 						// console.log('the post', post)
 						let html = "<li class='ypt-result' id='ypt-" + post.id + "'>";
 						html += "  <a href='" + post.permalink + "' title='" + post.title + "'>";
