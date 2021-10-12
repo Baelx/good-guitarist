@@ -16,7 +16,7 @@
 
 	<div class="entry-content">
 		<?php
-			the_title();
+			the_title( '<h1 class="' . $page_title_classes . '">', '</h1>' );
 			the_content();
 
 			wp_link_pages(

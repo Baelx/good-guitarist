@@ -1,18 +1,35 @@
 [data-type="gutenberg-good-guitarist/ypt"] {
 	border: 1px solid $block-border-color;
 	border-radius: 4px;
-	padding: 1rem 2rem;
 
-	.youtube-video-url {
-		width: 100%;
+	section {
+		margin: 0 1rem;
+		padding: 1rem 2rem;
 
-		.components-base-control__field {
+		&:first-of-type {
+			border-bottom: 2px solid $medium-grey;
+		}
+	}
 
-			input.block-editor-url-input__input {
-				width: 100%;
-				border: 1px solid rgb(88, 193, 228);
-				border-radius: 2px;
+	form {
+		.youtube-video-url {
+			width: 100%;
+
+			.components-base-control__field {
+
+				input.block-editor-url-input__input {
+					width: 100%;
+					border: 1px solid $gg-light-blue;
+					border-radius: 2px;
+				}
 			}
+		}
+		.yt-submit-button {
+			background-color: $gg-blue;
+			border: none;
+			border-radius: 3px;
+			color: $white;
+			padding: 0.5rem 1rem;
 		}
 	}
 
@@ -20,10 +37,6 @@
 		display: block;
 		margin-bottom: 8px;
 		font-size: 13px;
-	}
-
-	iframe {
-		padding: 2rem;
 	}
 
 	.components-base-control {
@@ -62,6 +75,68 @@
 			opacity: 100;
 			transition: opacity 0.25s;
 		}
+	}
+
+	.youtube-post-video-area {
+		display: flex;
+
+		iframe {
+			width: 70%;
+		}
+
+		.iframe-full-width {
+			width: 100%;
+		}
+
+		.iframe-two-third-width {
+			width: 70%;
+		}
+
+		.course-sidebar {
+			width: 30%;
+			margin-left: 1.5rem;
+
+			.small-course-card {
+				display: flex;
+				padding: 3%;
+				background-color: $light-grey;
+				border-radius: 3px;
+				height: 40%;
+
+				&:first-of-type {
+					margin-bottom: 7%;
+				}
+
+				img {
+					max-width: 50%;
+					object-fit: contain;
+				}
+
+				.course-card-body {
+					padding-left: 1rem;
+					display: flex;
+					flex-direction: column;
+					width: 100%;
+
+					.body-text {
+						font-size: 0.9rem;
+					}
+
+					.course-url-button {
+						background-color: $gg-blue;
+						border-radius: 3px;
+						color: white;
+						padding: 0.5rem 1rem;
+						align-self: center;
+					}
+				}
+
+			}
+		}
+	}
+
+	.empty-post-body-msg {
+		color: $grey;
 	}
 
 }

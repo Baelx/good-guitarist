@@ -56,6 +56,15 @@ class MetaBox {
 				'type'         => 'string'
 			]
 		);
+		register_post_meta(
+			'course',
+			'course_image',
+			[
+				'show_in_rest' => true,
+				'single'       => true,
+				'type'         => 'string'
+			]
+		);
 
 	}
 

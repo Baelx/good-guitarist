@@ -8,3 +8,40 @@
 		padding: 2rem 2rem;
 	}
 }
+
+.large-course-card {
+	border-radius: 3px;
+	padding: 2rem 4rem;
+	display: flex;
+	flex-direction: column;
+	box-shadow: 2px 2px 4px 1px $box-shadow-grey;
+	min-height: 500px;
+	justify-content: space-between;
+
+	.lcc {
+		&-image {
+			max-height: 250px;
+			width: auto;
+			object-fit: cover;
+		}
+
+		&-heading {
+
+		}
+
+		&-body {
+			font-size: 1rem;
+			min-height: 80px;
+		}
+
+		&-button {
+			background: $gg-blue;
+			color: white;
+			padding: 1rem;
+			display: inline-block;
+			align-self: center;
+			font-weight: bold;
+			border-radius: 3px;
+		}
+	}
+}

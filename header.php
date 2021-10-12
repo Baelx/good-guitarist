@@ -54,14 +54,6 @@ if ( has_blocks( $post->post_content ) ) {
 									<img src="http://localhost:8000/wp-content/uploads/2021/04/gg-logo-retina.png">
 								</a>
 							</h1>
-							<?php
-							$description = get_bloginfo( 'description', 'display' );
-							if ( $description || is_customize_preview() ) :
-							?>
-								<p class="site-description"><?php echo $description; /* WPCS: xss ok. */ ?></p>
-							<?php
-							endif;
-							?>
 					</div><!-- .site-branding -->
 
 				</div><!-- .col -->

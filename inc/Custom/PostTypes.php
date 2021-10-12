@@ -140,6 +140,31 @@ class PostTypes {
 
 		return $args;
 	}
+
+	/**
+	 * Get details for course post type by ID.
+	 *
+	 * @param	array	$course_id	The ID of the course details to fetch.
+	 * @return	array
+	 */
+	public static function get_course_details( $course_id ) {
+		$course_details = [];
+		$course = get_post( $course_id );
+		if ($course) {
+			$course_details['courseTitle'] = $course->post_title;
+			$parsed_blocks = parse_blocks( $course->post_content );
+			/**
+			 * The course post may use multiple blocks but only find the
+			 * (hopefully) single instance of the course template block
+			 * in order to get its attributes.
+			 */
+			$course_template_block = array_filter( $parsed_blocks, function( $block ) {
+				return 'gutenberg-good-guitarist/course-template' === $block['blockName'];
+			} );
+			$course_details = array_merge( $course_details, $course_template_block[0]['attrs'] );
+		}
+		return $course_details;
+	}
 }
 
 

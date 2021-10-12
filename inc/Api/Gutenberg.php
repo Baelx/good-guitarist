@@ -99,7 +99,8 @@ class Gutenberg
 		]);
 
 		register_block_type( 'gutenberg-good-guitarist/ypt', [
-			'editor_script' => 'gutenberg-good-guitarist'
+			'editor_script' => 'gutenberg-good-guitarist',
+			'render_callback' => [ $this, 'youtube_post_block_render' ]
 		]);
 
 		register_block_type( 'gutenberg-good-guitarist/course-template', [
@@ -118,6 +119,18 @@ class Gutenberg
 	 */
 	public function gutenberg_assets() {
 		wp_enqueue_style( 'gutenberg-good-guitarist-cta', get_template_directory_uri() . '/assets/dist/css/gutenberg.css', null );
+	}
+
+	/**
+	 * Youtube post dynamic block render callback.
+	 *
+	 * @param	array	$atts	Block attributes.
+	 * @return	string
+	 */
+	public function youtube_post_block_render( $atts ) {
+		ob_start();
+		include get_template_directory() . '/views/blocks/ypt-post.php';
+		return ob_get_clean();
 	}
 
 	/**

@@ -8,7 +8,7 @@ const {
 	PanelBody,
 	PanelRow,
 } = wp.components;
-// const { useSelect, useEffect } = wp.element;
+const { useEffect } = wp.element;
 const { select, useSelect } = wp.data;
 
 registerBlockType( 'gutenberg-good-guitarist/latest-lessons', {
@@ -19,45 +19,21 @@ registerBlockType( 'gutenberg-good-guitarist/latest-lessons', {
 	attributes: {
 		lessons: {
 			type: 'string',
+		},
+		scrollPosition: {
+			type: 'integer'
 		}
 	},
 	edit: ({ attributes, className}) => {
-		const { lessons } = attributes;
-		lessons = useSelect((select) => {
-			return select('core').getEntityRecords('postType', 'post');
-		});
+		const { scrollPosition } = attributes;
 
+		useEffect(() => {
+			const lessons = useSelect((select) => {
+				return select('core').getEntityRecords('postType', 'youtube-post');
+			});
 
-		const mockLessons = [
-			{
-				slug: 'test_slug',
-				thumbnail: 'https://source.com'
-			},
-			{
-				slug: 'another_slug',
-				thumbnail: 'https://source.com'
-			},
-			{
-				slug: 'great_slug',
-				thumbnail: 'https://source.com'
-			},
-			{
-				slug: 'banana_slug',
-				thumbnail: 'https://source.com'
-			},
-			{
-				slug: 'hello_slug',
-				thumbnail: 'https://source.com'
-			},
-			{
-				slug: 'testing_slug',
-				thumbnail: 'https://source.com'
-			},
-			{
-				slug: 'no_slug',
-				thumbnail: 'https://source.com'
-			},
-		];
+			console.log(lessons);
+		}, [])
 
 		return (
 			<div className={className}>
@@ -71,13 +47,12 @@ registerBlockType( 'gutenberg-good-guitarist/latest-lessons', {
 						<i>{"<"}</i>
 					</Button>
 				}
-				{lessons && lessons.map(() => <div>test</div>)}
-				{/* {lessons && lessons.map((lesson) => (
-					<a href="">
+				{lessons && lessons.map((lesson) => (
+					<a key={lesson.id} href="">
 						<img className="lesson-thumbnail" src={lesson.thumbnail}></img>
 					</a>
-				))} */}
-				{/* {mockLessons.length > 5 &&
+				))}
+				{mockLessons.length > 5 &&
 					<Button
 						className="more-lessons-right-arrow"
 						onClick={() => {
@@ -87,42 +62,11 @@ registerBlockType( 'gutenberg-good-guitarist/latest-lessons', {
 					>
 						<i>{">"}</i>
 					</Button>
-				} */}
+				}
 			</div>
 		)
 	},
 	save: ({className}) => {
-
-		const mockLessons = [
-			{
-				slug: 'test_slug',
-				thumbnail: 'https://source.com'
-			},
-			{
-				slug: 'another_slug',
-				thumbnail: 'https://source.com'
-			},
-			{
-				slug: 'great_slug',
-				thumbnail: 'https://source.com'
-			},
-			{
-				slug: 'banana_slug',
-				thumbnail: 'https://source.com'
-			},
-			{
-				slug: 'hello_slug',
-				thumbnail: 'https://source.com'
-			},
-			{
-				slug: 'testing_slug',
-				thumbnail: 'https://source.com'
-			},
-			{
-				slug: 'no_slug',
-				thumbnail: 'https://source.com'
-			},
-		];
 
 		let scrollPosition = 0;
 

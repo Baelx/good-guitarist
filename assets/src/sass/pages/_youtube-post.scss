@@ -1,0 +1,57 @@
+.youtube-post {
+
+	.youtube-post-video-area {
+		display: flex;
+
+		iframe {
+			width: 70%;
+		}
+
+		.upper-course-area {
+			width: 30%;
+			margin-left: 1.5rem;
+
+			.small-course-card {
+				display: flex;
+				padding: 3%;
+				background-color: $light-grey;
+				border-radius: 3px;
+				height: 40%;
+
+				&:first-of-type {
+					margin-bottom: 7%;
+				}
+
+				img {
+					max-width: 50%;
+					object-fit: contain;
+				}
+
+				.course-card-body {
+					padding-left: 1rem;
+					display: flex;
+					flex-direction: column;
+					width: 100%;
+
+					.body-text {
+						font-size: 0.9rem;
+					}
+
+					.course-url-button {
+						background-color: $gg-blue;
+						border-radius: 3px;
+						color: white;
+						padding: 0.5rem 1rem;
+						align-self: center;
+					}
+				}
+
+			}
+		}
+	}
+
+	.post-body {
+		white-space: pre-wrap;
+		margin-top: 6rem;
+	}
+}

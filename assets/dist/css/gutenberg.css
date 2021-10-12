@@ -148,6 +148,34 @@
   padding: 2rem 2rem;
 }
 
+.large-course-card {
+  border-radius: 3px;
+  padding: 2rem 4rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 2px 4px 1px #d2d2d2;
+  min-height: 500px;
+  justify-content: space-between;
+}
+.large-course-card .lcc-image {
+  max-height: 250px;
+  width: auto;
+  object-fit: cover;
+}
+.large-course-card .lcc-body {
+  font-size: 1rem;
+  min-height: 80px;
+}
+.large-course-card .lcc-button {
+  background: #0872bb;
+  color: white;
+  padding: 1rem;
+  display: inline-block;
+  align-self: center;
+  font-weight: bold;
+  border-radius: 3px;
+}
+
 .wp-block-gutenberg-good-guitarist-latest-lessons {
   display: flex;
   align-items: center;
@@ -173,26 +201,56 @@
   padding: 0 10rem;
 }
 
+.media-upload-component .image-label {
+  display: block;
+  font-size: 13px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
+.media-upload-component .course-image {
+  max-width: 50%;
+  height: auto;
+  display: block;
+}
+.media-upload-component .select-image-button {
+  margin: 0.5rem 0;
+  max-width: 50%;
+  background-color: #f0f0f0;
+  border: 2px dashed #818181;
+}
+.media-upload-component .button-hidden {
+  display: none;
+}
+
 [data-type="gutenberg-good-guitarist/ypt"] {
   border: 1px solid #717171;
   border-radius: 4px;
+}
+[data-type="gutenberg-good-guitarist/ypt"] section {
+  margin: 0 1rem;
   padding: 1rem 2rem;
 }
-[data-type="gutenberg-good-guitarist/ypt"] .youtube-video-url {
+[data-type="gutenberg-good-guitarist/ypt"] section:first-of-type {
+  border-bottom: 2px solid #e6e6e6;
+}
+[data-type="gutenberg-good-guitarist/ypt"] form .youtube-video-url {
   width: 100%;
 }
-[data-type="gutenberg-good-guitarist/ypt"] .youtube-video-url .components-base-control__field input.block-editor-url-input__input {
+[data-type="gutenberg-good-guitarist/ypt"] form .youtube-video-url .components-base-control__field input.block-editor-url-input__input {
   width: 100%;
-  border: 1px solid #58c1e4;
+  border: 1px solid #88cce2;
   border-radius: 2px;
+}
+[data-type="gutenberg-good-guitarist/ypt"] form .yt-submit-button {
+  background-color: #0872bb;
+  border: none;
+  border-radius: 3px;
+  color: #fff;
+  padding: 0.5rem 1rem;
 }
 [data-type="gutenberg-good-guitarist/ypt"] .youtube-post-label {
   display: block;
   margin-bottom: 8px;
   font-size: 13px;
-}
-[data-type="gutenberg-good-guitarist/ypt"] iframe {
-  padding: 2rem;
 }
 [data-type="gutenberg-good-guitarist/ypt"] .components-base-control > div {
   display: flex;
@@ -222,6 +280,55 @@
   color: #b30000;
   opacity: 100;
   transition: opacity 0.25s;
+}
+[data-type="gutenberg-good-guitarist/ypt"] .youtube-post-video-area {
+  display: flex;
+}
+[data-type="gutenberg-good-guitarist/ypt"] .youtube-post-video-area iframe {
+  width: 70%;
+}
+[data-type="gutenberg-good-guitarist/ypt"] .youtube-post-video-area .iframe-full-width {
+  width: 100%;
+}
+[data-type="gutenberg-good-guitarist/ypt"] .youtube-post-video-area .iframe-two-third-width {
+  width: 70%;
+}
+[data-type="gutenberg-good-guitarist/ypt"] .youtube-post-video-area .course-sidebar {
+  width: 30%;
+  margin-left: 1.5rem;
+}
+[data-type="gutenberg-good-guitarist/ypt"] .youtube-post-video-area .course-sidebar .small-course-card {
+  display: flex;
+  padding: 3%;
+  background-color: #f0f0f0;
+  border-radius: 3px;
+  height: 40%;
+}
+[data-type="gutenberg-good-guitarist/ypt"] .youtube-post-video-area .course-sidebar .small-course-card:first-of-type {
+  margin-bottom: 7%;
+}
+[data-type="gutenberg-good-guitarist/ypt"] .youtube-post-video-area .course-sidebar .small-course-card img {
+  max-width: 50%;
+  object-fit: contain;
+}
+[data-type="gutenberg-good-guitarist/ypt"] .youtube-post-video-area .course-sidebar .small-course-card .course-card-body {
+  padding-left: 1rem;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+[data-type="gutenberg-good-guitarist/ypt"] .youtube-post-video-area .course-sidebar .small-course-card .course-card-body .body-text {
+  font-size: 0.9rem;
+}
+[data-type="gutenberg-good-guitarist/ypt"] .youtube-post-video-area .course-sidebar .small-course-card .course-card-body .course-url-button {
+  background-color: #0872bb;
+  border-radius: 3px;
+  color: white;
+  padding: 0.5rem 1rem;
+  align-self: center;
+}
+[data-type="gutenberg-good-guitarist/ypt"] .empty-post-body-msg {
+  color: #818181;
 }
 
 .wp-block-gutenberg-good-guitarist-ypt .post-content-video-description {

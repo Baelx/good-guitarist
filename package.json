@@ -65,6 +65,7 @@
   "homepage": "https://github.com/Alecaddd/awps#readme",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.4",
+    "@wordpress/block-serialization-spec-parser": "^4.2.0",
     "@wordpress/scripts": "^13.0.3",
     "crypto-browserify": "^3.12.0",
     "fs": "0.0.1-security",

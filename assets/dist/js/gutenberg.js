@@ -157,23 +157,6 @@ function _nonIterableRest() {
 
 /***/ }),
 
-/***/ "./node_modules/@babel/runtime/helpers/esm/readOnlyError.js":
-/*!******************************************************************!*\
-  !*** ./node_modules/@babel/runtime/helpers/esm/readOnlyError.js ***!
-  \******************************************************************/
-/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ _readOnlyError)
-/* harmony export */ });
-function _readOnlyError(name) {
-  throw new TypeError("\"" + name + "\" is read-only");
-}
-
-/***/ }),
-
 /***/ "./node_modules/@babel/runtime/helpers/esm/slicedToArray.js":
 /*!******************************************************************!*\
   !*** ./node_modules/@babel/runtime/helpers/esm/slicedToArray.js ***!
@@ -235,10 +218,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
 
 var registerBlockType = wp.blocks.registerBlockType;
-var TextControl = wp.components.TextControl;
+var _wp$components = wp.components,
+    TextControl = _wp$components.TextControl,
+    FormFileUpload = _wp$components.FormFileUpload,
+    Button = _wp$components.Button;
 var _wp$blockEditor = wp.blockEditor,
     RichText = _wp$blockEditor.RichText,
-    useBlockProps = _wp$blockEditor.useBlockProps;
+    useBlockProps = _wp$blockEditor.useBlockProps,
+    MediaUpload = _wp$blockEditor.MediaUpload,
+    MediaUploadCheck = _wp$blockEditor.MediaUploadCheck;
 var _wp$data = wp.data,
     useSelect = _wp$data.useSelect,
     useDispatch = _wp$data.useDispatch;
@@ -248,45 +236,85 @@ registerBlockType('gutenberg-good-guitarist/course-template', {
   title: 'Course or Ebook Template',
   icon: 'admin-customizer',
   category: 'text',
-  attributes: {},
-  edit: function edit() {
+  attributes: {
+    courseDescription: {
+      type: 'string',
+      "default": ''
+    },
+    courseUrl: {
+      type: 'string',
+      "default": ''
+    },
+    imageId: {
+      type: 'integer',
+      "default": 0
+    },
+    imageUrl: {
+      type: 'string',
+      "default": ''
+    }
+  },
+  edit: function edit(_ref) {
+    var attributes = _ref.attributes,
+        setAttributes = _ref.setAttributes;
+    var courseUrl = attributes.courseUrl,
+        courseDescription = attributes.courseDescription,
+        imageId = attributes.imageId,
+        imageUrl = attributes.imageUrl;
     var blockProps = useBlockProps();
-    /**
-     * Meta data for post type is treated like react app state.
-     *
-     * useSelect and useDispatch allow us to select the current
-     * meta state and to update it respectively.
-     *
-     *  */
 
-    var postMeta = useSelect(function (select) {
-      return select('core/editor').getEditedPostAttribute('meta');
-    });
+    var onSelectMedia = function onSelectMedia(newImage) {
+      setAttributes({
+        imageId: newImage.id,
+        imageUrl: newImage.url
+      });
+    };
 
-    var _useDispatch = useDispatch('core/editor', [postMeta.course_url, postMeta.course_description]),
-        editPost = _useDispatch.editPost;
+    var removeMedia = function removeMedia() {
+      setAttributes({
+        imageId: 0,
+        imageUrl: ''
+      });
+    };
 
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", blockProps, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(TextControl, {
       label: __('Description'),
-      value: postMeta.course_description,
+      value: courseDescription,
       onChange: function onChange(newValue) {
-        return editPost({
-          meta: {
-            course_description: newValue
-          }
+        return setAttributes({
+          courseDescription: newValue
         });
       }
     }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(TextControl, {
       label: __('URL'),
-      value: postMeta.course_url,
+      value: courseUrl,
       onChange: function onChange(newValue) {
-        return editPost({
-          meta: {
-            course_url: newValue
-          }
+        return setAttributes({
+          courseUrl: newValue
         });
       }
-    }));
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "media-upload-component"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+      className: "image-label"
+    }, __('Course Thumbnail')), imageUrl && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+      className: "course-image",
+      src: imageUrl
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(MediaUploadCheck, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(MediaUpload, {
+      onSelect: onSelectMedia,
+      allowedTypes: ['image'],
+      render: function render(_ref2) {
+        var open = _ref2.open;
+        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(Button, {
+          className: 0 === imageId ? 'select-image-button' : 'select-image-button button-hidden',
+          onClick: open
+        }, imageId == 0 && __('Choose an image'));
+      }
+    })), imageId !== 0 && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(MediaUploadCheck, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(Button, {
+      onClick: removeMedia,
+      isLink: true,
+      isDestructive: true
+    }, __('Remove image')))));
   },
   save: function save() {
     return null;
@@ -389,7 +417,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
 
 var registerBlockType = wp.blocks.registerBlockType;
-var Fragment = wp.element.Fragment;
+var _wp$element = wp.element,
+    Fragment = _wp$element.Fragment,
+    useState = _wp$element.useState;
 var _wp$editor = wp.editor,
     PlainText = _wp$editor.PlainText,
     RichText = _wp$editor.RichText,
@@ -404,33 +434,44 @@ var _wp$components = wp.components,
     PanelBody = _wp$components.PanelBody,
     SelectControl = _wp$components.SelectControl;
 var useSelect = wp.data.useSelect;
+var parse = wp.blockSerializationDefaultParser.parse;
+var __ = wp.i18n.__;
 registerBlockType('gutenberg-good-guitarist/large-course-card', {
   title: 'Large Course Card',
   icon: 'format-image',
   category: 'layout',
   className: 'large-course-card',
   attributes: {
-    courseID: {
-      type: 'integer'
+    selectedCourseId: {
+      type: 'integer',
+      "default": 0
     },
-    courseTitle: {
-      type: 'string'
+    selectedCourseTitle: {
+      type: 'string',
+      "default": ''
     },
-    courseDesc: {
-      type: 'string'
+    selectedCourseDesc: {
+      type: 'string',
+      "default": ''
     },
-    courseLink: {
-      type: 'string'
+    selectedCourseLink: {
+      type: 'string',
+      "default": ''
     },
-    courseImageID: {
-      type: 'integer'
+    selectedCourseImageID: {
+      type: 'integer',
+      "default": 0
+    },
+    selectedCourseImageUrl: {
+      type: 'string',
+      "default": ''
     }
   },
   edit: function edit(_ref) {
     var attributes = _ref.attributes,
         className = _ref.className,
         setAttributes = _ref.setAttributes;
-    var courseID = attributes.courseID;
+    var selectedCourseId = attributes.selectedCourseId;
     var courseData = useSelect(function (select) {
       return select('core').getEntityRecords('postType', 'course');
     });
@@ -439,8 +480,7 @@ registerBlockType('gutenberg-good-guitarist/large-course-card', {
     });
     var courseOptions = [{
       label: 'Select a course',
-      value: 'selected',
-      disabled: true,
+      value: null,
       "default": true
     }];
     var courseDetails = {};
@@ -448,38 +488,67 @@ registerBlockType('gutenberg-good-guitarist/large-course-card', {
     if (courseData) {
       courseData.forEach(function (course) {
         if (course.id) {
-          // Create options for SelectControl.
-          courseOptions.push({
-            label: course.title.raw,
-            value: course.id
-          }); // Keep separate courseDetail objects used to populate attributes.
+          var parsedBlocks = parse(course.content.raw);
+          /**
+           * There may be multiple blocks in the course post.
+           *
+           * Find the course template block(which should be the first)
+           * and get its attributes.
+           */
 
-          courseDetails[course.id] = {
-            title: course.title.raw,
-            description: course.meta.course_description,
-            url: course.meta.course_url,
-            image: course.featured_media
-          };
+          var courseTemplateBlock = parsedBlocks.find(function (block) {
+            return 'gutenberg-good-guitarist/course-template' === block.blockName;
+          });
+          var courseAtts = courseTemplateBlock.attrs;
+
+          if (courseAtts) {
+            // Create options for SelectControl.
+            courseOptions.push({
+              label: course.title.raw,
+              value: course.id
+            }); // Keep separate courseDetail objects used to populate attributes.
+
+            courseDetails[course.id] = {
+              title: course.title.raw,
+              description: courseAtts.courseDescription,
+              url: courseAtts.courseUrl,
+              imageId: courseAtts.imageId,
+              imageUrl: courseAtts.imageUrl
+            };
+          }
         }
       });
     }
 
     var handleCourseSelect = function handleCourseSelect(selectedCourse) {
-      // if (courseDetails && courseDetails[selectedCourse]) {
-      setAttributes({
-        courseID: parseInt(selectedCourse),
-        courseTitle: courseDetails[selectedCourse].title,
-        courseDesc: courseDetails[selectedCourse].description,
-        courseImageID: courseDetails[selectedCourse].image,
-        courseLink: courseDetails[selectedCourse].url
-      }); // }
+      console.log(courseDetails[selectedCourse].imageUrl);
+
+      if (selectedCourse in courseDetails) {
+        setAttributes({
+          selectedCourseId: parseInt(selectedCourse),
+          selectedCourseTitle: courseDetails[selectedCourse].title,
+          selectedCourseDesc: courseDetails[selectedCourse].description,
+          selectedCourseImageID: courseDetails[selectedCourse].image,
+          selectedCourseLink: courseDetails[selectedCourse].url,
+          selectedCourseImageUrl: courseDetails[selectedCourse].imageUrl
+        });
+      } else {
+        setAttributes({
+          selectedCourseId: selectedCourse,
+          selectedCourseTitle: '',
+          selectedCourseDesc: '',
+          selectedCourseImageID: '',
+          selectedCourseLink: '',
+          selectedCourseImageUrl: ''
+        });
+      }
     };
 
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: className
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, "Large Course Card"), isLoading && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, "Loading..."), courseOptions && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(SelectControl, {
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, __('Large Course Card')), isLoading && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, __('Loading...')), courseOptions && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(SelectControl, {
       label: "Select course",
-      value: courseID,
+      value: selectedCourseId,
       options: courseOptions,
       onChange: handleCourseSelect
     }));
@@ -499,10 +568,8 @@ registerBlockType('gutenberg-good-guitarist/large-course-card', {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_helpers_readOnlyError__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/readOnlyError */ "./node_modules/@babel/runtime/helpers/esm/readOnlyError.js");
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__);
-
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
 
 var registerBlockType = wp.blocks.registerBlockType;
 var _wp$editor = wp.editor,
@@ -511,8 +578,8 @@ var _wp$editor = wp.editor,
 var _wp$components = wp.components,
     Button = _wp$components.Button,
     PanelBody = _wp$components.PanelBody,
-    PanelRow = _wp$components.PanelRow; // const { useSelect, useEffect } = wp.element;
-
+    PanelRow = _wp$components.PanelRow;
+var useEffect = wp.element.useEffect;
 var _wp$data = wp.data,
     select = _wp$data.select,
     useSelect = _wp$data.useSelect;
@@ -524,84 +591,60 @@ registerBlockType('gutenberg-good-guitarist/latest-lessons', {
   attributes: {
     lessons: {
       type: 'string'
+    },
+    scrollPosition: {
+      type: 'integer'
     }
   },
   edit: function edit(_ref) {
     var attributes = _ref.attributes,
         className = _ref.className;
-    var lessons = attributes.lessons;
-    useSelect(function (select) {
-      return select('core').getEntityRecords('postType', 'post');
-    }), (0,_babel_runtime_helpers_readOnlyError__WEBPACK_IMPORTED_MODULE_0__.default)("lessons");
-    var mockLessons = [{
-      slug: 'test_slug',
-      thumbnail: 'https://source.com'
-    }, {
-      slug: 'another_slug',
-      thumbnail: 'https://source.com'
-    }, {
-      slug: 'great_slug',
-      thumbnail: 'https://source.com'
-    }, {
-      slug: 'banana_slug',
-      thumbnail: 'https://source.com'
-    }, {
-      slug: 'hello_slug',
-      thumbnail: 'https://source.com'
-    }, {
-      slug: 'testing_slug',
-      thumbnail: 'https://source.com'
-    }, {
-      slug: 'no_slug',
-      thumbnail: 'https://source.com'
-    }];
-    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("div", {
+    var scrollPosition = attributes.scrollPosition;
+    useEffect(function () {
+      var lessons = useSelect(function (select) {
+        return select('core').getEntityRecords('postType', 'youtube-post');
+      });
+      console.log(lessons);
+    }, []);
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: className
-    }, scrollPosition > 0 && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(Button, {
+    }, scrollPosition > 0 && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(Button, {
       className: "more-lessons-left-arrow",
       onClick: function onClick() {
         setScrollPosition(function (newScrollPosition) {
           return newScrollPosition - 1;
         });
       }
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("i", null, "<")), lessons && lessons.map(function () {
-      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("div", null, "test");
-    }));
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("i", null, "<")), lessons && lessons.map(function (lesson) {
+      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
+        key: lesson.id,
+        href: ""
+      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+        className: "lesson-thumbnail",
+        src: lesson.thumbnail
+      }));
+    }), mockLessons.length > 5 && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(Button, {
+      className: "more-lessons-right-arrow",
+      onClick: function onClick() {
+        setScrollPosition(function (newScrollPosition) {
+          return newScrollPosition + 1;
+        });
+        console.log('sup', scrollPosition);
+      }
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("i", null, ">")));
   },
   save: function save(_ref2) {
     var className = _ref2.className;
-    var mockLessons = [{
-      slug: 'test_slug',
-      thumbnail: 'https://source.com'
-    }, {
-      slug: 'another_slug',
-      thumbnail: 'https://source.com'
-    }, {
-      slug: 'great_slug',
-      thumbnail: 'https://source.com'
-    }, {
-      slug: 'banana_slug',
-      thumbnail: 'https://source.com'
-    }, {
-      slug: 'hello_slug',
-      thumbnail: 'https://source.com'
-    }, {
-      slug: 'testing_slug',
-      thumbnail: 'https://source.com'
-    }, {
-      slug: 'no_slug',
-      thumbnail: 'https://source.com'
-    }];
     var scrollPosition = 0;
-    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("div", {
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: className
-    }, scrollPosition > 0 && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(Button, {
+    }, scrollPosition > 0 && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(Button, {
       className: "more-lessons-left-arrow",
       onClick: function onClick() {
         scrollPosition--;
         console.log('new scroll positon', scrollPosition);
       }
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("i", null, "<")));
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("i", null, "<")));
   }
 });
 
@@ -677,12 +720,8 @@ __webpack_require__.r(__webpack_exports__);
 var registerBlockType = wp.blocks.registerBlockType;
 var _wp$components = wp.components,
     TextControl = _wp$components.TextControl,
-    TextareaControl = _wp$components.TextareaControl,
-    Button = _wp$components.Button,
-    FocusableIframe = _wp$components.FocusableIframe,
     PanelBody = _wp$components.PanelBody,
     PanelRow = _wp$components.PanelRow,
-    FormToggle = _wp$components.FormToggle,
     SelectControl = _wp$components.SelectControl,
     ToggleControl = _wp$components.ToggleControl;
 var _wp$blockEditor = wp.blockEditor,
@@ -692,12 +731,11 @@ var _wp$blockEditor = wp.blockEditor,
     useBlockProps = _wp$blockEditor.useBlockProps;
 var _wp$data = wp.data,
     useSelect = _wp$data.useSelect,
-    useEffect = _wp$data.useEffect,
     dispatch = _wp$data.dispatch,
     useDispatch = _wp$data.useDispatch;
-var useEntityProp = wp.coreData.useEntityProp;
 var useState = wp.element.useState;
 var __ = wp.i18n.__;
+var parse = wp.blockSerializationDefaultParser.parse;
 
 registerBlockType('gutenberg-good-guitarist/ypt', {
   apiVersion: 2,
@@ -709,12 +747,12 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
     videoTitle: {
       type: 'string'
     },
+    videoThumbnail: {
+      type: 'string' // default: gutenbergVars.image_dir + '/good-guitarist-preview-img.png'
+
+    },
     videoDescription: {
       type: 'string'
-    },
-    videoThumbnail: {
-      type: 'string',
-      "default": gutenbergVars.image_dir + '/good-guitarist-preview-img.png'
     },
     videoURL: {
       type: 'string'
@@ -723,10 +761,20 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
       type: 'string'
     },
     courseSlotOne: {
-      type: 'integer'
+      type: 'integer',
+      "default": 0
     },
     courseSlotTwo: {
-      type: 'integer'
+      type: 'integer',
+      "default": 0
+    },
+    courseSlotThree: {
+      type: 'integer',
+      "default": 0
+    },
+    courseSlotFour: {
+      type: 'integer',
+      "default": 0
     },
     testBoolean: {
       type: 'boolean',
@@ -745,6 +793,7 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
         courseSlotOne = attributes.courseSlotOne,
         courseSlotTwo = attributes.courseSlotTwo;
     var blockProps = useBlockProps();
+    var courseDetails = {};
     var courseOptions = [{
       label: 'None',
       value: null
@@ -772,11 +821,30 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
 
     if (courses) {
       courses.forEach(function (course) {
+        var parsedBlocks = parse(course.content.raw);
+        /**
+         * There may be multiple blocks in the course post.
+         *
+         * Find the course template block(which should be the first)
+         * and get its attributes.
+         */
+
+        var courseTemplateBlock = parsedBlocks.find(function (block) {
+          return 'gutenberg-good-guitarist/course-template' === block.blockName;
+        });
+        var courseAtts = courseTemplateBlock.attrs;
         courseOptions.push({
           label: course.title.raw,
-          value: parseInt(course.id) // imageURL:
+          value: parseInt(course.id)
+        }); // Keep separate courseDetail objects used to populate attributes.
 
-        });
+        courseDetails[course.id] = {
+          title: course.title.raw,
+          description: courseAtts.courseDescription,
+          url: courseAtts.courseUrl,
+          imageId: courseAtts.imageId,
+          imageUrl: courseAtts.imageUrl
+        };
       });
     }
 
@@ -815,7 +883,8 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
             var fetchedThumbnail = response.result.items[0].snippet.thumbnails.medium.url;
             var descriptitonWithAnchorTags = fetchedDescription.replace(/(http:\/\/|https:\/\/).*/g, function (text) {
               return "<a href=\"".concat(text, "\">").concat(text, "</a>");
-            }); // Update the post title.
+            });
+            console.log(descriptitonWithAnchorTags); // Update the post title.
 
             dispatch('core/editor').editPost({
               title: fetchedTitle
@@ -843,26 +912,52 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
 
     var handleCourseChange = function handleCourseChange(newValue, id) {
       if ('first-course-slot' === id) {
-        setAttributes({
-          courseSlotOne: newValue
-        });
+        console.log('it is set', newValue);
+
+        if ('None' !== newValue) {
+          setAttributes({
+            courseSlotOne: newValue
+          });
+        } else {
+          setAttributes({
+            courseSlotOne: 0
+          });
+        }
       }
 
       if ('second-course-slot' === id) {
-        setAttributes({
-          courseSlotTwo: newValue
-        });
+        if ('None' !== newValue) {
+          setAttributes({
+            courseSlotTwo: newValue
+          });
+        } else {
+          setAttributes({
+            courseSlotTwo: 0
+          });
+        }
       }
     };
 
     var CourseArea = function CourseArea(props) {
-      var filteredCourses = courses.filter(function (course) {
-        return course.id === parseInt(props.courseID);
-      });
-      var selectedCourse = filteredCourses[0];
-      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("div", {
-        className: "small-course-card"
-      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("h3", null, props.slotContent), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("button", null));
+      console.log(props.courseID);
+
+      if ('None' !== props.courseID) {
+        var course = courseDetails[props.courseID];
+        console.log('happening?');
+        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("div", {
+          className: "small-course-card"
+        }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("img", {
+          src: course.imageUrl,
+          alt: ""
+        }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("div", {
+          className: "course-card-body"
+        }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("p", {
+          className: "body-text"
+        }, course.description), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("a", {
+          className: "course-url-button",
+          href: course.courseUrl
+        }, 'Get it now!')));
+      }
     };
 
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("div", (0,_babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__.default)({}, blockProps, {
@@ -909,7 +1004,9 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
           }
         });
       }
-    })))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("span", {
+    })))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("section", {
+      className: "video-details"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("h2", null, __('Video Details')), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("span", {
       className: "fetch-message ".concat(fetchStatus["class"])
     }, fetchStatus.message), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("form", {
       onSubmit: function onSubmit(event) {
@@ -922,56 +1019,49 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
       onChange: handleURLChange
     }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("input", {
       type: "submit",
+      className: "yt-submit-button",
       value: "Submit"
     })), videoTitle && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(TextControl, {
       label: __('Video Title'),
-      value: videoTitle
+      value: videoTitle,
+      onChange: function onChange(newValue) {
+        return setAttributes({
+          videoTitle: newValue
+        });
+      }
     }), videoThumbnail && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("label", {
       className: "youtube-post-label"
-    }, __('Post Thumbnail')), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("img", {
+    }, __('Video Thumbnail')), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("img", {
       src: videoThumbnail
-    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("div", {
+    }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("section", {
+      className: "post-body"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("h2", null, __('Post Body')), videoID ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("div", {
       className: "youtube-post-video-area"
     }, videoURL && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("iframe", {
       width: "560",
-      height: "515",
+      height: "715",
       src: videoURL,
+      className: 0 !== courseSlotOne ? 'iframe-two-third-width' : 'iframe-full-width',
       title: "YouTube video player",
       frameborder: "0",
       allow: "accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture",
       allowfullscreen: true
-    }), (courseSlotOne || courseSlotTwo) && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("div", {
+    }), 0 !== courseSlotOne && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("div", {
       className: "course-sidebar"
-    }, courseSlotOne && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(CourseArea, {
+    }, 0 !== courseSlotOne && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(CourseArea, {
       courseID: courseSlotOne
-    }), courseSlotTwo && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(CourseArea, {
+    }), 0 !== courseSlotTwo && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(CourseArea, {
       courseID: courseSlotTwo
     }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("div", {
-      claclassNamess: "post-content-video-description"
+      classNames: "post-content-video-description"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(RichText, {
       value: videoDescription
-    })));
+    }))) : (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("span", {
+      className: "empty-post-body-msg"
+    }, __('Submit URL to populate post body.'))));
   },
-  save: function save(_ref2) {
-    var attributes = _ref2.attributes,
-        className = _ref2.className;
-    var videoURL = attributes.videoURL,
-        videoDescription = attributes.videoDescription;
-    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("div", {
-      className: className
-    }, videoURL ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("iframe", {
-      width: "560",
-      height: "515",
-      src: videoURL,
-      title: "YouTube video player",
-      frameborder: "0",
-      allow: "accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture",
-      allowfullscreen: true
-    }) : '', (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("div", {
-      className: "post-content-video-description"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(RichText.Content, {
-      value: videoDescription
-    })));
+  save: function save() {
+    return null;
   }
 });
 

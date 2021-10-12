@@ -1,12 +1,8 @@
 const { registerBlockType } = wp.blocks;
 const {
 	TextControl,
-	TextareaControl,
-	Button,
-	FocusableIframe,
 	PanelBody,
 	PanelRow,
-	FormToggle,
 	SelectControl,
 	ToggleControl
 } = wp.components;
@@ -16,10 +12,10 @@ const {
 	URLInput,
 	useBlockProps
 } = wp.blockEditor;
-const { useSelect, useEffect, dispatch, useDispatch } = wp.data;
-const { useEntityProp } = wp.coreData;
+const { useSelect, dispatch, useDispatch } = wp.data;
 const { useState } = wp.element;
 const { __ } = wp.i18n;
+const { parse } = wp.blockSerializationDefaultParser;
 import { youtubeAPIConfig } from '../../../../youtube-api-config'
 
 registerBlockType( 'gutenberg-good-guitarist/ypt', {
@@ -32,12 +28,12 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 		videoTitle: {
 			type: 'string'
 		},
-		videoDescription: {
-			type: 'string',
-		},
 		videoThumbnail: {
 			type: 'string',
-			default: gutenbergVars.image_dir + '/good-guitarist-preview-img.png'
+			// default: gutenbergVars.image_dir + '/good-guitarist-preview-img.png'
+		},
+		videoDescription: {
+			type: 'string',
 		},
 		videoURL: {
 			type: 'string',
@@ -46,10 +42,20 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 			type: 'string',
 		},
 		courseSlotOne: {
-			type: 'integer'
+			type: 'integer',
+			default: 0
 		},
 		courseSlotTwo: {
-			type: 'integer'
+			type: 'integer',
+			default: 0
+		},
+		courseSlotThree: {
+			type: 'integer',
+			default: 0
+		},
+		courseSlotFour: {
+			type: 'integer',
+			default: 0
 		},
 		testBoolean:  {
 			type: 'boolean',
@@ -67,18 +73,17 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 			courseSlotOne,
 			courseSlotTwo
 		} = attributes;
-		const blockProps = useBlockProps();
 
+		const blockProps = useBlockProps();
+		const courseDetails = {};
 		const courseOptions = [{
 			label: 'None',
 			value: null
 		}];
-
 		const [fetchStatus, setFetchStatus] = useState({
 			class: 'fetch-message-hidden',
 			message: ''
 		});
-
 		const { postMeta, courses } = useSelect( ( select ) => {
 			return {
 				postMeta: select( 'core/editor' ).getEditedPostAttribute( 'meta' ),
@@ -89,11 +94,28 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 
 		if ( courses ) {
 			courses.forEach((course) => {
+				const parsedBlocks = parse(course.content.raw);
+				/**
+				 * There may be multiple blocks in the course post.
+				 *
+				 * Find the course template block(which should be the first)
+				 * and get its attributes.
+				 */
+				const courseTemplateBlock = parsedBlocks.find(block => 'gutenberg-good-guitarist/course-template' === block.blockName);
+				const courseAtts = courseTemplateBlock.attrs;
+
 				courseOptions.push({
 					label: course.title.raw,
 					value: parseInt(course.id),
-					// imageURL:
 				})
+				// Keep separate courseDetail objects used to populate attributes.
+				courseDetails[course.id] = {
+					title: course.title.raw,
+					description: courseAtts.courseDescription,
+					url: courseAtts.courseUrl,
+					imageId: courseAtts.imageId,
+					imageUrl: courseAtts.imageUrl
+				}
 			})
 		}
 
@@ -129,9 +151,11 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 						const fetchedDescription = response.result.items[0].snippet.description;
 						const fetchedThumbnail = response.result.items[0].snippet.thumbnails.medium.url;
 						const descriptitonWithAnchorTags = fetchedDescription.replace(/(http:\/\/|https:\/\/).*/g, (text) => (`<a href="${text}">${text}</a>`));
-
+						console.log(descriptitonWithAnchorTags);
 						// Update the post title.
-						dispatch('core/editor').editPost({title: fetchedTitle})
+						dispatch('core/editor').editPost({
+							title: fetchedTitle,
+						});
 						setAttributes({
 							videoTitle: fetchedTitle,
 							videoDescription: descriptitonWithAnchorTags,
@@ -155,24 +179,37 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 
 		const handleCourseChange = (newValue, id) => {
 			if ('first-course-slot' === id) {
-				setAttributes({ courseSlotOne: newValue })
+				console.log('it is set', newValue)
+				if ('None' !== newValue ) {
+					setAttributes({ courseSlotOne: newValue })
+				} else {
+					setAttributes({ courseSlotOne: 0})
+				}
 			}
 			if ('second-course-slot' === id) {
-				setAttributes({ courseSlotTwo: newValue })
+				if ('None' !== newValue ) {
+					setAttributes({ courseSlotTwo: newValue })
+				} else {
+					setAttributes({ courseSlotTwo: 0})
+				}
 			}
 		}
 
 		const CourseArea = ( props ) => {
-			const filteredCourses = courses.filter(course => course.id === parseInt(props.courseID));
-			const selectedCourse = filteredCourses[0];
-
-			return (
-				<div className="small-course-card">
-					{/* <img src={ebook1} alt="" /> */}
-					<h3>{props.slotContent}</h3>
-					<button></button>
-				</div>
-			)
+			console.log(props.courseID)
+			if ('None' !== props.courseID ) {
+				const course = courseDetails[props.courseID];
+				console.log('happening?')
+				return (
+					<div className="small-course-card">
+						<img src={course.imageUrl} alt="" />
+						<div className="course-card-body">
+							<p className="body-text">{course.description}</p>
+							<a className="course-url-button" href={course.courseUrl}>{'Get it now!'}</a>
+						</div>
+					</div>
+				)
+			}
 		}
 		return (
 			<div { ...blockProps } className={ className }>
@@ -216,50 +253,47 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 						</PanelRow>
 					</PanelBody>
 				</InspectorControls>
-				<span className={`fetch-message ${fetchStatus.class}`}>{fetchStatus.message}</span>
-				<form onSubmit={(event) => initFetch(event, videoID)}>
-					<URLInput
-						label={__('Video URL')}
-						value={ videoURL }
-						className={`youtube-video-url`}
-						onChange={handleURLChange}
-						/>
-                	<input type="submit" value="Submit" />
-				</form>
-				{ videoTitle && <TextControl label={__('Video Title')} value={videoTitle} />}
-				{ videoThumbnail &&
+				<section className="video-details">
+					<h2>{__('Video Details')}</h2>
+					<span className={`fetch-message ${fetchStatus.class}`}>{fetchStatus.message}</span>
+					<form onSubmit={(event) => initFetch(event, videoID)}>
+						<URLInput
+							label={__('Video URL')}
+							value={ videoURL }
+							className={`youtube-video-url`}
+							onChange={handleURLChange}
+							/>
+						<input type="submit" className="yt-submit-button" value="Submit" />
+					</form>
+					{ videoTitle && <TextControl label={__('Video Title')} value={videoTitle} onChange={(newValue) => setAttributes({videoTitle: newValue})} />}
+					{ videoThumbnail &&
+						<>
+							<label className="youtube-post-label">{__('Video Thumbnail')}</label>
+							<img src={videoThumbnail} />
+						</>
+					}
+				</section>
+				<section className="post-body">
+					<h2>{__('Post Body')}</h2>
+					{ videoID ?
 					<>
-						<label className="youtube-post-label">{__('Post Thumbnail')}</label>
-						<img src={videoThumbnail} />
-					</>
-				}
-				<div className="youtube-post-video-area">
-					{ ( videoURL ) && <iframe width="560" height="515" src={videoURL} title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> }
-					{ ( courseSlotOne || courseSlotTwo ) && <div className="course-sidebar">
-						{ courseSlotOne && <CourseArea courseID={courseSlotOne} />}
-						{ courseSlotTwo && <CourseArea courseID={courseSlotTwo} />}
-					</div> }
-				</div>
-				<div claclassNamess="post-content-video-description">
-					<RichText value={videoDescription} />
-				</div>
+						<div className="youtube-post-video-area">
+							{ ( videoURL ) && <iframe width="560" height="715" src={videoURL} className={0 !== courseSlotOne ? 'iframe-two-third-width' : 'iframe-full-width'} title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> }
+							{ ( 0 !== courseSlotOne ) && <div className="course-sidebar">
+								{ 0 !== courseSlotOne && <CourseArea courseID={courseSlotOne} />}
+								{ 0 !== courseSlotTwo && <CourseArea courseID={courseSlotTwo} />}
+							</div> }
+						</div>
+						<div classNames="post-content-video-description">
+							<RichText value={videoDescription} />
+						</div>
+					</> : <span className="empty-post-body-msg">{__('Submit URL to populate post body.')}</span> }
+				</section>
 			</div>
 		);
 	},
 
-	save({ attributes, className }) {
-		const {
-			videoURL,
-			videoDescription
-		} = attributes;
-
-		return (
-			<div className={ className }>
-				{ videoURL ? <iframe width="560" height="515" src={videoURL} title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> : ''}
-				<div className="post-content-video-description">
-					<RichText.Content value={videoDescription} />
-				</div>
-			</div>
-		);
+	save() {
+		return null;
 	}
 });
