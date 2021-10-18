@@ -1,5 +1,24 @@
 .youtube-post {
 
+	.youtube-post-term-pills {
+		list-style-type: none;
+		padding: 0;
+		display: flex;
+
+		.term-pill {
+			padding-right: 0.5rem;
+
+			a {
+				background: $white;
+				border: 1px solid $gg-blue;
+				padding: 0.5rem 0.75rem;
+				border-radius: 19px;
+				color: $gg-blue;
+				box-shadow: 1px 2px 3px -1px $gg-blue;
+			}
+		}
+	}
+
 	.youtube-post-video-area {
 		display: flex;
 

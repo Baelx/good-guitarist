@@ -7,6 +7,8 @@
 
 namespace GoodGuitarist\Api;
 
+use GoodGuitarist\Custom\PostTypes;
+
 /**
  * Customizer class
  */
@@ -140,42 +142,12 @@ class Gutenberg
 	 * @return	string
 	 */
 	public function youtube_search_block_render( $att ) {
-		$ypt_terms = $this->get_youtube_post_taxonomies_and_terms();
+		$ypt_terms = PostTypes::get_youtube_post_taxonomies_and_terms();
 		$ypt_meta = [ 'difficulty' => 'sus'];
 
 		ob_start();
 		include get_template_directory() . '/views/blocks/ypt-search.php';
 		return ob_get_clean();
-	}
-
-	/**
-	 * Get all taxonomies related to Youtube Posts, with their terms.
-	 *
-	 * @return	array
-	 */
-	public function get_youtube_post_taxonomies_and_terms(): array {
-		$ypt_taxonomies_and_terms = [];
-		$ypt_taxonomies = get_object_taxonomies( 'youtube-post' );
-
-		if ( $ypt_taxonomies ) {
-			foreach ( $ypt_taxonomies as $taxonomy ) {
-				$term_list = get_terms([
-					'taxonomy' => $taxonomy,
-					'hide_empty' => false
-				]);
-
-				$term_list = array_map( function( $term_object ) {
-					$term_array = (array) $term_object;
-					$term_array = array_filter( $term_array, function( $key ) {
-						return $key === 'slug' || $key === 'name';
-					}, ARRAY_FILTER_USE_KEY );
-					return $term_array;
-				}, $term_list );
-
-				$ypt_taxonomies_and_terms[$taxonomy] = $term_list;
-			}
-		}
-		return $ypt_taxonomies_and_terms;
 	}
 
 	/**
@@ -185,7 +157,6 @@ class Gutenberg
 	 * @param	string	$content	Block content
 	 */
 	public function large_course_card_render( $atts, $content ) {
-		error_log('sus?');
 		ob_start();
 		include get_template_directory() . '/views/blocks/large-course-card.php';
 		return ob_get_clean();

@@ -165,6 +165,64 @@ class PostTypes {
 		}
 		return $course_details;
 	}
+
+	/**
+	 * Get all taxonomies related to Youtube Posts, with their terms.
+	 *
+	 * @return	array
+	 */
+	public static function get_youtube_post_taxonomies_and_terms(): array {
+		$ypt_taxonomies_and_terms = [];
+		$ypt_taxonomies = get_object_taxonomies( 'youtube-post' );
+
+		if ( $ypt_taxonomies ) {
+			foreach ( $ypt_taxonomies as $taxonomy ) {
+				$term_list = get_terms([
+					'taxonomy' => $taxonomy,
+					'hide_empty' => false
+				]);
+				if ( $term_list ) {
+					$term_list = array_map( function( $term_object ) {
+						$term_array = (array) $term_object;
+						$term_array = array_filter( $term_array, function( $key ) {
+							return $key === 'slug' || $key === 'name';
+						}, ARRAY_FILTER_USE_KEY );
+						return $term_array;
+					}, $term_list );
+
+					$ypt_taxonomies_and_terms[$taxonomy] = $term_list;
+				}
+			}
+		}
+		return $ypt_taxonomies_and_terms;
+	}
+
+	/**
+	 * Get terms(with term urls) and meta values for a given Youtube Post.
+	 *
+	 * @param	int	$post_id	The ID of the post to retrieve values for.
+	 * @return	array
+	 */
+	public static function get_single_youtube_post_terms_and_meta( int $post_id ): array {
+		$post_terms = [];
+		$taxonomies = get_post_taxonomies( $post_id );
+		foreach ( $taxonomies as $key => $tax ) {
+			$term_list = get_the_terms( $post_id, $tax );
+			if ( $term_list ) {
+				$term_list = array_map( function( $term_object ) {
+					$term_array = (array) $term_object;
+					$term_array['url'] = get_term_link( $term_array['term_id'] );
+					$term_array = array_filter( $term_array, function( $key ) {
+						return $key === 'slug' || $key === 'name' || $key === 'url';
+					}, ARRAY_FILTER_USE_KEY );
+					return $term_array;
+				}, $term_list );
+
+				$post_terms[$tax] = $term_list;
+			}
+		}
+		return $post_terms;
+	}
 }
 
 

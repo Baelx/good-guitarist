@@ -1,9 +1,9 @@
 {
-    "/js/app.js": "/js/app.js",
-    "/js/admin.js": "/js/admin.js",
-    "/js/yptAjax.js": "/js/yptAjax.js",
-    "/js/gutenberg.js": "/js/gutenberg.js",
-    "/css/style.css": "/css/style.css",
-    "/css/gutenberg.css": "/css/gutenberg.css",
-    "/css/admin.css": "/css/admin.css"
+    "/js/app.js": "/js/app.js?id=5f63a01e897655f682a5",
+    "/js/admin.js": "/js/admin.js?id=d41d8cd98f00b204e980",
+    "/js/yptAjax.js": "/js/yptAjax.js?id=3bb8091ef0f339bf509f",
+    "/js/gutenberg.js": "/js/gutenberg.js?id=1290e39d46870869026f",
+    "/css/style.css": "/css/style.css?id=1684a3cb84571c098d52",
+    "/css/gutenberg.css": "/css/gutenberg.css?id=ac26d05a715d9f8d1f61",
+    "/css/admin.css": "/css/admin.css?id=334192300a65eb218635"
 }

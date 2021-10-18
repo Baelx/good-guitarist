@@ -1,0 +1,25 @@
+.archive {
+	main {
+		display: flex;
+
+		.youtube-post {
+			width: 30%;
+			border-radius: 4px;
+			background-color: $white;
+			border: 1px solid $gg-blue;
+
+			.ypt-link-wrapper {
+				padding: 1rem;
+
+				img {
+					width: 100%;
+					height: auto;
+				}
+
+				h2 {
+					font-size: 1.5em;
+				}
+			}
+		}
+	}
+}

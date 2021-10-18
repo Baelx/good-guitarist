@@ -5923,6 +5923,42 @@ aside {
   top: -9999px;
 }
 
+.archive main {
+  display: flex;
+}
+.archive main .youtube-post {
+  width: 30%;
+  border-radius: 4px;
+  background-color: #fff;
+  border: 1px solid #0872bb;
+}
+.archive main .youtube-post .ypt-link-wrapper {
+  padding: 1rem;
+}
+.archive main .youtube-post .ypt-link-wrapper img {
+  width: 100%;
+  height: auto;
+}
+.archive main .youtube-post .ypt-link-wrapper h2 {
+  font-size: 1.5em;
+}
+
+.youtube-post .youtube-post-term-pills {
+  list-style-type: none;
+  padding: 0;
+  display: flex;
+}
+.youtube-post .youtube-post-term-pills .term-pill {
+  padding-right: 0.5rem;
+}
+.youtube-post .youtube-post-term-pills .term-pill a {
+  background: #fff;
+  border: 1px solid #0872bb;
+  padding: 0.5rem 0.75rem;
+  border-radius: 19px;
+  color: #0872bb;
+  box-shadow: 1px 2px 3px -1px #0872bb;
+}
 .youtube-post .youtube-post-video-area {
   display: flex;
 }
