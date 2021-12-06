@@ -31,10 +31,13 @@ class Enqueue
 		// }
 
 		// CSS
-		wp_enqueue_style( 'main', mix('css/style.css'), array(), '1.0.1', 'all' );
+		wp_enqueue_style( 'main', mix('css/style.css'), [], '1.0.1', 'all' );
 
 		// JS
-		wp_enqueue_script( 'main', mix('js/app.js'), array(), '1.0.0', true );
+		wp_enqueue_script( 'main', mix('js/app.js'), [ 'jquery' ], '1.0.0', true );
+
+		// Dashicons
+		wp_enqueue_style('dashicons');
 
 		// Activate browser-sync on development environment
 		if ( getenv( 'APP_ENV' ) === 'development' ) :

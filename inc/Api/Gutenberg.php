@@ -81,7 +81,11 @@ class Gutenberg
 	public function gutenberg_enqueue()
 	{
 		wp_enqueue_script( 'gutenberg-good-guitarist-youtube-js', 'https://apis.google.com/js/api.js', [] );
-		wp_register_script( 'gutenberg-good-guitarist', get_template_directory_uri() . '/assets/dist/js/gutenberg.js', [ 'wp-blocks', 'wp-element', 'wp-editor', 'gutenberg-good-guitarist-youtube-js' ] );
+		wp_register_script(
+			'gutenberg-good-guitarist',
+			get_template_directory_uri() . '/assets/dist/js/gutenberg.js',
+			[ 'wp-blocks', 'wp-element', 'wp-editor', 'wp-edit-post', 'gutenberg-good-guitarist-youtube-js' ]
+		);
 
 		wp_localize_script( 'gutenberg-good-guitarist', 'gutenbergVars', [
 			'image_dir' => get_template_directory_uri() . '/assets/dist/images'
@@ -98,6 +102,7 @@ class Gutenberg
 
 		register_block_type( 'gutenberg-good-guitarist/latest-lessons', [
 			'editor_script' => 'gutenberg-good-guitarist',
+			'render_callback' => [ $this, 'latest_lessons_render' ]
 		]);
 
 		register_block_type( 'gutenberg-good-guitarist/ypt', [
@@ -159,6 +164,17 @@ class Gutenberg
 	public function large_course_card_render( $atts, $content ) {
 		ob_start();
 		include get_template_directory() . '/views/blocks/large-course-card.php';
+		return ob_get_clean();
+	}
+
+	/**
+	 * Render the latest posts block.
+	 *
+	 * @param	array	$atts
+	 */
+	public function latest_lessons_render( $atts ) {
+		ob_start();
+		include get_template_directory() . '/views/blocks/latest-lessons.php';
 		return ob_get_clean();
 	}
 }

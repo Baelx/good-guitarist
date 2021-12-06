@@ -17,6 +17,12 @@ class Taxonomies {
 	public function __construct() {
 		$this->custom_taxonomies = [
 			[
+				'key' => 'artist',
+				'singular_name' => 'Artist',
+				'plural_name' => 'Artists',
+				'defaults' => []
+			],
+			[
 				'key' => 'genre',
 				'singular_name' => 'Genre',
 				'plural_name' => 'Genres',
@@ -118,7 +124,7 @@ class Taxonomies {
 					'Solo',
 					'Concept'
 				]
-			]
+			],
 		];
 	}
 

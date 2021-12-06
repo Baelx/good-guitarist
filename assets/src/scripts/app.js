@@ -1,13 +1,24 @@
-/**
- * Manage global libraries like jQuery or THREE from the package.json file
- */
+import Carousel from './modules/carousel.js';
 
-// Import libraries
-// import 'slick-carousel';
+const carousel = new Carousel();
 
-// Import custom modules
-import App from './modules/app.js';
-// import Carousel from './modules/carousel.js';
+const $siteNav = $('#site-navigation');
 
-const app = new App();
-// const carousel = new Carousel();
+$('.mobile-nav-button').on('click', () => {
+	console.log("button")
+	if ('false' === $siteNav.attr('aria-expanded')) {
+		$siteNav.fadeIn();
+		$siteNav.attr('aria-expanded', 'true');
+
+		// No scroll on body when nav menu is visible.
+		$('body').style('overflow-y', 'hidden');
+	}
+})
+
+$('.close-nav-button').on('click', () => {
+	$siteNav.fadeOut();
+	$siteNav.attr('aria-expanded', 'false');
+
+	// No scroll on body when nav menu is visible.
+	$('body').style('overflow-y', 'hidden');
+})

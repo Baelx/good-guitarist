@@ -17,25 +17,39 @@
 	if ( is_customize_preview() ) {
 		echo '<div id="awps-footer-control" style="margin-top:-30px;position:absolute;"></div>';
 	}
+	$footer_font_color = get_theme_mod( 'gg_footer_font_color', '#000' );
 	?>
 
-	<footer id="colophon" class="site-footer container-fluid" role="contentinfo">
+	<footer id="colophon" class="site-footer container-fluid" role="contentinfo" style="<?php esc_attr_e( 'background-color: ' . get_theme_mod( 'gg_footer_background_color', '#fff' ) ); ?>">
+		<h2 style="<?php esc_attr_e( 'color: ' . $footer_font_color ) ?>">
+			<?php esc_html_e( get_theme_mod( 'gg_footer_header_text', '' ) ); ?>
+		</h2>
 		<section class="social-links-footer-section">
 			<div class="social-icon-container social-icon-label-youtube">
-				<i class="fa"></i>
-				<p class="social-icon-label">Youtube</p>
-			</div>
-			<div class="social-icon-container social-icon-label-facebook">
-				<i class="fa"></i>
-				<p class="social-icon-label">Facebook</p>
+				<a style="<?php esc_attr_e( 'color: ' . $footer_font_color ) ?>"
+				   href="<?php esc_attr_e( get_theme_mod( 'gg_youtube_url', '#' ) ); ?>"
+				   class="">
+				   <img src="<?php echo get_template_directory_uri() . '/assets/dist/images' ?>" />
+				</a>
 			</div>
 			<div class="social-icon-container social-icon-label-instagram">
-				<i class="fa"></i>
-				<p class="social-icon-label">Instagram</p>
+				<a style="<?php esc_attr_e( 'color: ' . $footer_font_color ) ?>"
+				   href="<?php esc_attr_e( get_theme_mod( 'gg_instagram_url', '#' ) ); ?>"
+				   class="dashicons dashicons-instagram">
+				</a>
+			</div>
+			<div class="social-icon-container social-icon-label-facebook">
+				<a style="<?php esc_attr_e( 'color: ' . $footer_font_color ) ?>"
+				   href="<?php esc_attr_e( get_theme_mod( 'gg_facebook_url', '#' ) ); ?>"
+				   class="dashicons dashicons-facebook">
+				</a>
 			</div>
 			<div class="social-icon-container social-icon-label-patreon">
-				<i class="fa"></i>
-				<p class="social-icon-label">Patreon</p>
+				<a style="<?php esc_attr_e( 'color: ' . $footer_font_color ) ?>"
+				   href="<?php esc_attr_e( get_theme_mod( 'gg_patreon_url', '#' ) ); ?>"
+				   class="dashicons dashicons-facebook">
+				   <svg>
+				</a>
 			</div>
 		</section>
 		<div class="site-info">

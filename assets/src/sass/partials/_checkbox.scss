@@ -29,11 +29,11 @@
 	left: 3px;
 	height: 16px;
 	width: 16px;
-	outline: 2px solid $search-box-highlight;
+	outline: 2px solid $black;
   }
 
   .checkbox input:checked ~ .checkmark {
-	background-color: $search-box-highlight;
+	background-color: $black;
   }
 
   .checkmark:after {

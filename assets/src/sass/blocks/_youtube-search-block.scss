@@ -1,76 +1,102 @@
 #ypt-ajax-filter-search {
 	display: flex;
-	margin: 1rem 1rem;
+	margin: 1rem;
 
 	form {
-		max-width: 30%;
-		padding: 0 1rem;
-		border-right: 1px solid $search-box-highlight;
+		width: 25%;
+		min-width: 25%;
+		display: block;
+		max-height: 80vh;
+		background-color: $ypt-search-form-bg;
+		border-radius: 6px;
 
-		#songSearchText {
-			border: 2px solid $search-box-highlight;
-			border-radius: 3px;
-			padding: 0.5rem;
+		.search-text-section {
+			padding-bottom: 2rem;
+			padding-top: 1rem;
+			margin-left: 1rem;
+
+			#songSearchText {
+				border: 2px solid $black;
+				border-radius: 3px;
+				padding: 0.5rem;
+				width: 85%;
+			}
 		}
 
 		.search-label {
 			font-weight: bold;
 			font-size: 1.2rem;
 			padding: 1rem 0;
-			color: $search-box-highlight;
+			color: $black;
 		}
 
-		.search-filter {
-			border-left: none;
-			border-right: none;
-			border-top: none;
-			padding: 0;
-			border-bottom: 1px solid $search-box-highlight;
-			padding-bottom: 0.75rem;
+		.search-filters-section {
+			max-height: 70%;
+			display: block;
+			overflow-y: auto;
+			background-color: $ypt-nested-search-form-bg;
 
-			label {
-				font-size: 1.1rem;
-				margin-left: 0.1rem;
+			.search-filter {
+				margin-left: 1rem;
 			}
 
-			.chord-filter-type-container {
-				margin-bottom: 1rem;
+			.search-filter {
+				border: none;
+				padding: 0;
+				padding-bottom: 0.75rem;
 
 				label {
-					display: inline;
+					font-size: 1.1rem;
+					margin-left: 0.1rem;
+				}
+
+				.chord-filter-type-container {
+					margin-bottom: 1rem;
+
+					label {
+						display: inline;
+					}
 				}
 			}
 
-		}
+			.single-button-filters-container {
+				padding: 1rem 0;
+				margin-top: 1rem;
+				margin-left: 1rem;
 
-		.single-button-filters-container {
-			padding: 1rem 0;
-			margin-top: 1rem;
-
-			.single-button-filter-label {
-				font-weight: bold;
-				font-size: 1.2rem;
-				color: $search-box-highlight;
+				.single-button-filter-label {
+					font-weight: bold;
+					font-size: 1.2rem;
+					color: $black;
+				}
 			}
 		}
 
 		.search-btn {
+			margin-top: 1rem;
+			margin-left: 1rem;
 			background-color: $white;
-			border: 2px solid $search-box-highlight;
+			border: 2px solid $black;
 		}
 	}
 
 	#ypt-ajax-search-results {
-		flex-grow: 1;
-		display: flex;
-		flex-wrap: wrap;
+		margin-top: 0;
+		display: grid;
+		grid-template-columns: 1fr 1fr 1fr;
 		list-style-type: none;
 
 		.ypt-result {
-			max-width: 30%;
-			margin: 0 0.75rem 0.75rem 0.75rem;
+			margin: 1rem;
+
+			a {
+				color: black;
+
+				img {
+					width: 100%;
+					max-width: inherit;
+				}
+			}
 		}
 	}
-
-
 }

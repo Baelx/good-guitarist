@@ -8,11 +8,17 @@ if ( $atts['courseSlotOne'] ?? false ) {
 if ( $atts['courseSlotTwo'] ?? false ) {
 	$upper_slot_courses[] = PostTypes::get_course_details( $atts['courseSlotTwo'] );
 }
-
-
+$youtube_iframe_class = empty( $upper_slot_courses ) ? "no-upper-courses" : "";
 $taxonomies = PostTypes::get_single_youtube_post_terms_and_meta( get_the_ID() );
 ?>
 <div className="youtube-post">
+	<h3 class="song-and-artist">
+		<span><?php esc_html_e( $taxonomies['artist'] ?? '' ); ?></span>
+		<?php if ( ( $taxonomies['artist'] ?? false ) && ( $atts['songtitle'] ?? false ) ): ?>
+			<span>-</span>
+		<?php endif; ?>
+		<span><?php esc_html_e( $atts['songTitle'] ?? '' ); ?></span>
+	</h3>
 	<ul class="youtube-post-term-pills">
 		<?php foreach ( $taxonomies as $tax_key => $tax_value ): ?>
 			<?php if ( 'chords' !== $tax_key && 'beginner-songs-containing-only' !== $tax_key ): ?>
@@ -25,9 +31,9 @@ $taxonomies = PostTypes::get_single_youtube_post_terms_and_meta( get_the_ID() );
 		<?php endforeach; ?>
 	</ul>
 	<div class="youtube-post-video-area">
-		<iframe width="560" height="515" src="<?php esc_attr_e( $atts['videoURL'])?>" title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+		<iframe class="<?php esc_attr_e( $youtube_iframe_class ); ?>" width="560" height="515" src="<?php esc_attr_e( $atts['videoURL'])?>" title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+		<?php if ( ! empty( $upper_slot_courses ) ): ?>
 		<div class="upper-course-area">
-			<?php if ( ! empty( $upper_slot_courses ) ): ?>
 				<?php foreach( $upper_slot_courses as $course ): ?>
 				<div class="small-course-card">
 					<img src="<?php esc_attr_e( $course['imageUrl'] ); ?>" alt="" />
@@ -37,14 +43,22 @@ $taxonomies = PostTypes::get_single_youtube_post_terms_and_meta( get_the_ID() );
 					</div>
 				</div>
 				<?php endforeach; ?>
-			<?php endif; ?>
 		</div>
+		<?php endif; ?>
 	</div>
 	<div class="youtube-post-chords">
 		<span><?php esc_html_e( 'Chords' ); ?>:</span>
-		<?php foreach ( $taxonomies['chords'] as $chord_term ): ?>
-		<span><?php esc_html_e( $chord_term['name'] ); ?></span>
-		<?php endforeach; ?>
+		<?php if ( $taxonomies['chords'] ?? false ): ?>
+			<?php
+				// Keep an index of each looped chord to insert commas after each one except the last.
+				$index = 0;
+			?>
+			<?php foreach ( $taxonomies['chords'] as $key => $chord_term ): ?>
+			<?php $index += 1; ?>
+			<a href="<?php esc_url( $chord_term['url'] ?? '#' ) ?>"><?php esc_html_e( $chord_term['name'] ); ?></a>
+			<?php if ( count( $taxonomies['chords'] ) > 1 && $index !== count( $taxonomies['chords'] ) ): ?><span>, </span><?php endif; ?>
+			<?php endforeach; ?>
+		<?php endif; ?>
 	</div>
 	<div class="post-body"><?php esc_html_e( $atts['videoDescription'] ); ?></div>
 </div>

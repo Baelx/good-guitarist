@@ -1,43 +1,27 @@
 .site-footer {
-	padding: 0;
+	padding: 4rem 3rem 5rem 3rem;
 	margin-top: 4rem;
+	text-align: center;
+
+	h2 {
+		padding: 0 15%;
+		line-height: 1.15;
+	}
 
 	.social-links-footer-section {
 		display: flex;
-		flex-wrap: wrap;
+		justify-content: space-around;
+		background-color: $gg-blue;
+		padding: 2rem 3rem;
 
-		.social-icon-label-facebook {
-			background-color: blue;
+		.dashicons {
+			font-size: 4rem;
+			color: $white;
 		}
 
-		.social-icon-label-instagram {
-			background-color: pink;
-		}
-
-		.social-icon-label-patreon {
-			background-color: orange;
-		}
-
-		.social-icon-label-youtube {
-			background-color: red;
-		}
-
-		.social-icon-container {
-			flex: 1 0 25%; /* explanation below */
-			height: 100px;
-			color: #fff;
-			text-align: center;
-
-			i {
-				// color: #fff;
-			}
-
-			.social-icon-label {
-				// color: #fff;
-			}
-		}
 	}
 }
 
 .entry-footer {
+
 }

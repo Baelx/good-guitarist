@@ -48,11 +48,11 @@
   left: 3px;
   height: 16px;
   width: 16px;
-  outline: 2px solid #1e1e9b;
+  outline: 2px solid #000;
 }
 
 .checkbox input:checked ~ .checkmark {
-  background-color: #1e1e9b;
+  background-color: #000;
 }
 
 .checkmark:after {
@@ -100,7 +100,7 @@
   height: 18px;
   width: 18px;
   border-radius: 50%;
-  border: 2px solid #1e1e9b;
+  border: 2px solid #000;
 }
 
 /* When the radio button is checked, add a blue background */
@@ -124,7 +124,7 @@
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: #1e1e9b;
+  background: #000;
   transform: translate(-50%, -50%);
 }
 
@@ -136,6 +136,11 @@
 /** All blocks **/
 .wp-block {
   max-width: none;
+}
+
+.dynamic-block-h2 {
+  color: #818181;
+  font-style: italic;
 }
 
 *[data-type="gutenberg-good-guitarist/large-course-card"] {
@@ -150,7 +155,7 @@
 
 .large-course-card {
   border-radius: 3px;
-  padding: 2rem 4rem;
+  padding: 10%;
   display: flex;
   flex-direction: column;
   box-shadow: 2px 2px 4px 1px #d2d2d2;
@@ -176,12 +181,35 @@
   border-radius: 3px;
 }
 
-.wp-block-gutenberg-good-guitarist-latest-lessons {
-  display: flex;
-  align-items: center;
+*[data-type="gutenberg-good-guitarist/latest-lessons"]:first-of-type {
+  border: 1px solid #818181;
+  border-radius: 4px;
+  text-align: center;
 }
-.wp-block-gutenberg-good-guitarist-latest-lessons .lesson-thumbnail {
+
+.latest-lessons-block {
+  display: flex;
+  justify-content: center;
+  padding: 0 5%;
+}
+.latest-lessons-block .lessons-carousel {
+  overflow-x: hidden;
+}
+.latest-lessons-block .lessons-carousel .lessons-container {
+  white-space: nowrap;
+}
+.latest-lessons-block .lessons-carousel .lessons-container .lesson-link {
+  width: 19%;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  margin: 0 0.5%;
+}
+.latest-lessons-block .lessons-carousel .lessons-container .lesson-link .lesson-thumbnail {
   width: 100px;
+}
+.latest-lessons-block .lessons-carousel .lessons-container .lesson-link .lesson-title {
+  font-size: 1rem;
 }
 
 [data-type="core/cover"] {
@@ -195,10 +223,26 @@
 
 .wp-block-columns {
   margin-bottom: 0;
+  flex-direction: column;
+}
+@media screen and (min-width: 1000px) {
+  .wp-block-columns {
+    margin-bottom: 0;
+    flex-direction: row;
+  }
+}
+.wp-block-columns .wp-block-column {
+  margin-bottom: 3rem;
+  margin-left: 0;
+}
+@media screen and (min-width: 1000px) {
+  .wp-block-columns .wp-block-column {
+    margin-bottom: 0;
+  }
 }
 
 .wp-block-group {
-  padding: 0 10rem;
+  padding: 0 10%;
 }
 
 .media-upload-component .image-label {
@@ -232,6 +276,11 @@
 [data-type="gutenberg-good-guitarist/ypt"] section:first-of-type {
   border-bottom: 2px solid #e6e6e6;
 }
+[data-type="gutenberg-good-guitarist/ypt"] form {
+  display: grid;
+  grid-template-columns: auto 20%;
+  margin-bottom: 1rem;
+}
 [data-type="gutenberg-good-guitarist/ypt"] form .youtube-video-url {
   width: 100%;
 }
@@ -241,16 +290,22 @@
   border-radius: 2px;
 }
 [data-type="gutenberg-good-guitarist/ypt"] form .yt-submit-button {
+  cursor: pointer;
   background-color: #0872bb;
   border: none;
   border-radius: 3px;
   color: #fff;
   padding: 0.5rem 1rem;
+  margin-left: 0.5rem;
 }
 [data-type="gutenberg-good-guitarist/ypt"] .youtube-post-label {
   display: block;
-  margin-bottom: 8px;
+  margin: 8px 0;
   font-size: 13px;
+}
+[data-type="gutenberg-good-guitarist/ypt"] input[type=text] {
+  display: block;
+  width: 100%;
 }
 [data-type="gutenberg-good-guitarist/ypt"] .components-base-control > div {
   display: flex;
@@ -281,54 +336,66 @@
   opacity: 100;
   transition: opacity 0.25s;
 }
-[data-type="gutenberg-good-guitarist/ypt"] .youtube-post-video-area {
+[data-type="gutenberg-good-guitarist/ypt"] .post-body .youtube-post-video-area {
   display: flex;
 }
-[data-type="gutenberg-good-guitarist/ypt"] .youtube-post-video-area iframe {
+[data-type="gutenberg-good-guitarist/ypt"] .post-body .youtube-post-video-area iframe {
   width: 70%;
 }
-[data-type="gutenberg-good-guitarist/ypt"] .youtube-post-video-area .iframe-full-width {
+[data-type="gutenberg-good-guitarist/ypt"] .post-body .youtube-post-video-area .iframe-full-width {
   width: 100%;
 }
-[data-type="gutenberg-good-guitarist/ypt"] .youtube-post-video-area .iframe-two-third-width {
+[data-type="gutenberg-good-guitarist/ypt"] .post-body .youtube-post-video-area .iframe-two-third-width {
   width: 70%;
 }
-[data-type="gutenberg-good-guitarist/ypt"] .youtube-post-video-area .course-sidebar {
+[data-type="gutenberg-good-guitarist/ypt"] .post-body .youtube-post-video-area .course-sidebar {
   width: 30%;
   margin-left: 1.5rem;
 }
-[data-type="gutenberg-good-guitarist/ypt"] .youtube-post-video-area .course-sidebar .small-course-card {
+[data-type="gutenberg-good-guitarist/ypt"] .post-body .youtube-post-video-area .course-sidebar .sidebar-course-card {
   display: flex;
   padding: 3%;
   background-color: #f0f0f0;
   border-radius: 3px;
   height: 40%;
 }
-[data-type="gutenberg-good-guitarist/ypt"] .youtube-post-video-area .course-sidebar .small-course-card:first-of-type {
+[data-type="gutenberg-good-guitarist/ypt"] .post-body .youtube-post-video-area .course-sidebar .sidebar-course-card:first-of-type {
   margin-bottom: 7%;
 }
-[data-type="gutenberg-good-guitarist/ypt"] .youtube-post-video-area .course-sidebar .small-course-card img {
+[data-type="gutenberg-good-guitarist/ypt"] .post-body .youtube-post-video-area .course-sidebar .sidebar-course-card img {
   max-width: 50%;
   object-fit: contain;
 }
-[data-type="gutenberg-good-guitarist/ypt"] .youtube-post-video-area .course-sidebar .small-course-card .course-card-body {
+[data-type="gutenberg-good-guitarist/ypt"] .post-body .youtube-post-video-area .course-sidebar .sidebar-course-card .course-card-body {
   padding-left: 1rem;
   display: flex;
   flex-direction: column;
   width: 100%;
 }
-[data-type="gutenberg-good-guitarist/ypt"] .youtube-post-video-area .course-sidebar .small-course-card .course-card-body .body-text {
+[data-type="gutenberg-good-guitarist/ypt"] .post-body .youtube-post-video-area .course-sidebar .sidebar-course-card .course-card-body .body-text {
   font-size: 0.9rem;
 }
-[data-type="gutenberg-good-guitarist/ypt"] .youtube-post-video-area .course-sidebar .small-course-card .course-card-body .course-url-button {
+[data-type="gutenberg-good-guitarist/ypt"] .post-body .youtube-post-video-area .course-sidebar .sidebar-course-card .course-card-body .course-url-button {
   background-color: #0872bb;
   border-radius: 3px;
   color: white;
   padding: 0.5rem 1rem;
   align-self: center;
 }
+[data-type="gutenberg-good-guitarist/ypt"] .post-body .post-content-video-description .post-body-course-area {
+  margin: 0.75rem 0;
+}
+[data-type="gutenberg-good-guitarist/ypt"] .post-body .post-content-video-description .post-body-course-area p {
+  margin: 0;
+}
+[data-type="gutenberg-good-guitarist/ypt"] .post-body .post-content-video-description .post-body-course-area.no-course {
+  padding: 0.5rem;
+  border: 2px dashed #0872bb;
+  background-color: #edf7fb;
+}
 [data-type="gutenberg-good-guitarist/ypt"] .empty-post-body-msg {
   color: #818181;
+  font-style: italic;
 }
 
 .wp-block-gutenberg-good-guitarist-ypt .post-content-video-description {
@@ -337,62 +404,86 @@
 
 #ypt-ajax-filter-search {
   display: flex;
-  margin: 1rem 1rem;
+  margin: 1rem;
 }
 #ypt-ajax-filter-search form {
-  max-width: 30%;
-  padding: 0 1rem;
-  border-right: 1px solid #1e1e9b;
+  width: 25%;
+  min-width: 25%;
+  display: block;
+  max-height: 80vh;
+  background-color: #e1f3f9;
+  border-radius: 6px;
 }
-#ypt-ajax-filter-search form #songSearchText {
-  border: 2px solid #1e1e9b;
+#ypt-ajax-filter-search form .search-text-section {
+  padding-bottom: 2rem;
+  padding-top: 1rem;
+  margin-left: 1rem;
+}
+#ypt-ajax-filter-search form .search-text-section #songSearchText {
+  border: 2px solid #000;
   border-radius: 3px;
   padding: 0.5rem;
+  width: 85%;
 }
 #ypt-ajax-filter-search form .search-label {
   font-weight: bold;
   font-size: 1.2rem;
   padding: 1rem 0;
-  color: #1e1e9b;
+  color: #000;
 }
-#ypt-ajax-filter-search form .search-filter {
-  border-left: none;
-  border-right: none;
-  border-top: none;
+#ypt-ajax-filter-search form .search-filters-section {
+  max-height: 70%;
+  display: block;
+  overflow-y: auto;
+  background-color: #edf7fb;
+}
+#ypt-ajax-filter-search form .search-filters-section .search-filter {
+  margin-left: 1rem;
+}
+#ypt-ajax-filter-search form .search-filters-section .search-filter {
+  border: none;
   padding: 0;
-  border-bottom: 1px solid #1e1e9b;
   padding-bottom: 0.75rem;
 }
-#ypt-ajax-filter-search form .search-filter label {
+#ypt-ajax-filter-search form .search-filters-section .search-filter label {
   font-size: 1.1rem;
   margin-left: 0.1rem;
 }
-#ypt-ajax-filter-search form .search-filter .chord-filter-type-container {
+#ypt-ajax-filter-search form .search-filters-section .search-filter .chord-filter-type-container {
   margin-bottom: 1rem;
 }
-#ypt-ajax-filter-search form .search-filter .chord-filter-type-container label {
+#ypt-ajax-filter-search form .search-filters-section .search-filter .chord-filter-type-container label {
   display: inline;
 }
-#ypt-ajax-filter-search form .single-button-filters-container {
+#ypt-ajax-filter-search form .search-filters-section .single-button-filters-container {
   padding: 1rem 0;
   margin-top: 1rem;
+  margin-left: 1rem;
 }
-#ypt-ajax-filter-search form .single-button-filters-container .single-button-filter-label {
+#ypt-ajax-filter-search form .search-filters-section .single-button-filters-container .single-button-filter-label {
   font-weight: bold;
   font-size: 1.2rem;
-  color: #1e1e9b;
+  color: #000;
 }
 #ypt-ajax-filter-search form .search-btn {
+  margin-top: 1rem;
+  margin-left: 1rem;
   background-color: #fff;
-  border: 2px solid #1e1e9b;
+  border: 2px solid #000;
 }
 #ypt-ajax-filter-search #ypt-ajax-search-results {
-  flex-grow: 1;
-  display: flex;
-  flex-wrap: wrap;
+  margin-top: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
   list-style-type: none;
 }
 #ypt-ajax-filter-search #ypt-ajax-search-results .ypt-result {
-  max-width: 30%;
-  margin: 0 0.75rem 0.75rem 0.75rem;
+  margin: 1rem;
+}
+#ypt-ajax-filter-search #ypt-ajax-search-results .ypt-result a {
+  color: black;
+}
+#ypt-ajax-filter-search #ypt-ajax-search-results .ypt-result a img {
+  width: 100%;
+  max-width: inherit;
 }

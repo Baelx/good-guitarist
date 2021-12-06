@@ -35,3 +35,8 @@ button {
 		@include font-size(11px, 11px, 0.4px);
 	}
 }
+
+.dashicons-button {
+	background-color: transparent;
+	border: none;
+}

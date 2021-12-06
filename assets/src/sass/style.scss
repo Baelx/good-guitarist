@@ -2,7 +2,8 @@
 # Import Modules
 --------------------------------------------------------------*/
 @import '~normalize-scss/sass/normalize/import-now';
-@import '~slick-carousel/slick/slick.scss';
+@import "~slick-carousel/slick/slick";
+@import "~slick-carousel/slick/slick-theme";
 
 /*--------------------------------------------------------------
 # Base
@@ -43,3 +44,9 @@
 @import 'pages/home';
 @import 'pages/archive';
 @import 'pages/youtube-post';
+
+/*--------------------------------------------------------------
+# Blocks
+--------------------------------------------------------------*/
+
+@import 'blocks/latest-lessons';

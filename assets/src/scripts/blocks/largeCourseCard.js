@@ -116,7 +116,7 @@ registerBlockType( 'gutenberg-good-guitarist/large-course-card', {
 
 		return (
 			<div className={className}>
-				<h2>{__('Large Course Card')}</h2>
+				<h2 className="dynamic-block-h2">{__('Large Course Card')}</h2>
 				{ isLoading && <span>{__('Loading...')}</span>}
 				{ courseOptions &&
 				<SelectControl

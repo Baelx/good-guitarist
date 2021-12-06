@@ -27,6 +27,37 @@ class AjaxHandler {
 	}
 
 	/**
+     * Checks for a QF finder search happening and modifies the SQL query to
+     * allow for text search(by post name) as well as meta query searches of this
+     * same value.
+     *
+     * @link    https://wordpress.stackexchange.com/a/208939/121243
+     * @param   array $sql    The SQL array object for the meta query.
+     * @return  array
+     */
+    public function modify_text_and_meta_sql( array $sql ): array {
+        if ( $this->qf_search_term ) {
+            global $wpdb;
+
+            // Only modify the SQL "where" once.
+            static $has_already_run = false;
+            if ( $has_already_run ) {
+                return $sql;
+            }
+            $escaped_like    = '%%' . $wpdb->esc_like( $this->qf_search_term ) . '%%';
+            $sql['where']    = sprintf(
+                ' AND ( %s OR %s ) ',
+                $wpdb->prepare( "{$wpdb->posts}.post_title like %s", $escaped_like ),
+                mb_substr( $sql['where'], 5, mb_strlen( $sql['where'] ) )
+            );
+            $has_already_run = true;
+            return $sql;
+        } else {
+            return $sql;
+        }
+    }
+
+	/**
 	 * Checks if the ajax parameter is set and adds a taxonmy query to the
 	 * WP Query if so. If not, returns the taxonomy query.
 	 *
@@ -64,7 +95,6 @@ class AjaxHandler {
 
 		if ( isset( $_GET['songDifficulty'] ) ) {
 			$song_difficulties = sanitize_array( $_GET['songDifficulty'] );
-			error_log('hello');
 
 			foreach( $song_difficulties as $difficulty ) {
 				$difficulty_range = $difficulty_to_numerical_range_map[$difficulty];
@@ -101,7 +131,7 @@ class AjaxHandler {
 
 		// Save for later to filter by exact chords.
 		if ( isset( $_GET['songChordsFilterType'] ) ) {
-			$song_chords_filter['chords'] = sanitize_text_field( $_GET['songChords'] );
+			$song_chords_filter['chords'] = sanitize_array( $_GET['songChords'] );
 			$song_chords_filter['filter-type'] = sanitize_text_field( $_GET['songChordsFilterType'] );
 		}
 
@@ -121,6 +151,7 @@ class AjaxHandler {
 
 		// Compile all queries into single WP_Query.
 		$search_args = [
+			's' => sanitize_text_field( $_GET['songSearchText'] ),
 			'post_type' => 'youtube-post',
 			'posts_per_page' => -1,
 			'tax_query' => $tax_query,
@@ -130,9 +161,7 @@ class AjaxHandler {
 		// Run the query.
 		$search_query = new \WP_Query( $search_args );
 
-		// For debugging.
 		if ( $search_query->have_posts() ) {
-
 			$result["data"] = [];
 			$result["status"] = 200;
 			// For debugging.
@@ -141,21 +170,31 @@ class AjaxHandler {
 			while ( $search_query->have_posts() ) {
 				$search_query->the_post();
 
-				if ( $song_chords_filter['chords'] && $song_chords_filter['filter-type'] ) {
-					$the_post_chords = get_the_terms( get_the_ID(), 'chords' );
+				$is_exact_chord_match = true;
+				$the_post_chords = get_the_terms( get_the_ID(), 'chords' );
+
+				if ( is_array( $the_post_chords ) && ! empty( $the_post_chords ) ) {
+					$the_post_chords = array_map( function ( $chord_obj ) {
+						return $chord_obj->slug;
+					}, $the_post_chords );
+
+					sort( $the_post_chords );
 				}
 
-				$result["data"][] = [
-					"id" => get_the_ID(),
-					"title" => get_the_title(),
-					"content" => parse_blocks(get_the_content()),
-					"permalink" => get_permalink(),
-					// "year" => get_field('year'),
-					// "rating" => get_field('rating'),
-					// "director" => get_field('director'),
-					// "language" => get_field('language'),
-					// "genre" => $cats,
-				];
+				if ( 'exact' === $song_chords_filter['filter-type'] ) {
+					sort( $song_chords_filter['chords'] );
+					$is_exact_chord_match = $song_chords_filter['chords'] === $the_post_chords;
+				}
+
+				// Filter down the songs by exact chord match if applicable.
+				if ( $is_exact_chord_match ) {
+					$result["data"][] = [
+						"id" => get_the_ID(),
+						"title" => get_the_title(),
+						"content" => parse_blocks( get_the_content() ),
+						"permalink" => get_permalink(),
+					];
+				}
 			}
 
 			wp_send_json($result);

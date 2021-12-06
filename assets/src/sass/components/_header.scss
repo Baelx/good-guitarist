@@ -1,26 +1,119 @@
 header {
 	position: relative;
 
-	.site-title {
-		text-align: center;
-	}
+	.header-row {
+		position: relative;
+		justify-content: space-between;
 
-	.header-navigation {
-		display: flex;
-		align-items: center;
-		justify-content: center;
+		.site-title {
+			text-align: left;
+			margin-left: 1rem;
 
-		#primary-menu {
-			list-style: none;
-			display: flex;
+			@media screen and (min-width: $nav-breakpoint) {
+				text-align: center;
+			}
 
-			.menu-item {
-				font-size: 1.25rem;
-				font-weight: 700;
-				padding: 0 1rem;
+			a {
+				max-width: 255px;
+				display: block;
 
-				a {
-					color: #000;
+				@media screen and (min-width: $nav-breakpoint) {
+					display: inline;
+				}
+			}
+		}
+
+		.mobile-nav-button {
+			cursor: pointer;
+			display: inherit;
+			position: absolute;
+			top: 50%;
+			right: 4rem;
+			transform: translateY(-120%);
+			font-size: 3rem;
+			color: $black;
+
+			@media screen and (min-width: $nav-breakpoint) {
+				display: none;
+			}
+		}
+
+		#site-navigation {
+			display: none;
+			width: 100vw;
+			height: 100vh;
+			position: fixed;
+			background-color: $white;
+			z-index: 1;
+
+			@media screen and (min-width: $nav-breakpoint) {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				width: inherit;
+				height: inherit;
+				position: static;
+				background-color: transparent;
+			}
+
+			.menu-main-menu-container {
+				width: 100%;
+				height: 100%;
+				display: flex;
+				justify-content: center;
+
+				@media screen and (min-width: $nav-breakpoint) {
+					display: inherit;
+					width: inherit;
+					height: inherit;
+				}
+
+				#primary-menu {
+					list-style: none;
+					display: flex;
+					flex-direction: column;
+					padding-left: 0;
+					align-items: center;
+					align-self: center;
+
+					@media screen and (min-width: $nav-breakpoint) {
+						padding-left: inherit;
+						flex-direction: row;
+						align-items: inherit;
+						align-self: inherit;
+					}
+
+					.menu-item {
+						font-size: 2.25rem;
+						font-weight: 700;
+						padding: 0 1rem;
+						padding-bottom: 10%;
+
+						@media screen and (min-width: $nav-breakpoint) {
+							font-size: 1.25rem;
+							padding-bottom: inherit;
+
+						}
+
+						a {
+							color: $black;
+						}
+					}
+				}
+			}
+
+			.close-nav-button {
+				cursor: pointer;
+				display: inherit;
+				position: absolute;
+				top: 2.5rem;
+				right: 3.5rem;
+				transform: translateY(-120%);
+				font-size: 3rem;
+				color: $black;
+
+				@media screen and (min-width: $nav-breakpoint) {
+					display: none;
 				}
 			}
 		}
@@ -28,7 +121,7 @@ header {
 
 	&.transparent-header {
 		position: absolute;
-		z-index: 999;
+		z-index: 10;
 		width: 100%;
 
 		.site-title {
@@ -37,13 +130,26 @@ header {
 			}
 		}
 
-		.header-navigation {
+		.mobile-nav-button {
+			color: $white;
+		}
 
-			#primary-menu {
+		#site-navigation {
 
-				.menu-item {
-					a {
-						color: #fff;
+			.menu-main-menu-container {
+
+
+				#primary-menu {
+
+					.menu-item {
+
+						a {
+							color: $black;
+
+							@media screen and (min-width: $nav-breakpoint) {
+								color: $white;
+							}
+						}
 					}
 				}
 			}

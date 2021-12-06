@@ -12,6 +12,11 @@
 	}
 
 	form {
+		display: grid;
+		grid-template-columns: auto 20%;
+		margin-bottom: 1rem;
+
+
 		.youtube-video-url {
 			width: 100%;
 
@@ -24,19 +29,27 @@
 				}
 			}
 		}
+
 		.yt-submit-button {
+			cursor: pointer;
 			background-color: $gg-blue;
 			border: none;
 			border-radius: 3px;
 			color: $white;
 			padding: 0.5rem 1rem;
+			margin-left: 0.5rem;
 		}
 	}
 
 	.youtube-post-label {
 		display: block;
-		margin-bottom: 8px;
+		margin: 8px 0;
 		font-size: 13px;
+	}
+
+	input[type="text"] {
+		display: block;
+		width: 100%;
 	}
 
 	.components-base-control {
@@ -77,72 +90,97 @@
 		}
 	}
 
-	.youtube-post-video-area {
-		display: flex;
+	.post-body {
+		.youtube-post-video-area {
+			display: flex;
 
-		iframe {
-			width: 70%;
-		}
+			iframe {
+				width: 70%;
+			}
 
-		.iframe-full-width {
-			width: 100%;
-		}
+			.iframe-full-width {
+				width: 100%;
+			}
 
-		.iframe-two-third-width {
-			width: 70%;
-		}
+			.iframe-two-third-width {
+				width: 70%;
+			}
 
-		.course-sidebar {
-			width: 30%;
-			margin-left: 1.5rem;
+			.course-sidebar {
+				width: 30%;
+				margin-left: 1.5rem;
 
-			.small-course-card {
-				display: flex;
-				padding: 3%;
-				background-color: $light-grey;
-				border-radius: 3px;
-				height: 40%;
-
-				&:first-of-type {
-					margin-bottom: 7%;
-				}
-
-				img {
-					max-width: 50%;
-					object-fit: contain;
-				}
-
-				.course-card-body {
-					padding-left: 1rem;
+				.sidebar-course-card {
 					display: flex;
-					flex-direction: column;
-					width: 100%;
+					padding: 3%;
+					background-color: $light-grey;
+					border-radius: 3px;
+					height: 40%;
 
-					.body-text {
-						font-size: 0.9rem;
+					&:first-of-type {
+						margin-bottom: 7%;
 					}
 
-					.course-url-button {
-						background-color: $gg-blue;
-						border-radius: 3px;
-						color: white;
-						padding: 0.5rem 1rem;
-						align-self: center;
+					img {
+						max-width: 50%;
+						object-fit: contain;
+					}
+
+					.course-card-body {
+						padding-left: 1rem;
+						display: flex;
+						flex-direction: column;
+						width: 100%;
+
+						.body-text {
+							font-size: 0.9rem;
+						}
+
+						.course-url-button {
+							background-color: $gg-blue;
+							border-radius: 3px;
+							color: white;
+							padding: 0.5rem 1rem;
+							align-self: center;
+						}
 					}
 				}
+			}
+		}
 
+		.post-content-video-description {
+			.post-body-course-area {
+				margin: 0.75rem 0;
+
+				p {
+					margin: 0;
+				}
+
+				&.no-course {
+					padding: 0.5rem;
+					border: 2px dashed $gg-blue;
+					background-color: $ypt-nested-search-form-bg;
+				}
+
+				&.course-selected {
+
+				}
 			}
 		}
 	}
 
 	.empty-post-body-msg {
 		color: $grey;
+		font-style: italic;
 	}
 
 }
 
+// Frontend.
 .wp-block-gutenberg-good-guitarist-ypt {
 	.post-content-video-description {
 		white-space: pre-wrap;
+
+
 	}
 }

@@ -1,23 +1,31 @@
 .archive {
 	main {
-		display: flex;
+		display: grid;
+		grid-template-columns: auto;
+
+		@media screen and (min-width: $md) {
+			grid-template-columns: auto auto;
+		}
+
+		@media screen and (min-width: $lg) {
+			grid-template-columns: 1fr 1fr 1fr 1fr;
+		}
 
 		.youtube-post {
-			width: 30%;
-			border-radius: 4px;
 			background-color: $white;
-			border: 1px solid $gg-blue;
+			margin-right: 1.5rem;
+			margin-bottom: 2rem;
 
 			.ypt-link-wrapper {
-				padding: 1rem;
-
 				img {
 					width: 100%;
 					height: auto;
 				}
 
 				h2 {
-					font-size: 1.5em;
+					font-size: 1.4rem;
+					font-weight: bold;
+					color: $black;
 				}
 			}
 		}

@@ -1,4 +1,12 @@
 .youtube-post {
+	h1 {
+		font-weight: 500;
+		color: $gg-blue;
+	}
+
+	.song-and-artist {
+		font-weight: 500;
+	}
 
 	.youtube-post-term-pills {
 		list-style-type: none;
@@ -24,6 +32,10 @@
 
 		iframe {
 			width: 70%;
+
+			&.no-upper-courses {
+				width: 100%;
+			}
 		}
 
 		.upper-course-area {
@@ -69,8 +81,17 @@
 		}
 	}
 
+	.youtube-post-chords {
+		margin-top: 2.5%;
+		font-size: 1.5rem;
+
+		a {
+			text-decoration: underline;
+		}
+	}
+
 	.post-body {
 		white-space: pre-wrap;
-		margin-top: 6rem;
+		margin-top: 7.5%;
 	}
 }

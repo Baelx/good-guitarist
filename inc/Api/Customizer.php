@@ -7,8 +7,8 @@
 
 namespace GoodGuitarist\Api;
 
-use GoodGuitarist\Api\Customizer\Sidebar;
 use GoodGuitarist\Api\Customizer\Header;
+use GoodGuitarist\Api\Customizer\Social;
 use GoodGuitarist\Api\Customizer\Footer;
 
 /**
@@ -34,9 +34,9 @@ class Customizer
 	public function get_classes()
 	{
 		return [
-			Sidebar::class,
+			Header::class,
+			Social::class,
 			Footer::class,
-			Header::class
 		];
 	}
 

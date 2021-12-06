@@ -30,37 +30,28 @@ if ( has_blocks( $post->post_content ) ) {
 
 	<?php wp_head(); ?>
 </head>
-
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
 	<div id="page" class="site" <?php echo ! is_customize_preview() ?: 'style="padding: 0 40px;"'; ?>>
-
 		<header id="masthead" class="<?php echo esc_attr( $header_classes ) ; ?>" role="banner">
-
 			<?php
 			if ( is_customize_preview() ) {
 				echo '<div id="awps-header-control"></div>';
 			}
 			?>
-
 			<div class="container container-fluid">
-
-				<div class="row">
-					<div class="col-xs-12 col-sm-4">
-
+				<div class="row header-row">
+					<div class="col-sm-12 col-md-4">
 						<div class="site-branding">
 							<h1 class="site-title">
 								<a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home">
 									<img src="http://localhost:8000/wp-content/uploads/2021/04/gg-logo-retina.png">
 								</a>
 							</h1>
-					</div><!-- .site-branding -->
-
-				</div><!-- .col -->
-
-				<div class="col-xs-12 col-sm-8 header-navigation">
-
-					<nav id="site-navigation" class="main-navigation" role="navigation">
+						</div><!-- .site-branding -->
+					</div><!-- .col -->
+					<button class="dashicons dashicons-button dashicons-menu mobile-nav-button"></button>
+					<nav id="site-navigation" class="main-navigation" role="navigation" aria-expanded="false">
 						<?php
 						if ( has_nav_menu( 'primary' ) ) :
 							wp_nav_menu(
@@ -72,13 +63,12 @@ if ( has_blocks( $post->post_content ) ) {
 							);
 						endif;
 						?>
+						<button class="dashicons dashicons-button dashicons-no-alt close-nav-button"
+								aria-hidden="true"
+								tabindex="">
+						</button>
 					</nav>
-
-				</div><!-- .col -->
-
 			</div><!-- .row -->
 		</div><!-- .container-fluid -->
-
 	</header><!-- #masthead -->
-
 	<div id="content" class="site-content">

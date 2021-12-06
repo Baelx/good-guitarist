@@ -1,8 +1,37 @@
-.wp-block-gutenberg-good-guitarist-latest-lessons {
-	display: flex;
-    align-items: center;
+*[data-type="gutenberg-good-guitarist/latest-lessons"] {
+	&:first-of-type {
+		border: 1px solid $grey;
+		border-radius: 4px;
+		text-align: center;
+	}
+}
 
-	.lesson-thumbnail {
-		width: 100px;
+.latest-lessons-block {
+	display: flex;
+	justify-content: center;
+	padding: 0 5%;
+
+	.lessons-carousel {
+		overflow-x: hidden;
+
+		.lessons-container {
+			white-space: nowrap;
+
+			.lesson-link {
+				width: 19%;
+				text-align: center;
+				text-decoration: none;
+				display: inline-block;
+				margin: 0 0.5%;
+
+				.lesson-thumbnail {
+					width: 100px;
+				}
+
+				.lesson-title {
+					font-size: 1rem;
+				}
+			}
+		}
 	}
 }

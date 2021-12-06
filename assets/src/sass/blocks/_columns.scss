@@ -1,3 +1,19 @@
 .wp-block-columns {
-	margin-bottom:  0;
+	margin-bottom: 0;
+	flex-direction: column;
+
+	@media screen and (min-width: $nav-breakpoint) {
+		margin-bottom: 0;
+		flex-direction: row;
+	}
+
+	.wp-block-column {
+		margin-bottom: 3rem;
+		margin-left: 0;
+
+		@media screen and (min-width: $nav-breakpoint) {
+			margin-bottom: 0;
+
+		}
+	}
 }

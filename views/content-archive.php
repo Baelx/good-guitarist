@@ -14,7 +14,7 @@ $ypt_block = array_filter( $parsed_blocks, function( $block ) {
 $ypt_atts = $ypt_block[0]['attrs'];
 ?>
 
-<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+<article id="post-<?php the_ID(); ?>" <?php post_class( 'col' ); ?>>
 	<?php if ( 'youtube-post' === get_post_type() ): ?>
 	<a class="ypt-link-wrapper" aria-label="<?php the_title(); ?>" href="<?php echo esc_url( the_permalink() ); ?>">
 		<img src="<?php echo esc_url( $ypt_atts['videoThumbnail'] ); ?>">
