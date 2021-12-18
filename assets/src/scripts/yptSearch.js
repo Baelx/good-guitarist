@@ -85,6 +85,50 @@ const sendAjaxRequest = ( yptSearchResultsElement, searchFormData ) => {
 	}
 }
 
+/**
+ * Set aria-expanded attributes for mobile devices(less than 901px wide).
+ *
+ * @param {HTMLElement} buttonElement
+ */
+const setSearchFiltersAriaExpandedIfMobile = (buttonElement) => {
+	if ( window.innerWidth < 901) {
+		buttonElement.setAttribute('aria-expanded', "false");
+	} else {
+		buttonElement.setAttribute('aria-expanded', "true");
+	}
+}
+
+/**
+ * Allow search filters to collapse and expand on mobile(less than 901px wide).
+ */
+const searchFiltersMobile = () => {
+	const searchFiltersButtonElement = document.querySelector('.filters-expand-button');
+	const searchFiltersButtonArrowElement = searchFiltersButtonElement.querySelector('span');
+	const searchFiltersElement = document.querySelector('.search-filters-section');
+
+	window.addEventListener("resize", () => {
+		setSearchFiltersAriaExpandedIfMobile();
+		if ( window.innerWidth < 901) {
+			searchFiltersElement.style.height = "0px";
+		} else {
+			searchFiltersElement.style.height = "450px";
+		}
+	});
+
+	setSearchFiltersAriaExpandedIfMobile(searchFiltersButtonElement);
+	searchFiltersButtonElement.addEventListener("click", (e) => {
+		e.preventDefault();
+		if ("true" === searchFiltersButtonElement.getAttribute("aria-expanded")) {
+			searchFiltersElement.style.height = "0px";
+			searchFiltersButtonElement.setAttribute('aria-expanded', "false");
+			searchFiltersButtonArrowElement.style.transform = "rotate(0deg)";
+		} else if ("false" === searchFiltersButtonElement.getAttribute("aria-expanded")) {
+			searchFiltersElement.style.height = "450px";
+			searchFiltersButtonElement.setAttribute('aria-expanded', "true");
+			searchFiltersButtonArrowElement.style.transform = "rotate(180deg)";
+		}
+	});
+}
 
 /**
  * IIFE.
@@ -92,7 +136,6 @@ const sendAjaxRequest = ( yptSearchResultsElement, searchFormData ) => {
  *
  */
 (($) => {
-
 	const songFilterCheckboxes = [
 		'songDecade',
 		'songChords',
@@ -112,6 +155,8 @@ const sendAjaxRequest = ( yptSearchResultsElement, searchFormData ) => {
 		e.preventDefault();
 		sendAjaxRequest(yptSearchResultsElement, searchFormData);
 	});
+
+	searchFiltersMobile();
 
 	// Run request on page load for initial results.
 	const searchFormData = verifyAndReturnSearchFormData(yptSearchFiltersForm, null);

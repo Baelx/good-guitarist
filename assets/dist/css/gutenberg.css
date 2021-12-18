@@ -393,6 +393,9 @@
   border: 2px dashed #0872bb;
   background-color: #edf7fb;
 }
+[data-type="gutenberg-good-guitarist/ypt"] .post-body .post-content-video-description .post-body-course-area.course {
+  border: 1px solid black;
+}
 [data-type="gutenberg-good-guitarist/ypt"] .empty-post-body-msg {
   color: #818181;
   font-style: italic;
@@ -405,25 +408,76 @@
 #ypt-ajax-filter-search {
   display: flex;
   margin: 1rem;
+  flex-direction: column;
+}
+@media (min-width: 901px) {
+  #ypt-ajax-filter-search {
+    flex-direction: row;
+  }
 }
 #ypt-ajax-filter-search form {
-  width: 25%;
+  width: 100%;
   min-width: 25%;
   display: block;
-  max-height: 80vh;
   background-color: #e1f3f9;
   border-radius: 6px;
+  z-index: 1;
+}
+@media (min-width: 901px) {
+  #ypt-ajax-filter-search form {
+    width: 25%;
+    max-height: 80vh;
+  }
 }
 #ypt-ajax-filter-search form .search-text-section {
-  padding-bottom: 2rem;
   padding-top: 1rem;
+}
+@media (min-width: 901px) {
+  #ypt-ajax-filter-search form .search-text-section {
+    padding-bottom: 2rem;
+  }
+}
+#ypt-ajax-filter-search form .search-text-section label {
   margin-left: 1rem;
 }
 #ypt-ajax-filter-search form .search-text-section #songSearchText {
   border: 2px solid #000;
   border-radius: 3px;
   padding: 0.5rem;
-  width: 85%;
+  padding-left: 1rem;
+  margin-left: 1rem;
+  margin-top: 1rem;
+  display: block;
+  width: 50%;
+}
+@media (min-width: 901px) {
+  #ypt-ajax-filter-search form .search-text-section #songSearchText {
+    width: 85%;
+  }
+}
+#ypt-ajax-filter-search form .search-text-section .filters-expand-button {
+  background: none;
+  border: none;
+  text-decoration: underline;
+  padding-top: 1.5rem;
+  padding-bottom: 0.75rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  display: block;
+  margin: auto;
+}
+@media (min-width: 901px) {
+  #ypt-ajax-filter-search form .search-text-section .filters-expand-button {
+    display: none;
+  }
+}
+#ypt-ajax-filter-search form .search-text-section .filters-expand-button span {
+  width: inherit;
+  height: inherit;
+  text-decoration: none;
+  font-size: 1.5rem;
+  transition: transform 0.5s ease-in-out;
 }
 #ypt-ajax-filter-search form .search-label {
   font-weight: bold;
@@ -432,10 +486,18 @@
   color: #000;
 }
 #ypt-ajax-filter-search form .search-filters-section {
-  max-height: 70%;
+  max-height: 450px;
   display: block;
   overflow-y: auto;
   background-color: #edf7fb;
+  height: 0px;
+  transition: height 0.75s ease-in-out;
+}
+@media (min-width: 901px) {
+  #ypt-ajax-filter-search form .search-filters-section {
+    height: inherit;
+    max-height: 65%;
+  }
 }
 #ypt-ajax-filter-search form .search-filters-section .search-filter {
   margin-left: 1rem;
@@ -465,17 +527,33 @@
   font-size: 1.2rem;
   color: #000;
 }
-#ypt-ajax-filter-search form .search-btn {
-  margin-top: 1rem;
-  margin-left: 1rem;
+#ypt-ajax-filter-search form .search-button-area {
+  background-color: #e1f3f9;
+}
+#ypt-ajax-filter-search form .search-button-area .search-btn {
+  margin: 1rem;
   background-color: #fff;
   border: 2px solid #000;
 }
 #ypt-ajax-filter-search #ypt-ajax-search-results {
   margin-top: 0;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr;
   list-style-type: none;
+  padding-left: 0;
+  padding-top: 1rem;
+}
+@media (min-width: 601px) {
+  #ypt-ajax-filter-search #ypt-ajax-search-results {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (min-width: 901px) {
+  #ypt-ajax-filter-search #ypt-ajax-search-results {
+    grid-template-columns: 1fr 1fr 1fr;
+    padding-left: 2rem;
+    padding-top: 0;
+  }
 }
 #ypt-ajax-filter-search #ypt-ajax-search-results .ypt-result {
   margin: 1rem;
@@ -486,4 +564,8 @@
 #ypt-ajax-filter-search #ypt-ajax-search-results .ypt-result a img {
   width: 100%;
   max-width: inherit;
+}
+#ypt-ajax-filter-search #ypt-ajax-search-results .ypt-result a h3 {
+  font-size: 1.1rem;
+  line-height: 1.3;
 }

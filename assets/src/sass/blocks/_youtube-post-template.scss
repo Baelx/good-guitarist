@@ -162,8 +162,9 @@
 					background-color: $ypt-nested-search-form-bg;
 				}
 
-				&.course-selected {
-
+				&.course {
+					border: 1px solid black;
+					// background-color:
 				}
 			}
 		}

@@ -1,12 +1,16 @@
 <?php
 use GoodGuitarist\Custom\AjaxHandler;
-AjaxHandler::ypt_ajax_filter_search_scripts();
+AjaxHandler::ypt_filter_search_scripts();
 ?>
 <div id="ypt-ajax-filter-search">
         <form action="" method="get">
 			<div class="search-text-section">
 				<label class="search-label" for="songSearchText"><?php esc_html_e('Search by song title, description.'); ?></label>
 				<input type="text" name="songSearchText" id="songSearchText">
+				<button class="filters-expand-button">
+					<span class="dashicons dashicons-arrow-down-alt2"></span>
+					<?php esc_html_e('Search filters'); ?>
+				</button>
 			</div>
 			<div class="search-filters-section">
 				<?php if ( $ypt_terms['genre'] ?? null ): ?>
@@ -146,7 +150,9 @@ AjaxHandler::ypt_ajax_filter_search_scripts();
 					</label>
 				</div>
 			</div>
-            <input class="btn search-btn" type="submit" id="submit" name="submit" value="Search">
+			<div class="search-button-area">
+				<input class="btn search-btn" type="submit" id="submit" name="submit" value="Search">
+			</div>
         </form>
         <ul id="ypt-ajax-search-results"></ul>
     </div>

@@ -6,7 +6,7 @@ const { useSelect, dispatch, useDispatch } = wp.data;
 const { useRef, useState } = wp.element;
 const { __ } = wp.i18n;
 const { parse } = wp.blockSerializationDefaultParser;
-import _ from 'lodash';
+import { isEmpty } from 'lodash';
 import { youtubeAPIConfig } from '../../../../youtube-api-config'
 
 registerBlockType( 'gutenberg-good-guitarist/ypt', {
@@ -42,20 +42,16 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 		},
 		sidebarCourseSlotOne: {
 			type: 'integer',
-			default: 0
+			default: -1
 		},
 		sidebarCourseSlotTwo: {
 			type: 'integer',
-			default: 0
+			default: -1
 		},
-		postBodyCourses: {
+		postBodyElements: {
 			type: 'array',
 			default: []
-		},
-		courseSlotFour: {
-			type: 'integer',
-			default: 0
-		},
+		}
 	},
 
 	edit({ attributes, className, setAttributes }) {
@@ -64,28 +60,31 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 			videoID,
 			videoURL,
 			videoTitle,
-			videoDescription,
 			videoThumbnail,
 			songTitle,
 			sidebarCourseSlotOne,
 			sidebarCourseSlotTwo,
-			postBodyCourses
+			postBodyElements
 		} = attributes;
 
 		const blockProps = useBlockProps();
-		const courseOptions = [{
-			label: 'None',
-			value: null
-		}];
 		const postBody = useRef();
-
 		const [fetchStatus, setFetchStatus] = useState({
 			class: 'fetch-message-hidden',
 			message: ''
 		});
-		const { postMeta, courseDetails } = useSelect( ( select ) => {
+
+		const { postMeta, courseDetails, courseOptions, courseOptionsWithAuto } = useSelect( ( select ) => {
 			const courses = select( 'core' ).getEntityRecords( 'postType', 'course' );
 			const courseDetails = {};
+			const courseOptions = [{
+				label: 'None',
+				value: -1
+			}];
+			const courseOptionsWithAuto = [{
+				label: 'Autodetect',
+				value: 0
+			}, ...courseOptions];
 			if (courses) {
 				courses.forEach((course) => {
 					const parsedBlocks = parse(course.content.raw);
@@ -101,7 +100,11 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 					courseOptions.push({
 						label: course.title.raw,
 						value: parseInt(course.id),
-					})
+					});
+					courseOptionsWithAuto.push({
+						label: course.title.raw,
+						value: parseInt(course.id),
+					});
 					// Keep separate courseDetail objects used to populate attributes.
 					courseDetails[course.id] = {
 						title: course.title.raw,
@@ -116,6 +119,8 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 			return {
 				postMeta: select( 'core/editor' ).getEditedPostAttribute( 'meta' ),
 				courseDetails: courseDetails,
+				courseOptions: courseOptions,
+				courseOptionsWithAuto: courseOptionsWithAuto
 			};
 		} );
 		const { editPost } = useDispatch( 'core/editor', [ postMeta.difficulty ] );
@@ -127,19 +132,24 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 		 */
 		const stringContainsLink = (stringToCheck) => {
 			let containsLink = false;
-			if ( stringToCheck.search(/(http:\/\/|https:\/\/).*/g) >= 0 ) {
+			if ( 'string' === typeof stringToCheck && stringToCheck.search(/(http:\/\/|https:\/\/).*/g) >= 0 ) {
 				containsLink = true;
 			}
 			return containsLink;
 		}
 
 		/**
-		 * Get all post body course area elements from a given dom Ref(useRef).
+		 * Checks if a string begins with an arrow character.
 		 *
-		 * @param {*} domRef
+		 * @param {String} stringtoCheck
+		 * @returns
 		 */
-		const getCourseAreaElements = (domRef) => {
-			return domRef.current.querySelectorAll('.post-body-course-area');
+		const stringContainsArrow = (stringToCheck) => {
+			let containsArrow = false;
+			if ( 'string' === typeof stringToCheck && stringToCheck.search(/^►([^&]*)/) >= 0) {
+				containsArrow = true;
+			}
+			return containsArrow;
 		}
 
 		/**
@@ -190,31 +200,48 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 		}
 
 		/**
+		 * If individual paragraphs of the youtube post description are found
+		 * to include an arrow character, a link, or both, output a type
+		 * accordingly.
+		 *
+		 * @param {String} element
+		 */
+		const postBodyElementType = (element) => {
+			let elementType = "text";
+			if ( stringContainsLink(element) ) {
+				if ( stringContainsArrow(element) ) {
+					elementType = "courseLinkAndDescription"
+				} else {
+					elementType = "courseLink";
+				}
+			} else if ( stringContainsArrow(element) ) {
+				elementType = "courseDescription"
+			}
+			return elementType;
+		}
+
+		/**
 		 * Handle a successful youtube video fetch.
 		 *
 		 * @param {Object} response
 		 */
 		const handleFetchResponse = (response) => {
 			try {
-				let detectedPostBodyCourseAreas = 0;
 				const fetchedTitle = response.result.items[0].snippet.title;
 				const fetchedDescription = response.result.items[0].snippet.description;
 				const fetchedThumbnail = response.result.items[0].snippet.thumbnails.medium.url;
 				const descriptionArray = fetchedDescription.split('\n');
-				descriptionArray.forEach((sentence) => {
-					/**
-					 * If a link is found in the sentence, increment the
-					 * amount of post body course areas.
-					 */
-					if ( stringContainsLink(sentence) ) {
-						detectedPostBodyCourseAreas++;
-					}
+				const postBodyContentArray = descriptionArray.map((element) => {
+					return {
+						content: element,
+						type: postBodyElementType(element),
+						course: 0
+					};
 				})
-				/**
-				 * Set post body array attribute to be an array of detectedPostBodyCourseAreas length,
-				 * with each element being 0 to start(empty course selection).
-				 */
-				setAttributes({ postBodyCourses: Array(detectedPostBodyCourseAreas).fill(0) });
+
+				console.log("the post body", postBodyContentArray)
+
+				setAttributes({ postBodyElements: postBodyContentArray });
 
 				// Update the post title.
 				dispatch('core/editor').editPost({
@@ -233,9 +260,10 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 
 				// Give some feedback to the user that the fetch has completed.
 				showFetchCompleteMessage( true );
-			} catch {
+			} catch (error) {
 				// Let the user know the operation failed.
 				showFetchCompleteMessage( false );
+				console.error(error)
 			}
 		}
 
@@ -272,20 +300,23 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 			})
 		}
 
-		const handlePostBodyCourseChange = (newCourse, courseAreaAttributeToUpdate) => {
-			const courseAreaElements = getCourseAreaElements(postBody);
+		const handlePostBodyCourseChange = (newCourse, courseAreaIndex) => {
+			console.log('the post body element', postBodyElements);
 			/**
 			 * If the course area select box has a matching element in the post body,
 			 * update the corresponding position in the array attribute and update the
 			 * course area HTML.
 			 */
-			if (courseAreaElements[courseAreaAttributeToUpdate]) {
-				const newPostBodyCourses = postBodyCourses.fill(newCourse, courseAreaAttributeToUpdate, courseAreaAttributeToUpdate + 1);
-				setAttributes({ postBodyCourses: newPostBodyCourses });
-				courseAreaElements.forEach(courseArea => console.log('sus', courseArea.dataset.courseSlot));
+			const newCourseObject = postBodyElements[courseAreaIndex];
+			newCourseObject.course = parseInt(newCourse);
+			// if (courseAreaElements[courseAreaAttributeToUpdate]) {
+				const newPostBodyElements = postBodyElements.fill(newCourseObject, courseAreaIndex, courseAreaIndex + 1);
+				console.log('the new ones', newPostBodyElements)
+				setAttributes({ postBodyElements: newPostBodyElements });
+			// 	courseAreaElements.forEach(courseArea => console.log('sus', courseArea.dataset.courseSlot));
 
-				// courseAreaElements[courseAreaAttributeToUpdate].classList.remove('no-course');
-			}
+			// 	// courseAreaElements[courseAreaAttributeToUpdate].classList.remove('no-course');
+			// }
 		}
 
 		const handleCourseChange = (newValue, id) => {
@@ -306,51 +337,59 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 			}
 		}
 
-		const SidebarCourseArea = (props) => {
-			console.log(props.courseID)
-			if ('None' !== props.courseID ) {
-				const course = courseDetails[props.courseID];
-				return (
-					<div className="sidebar-course-card">
-						<img src={course.imageUrl} alt="" />
-						<div className="course-card-body">
-							<p className="body-text">{course.description}</p>
-							<a className="course-url-button" href={course.courseUrl}>{'Get it now!'}</a>
-						</div>
-					</div>
-				)
-			}
-		}
-
-		const EmptyCourseArea = (props) => {
+		const SidebarCourseArea = ({courseID}) => {
+			console.log('course?', courseID, courseDetails)
+			const course = courseDetails[props.courseID];
 			return (
-				<div data-course-slot={props.courseSlot} className="post-body-course-area no-course">
-					{<p>{ __('Select a course to fill this area or leave blank.')}</p>}
+				<div className="sidebar-course-card">
+					<img src={course.imageUrl} alt="" />
+					<div className="course-card-body">
+						<p className="body-text">{course.description}</p>
+						<a className="course-url-button" href={course.courseUrl}>{'Get it now!'}</a>
+					</div>
 				</div>
 			)
 		}
 
-		const PostBodyCourseArea = () => {
-			return (<>
-				<img src={''} alt="" />
-				<div className="course-card-body">
-					<p className="body-text">{''}</p>
-					<a className="course-url-button" href={''}>{'Get it now!'}</a>
-				</div>
-			</>)
+		const getCourseViewInfo = (element, courseAreaIndex) => {
+			let courseViewInfo = [ '', '', '' ];
+			let elementContent = element.content;
+			let matchedDescription = '';
+			let matchedButtonText = '';
+			const matchedLink = elementContent.match(/(http:\/\/|https:\/\/).*/);
+			if ( "string" === typeof elementContent ) {
+				if ( "courseLink" === element.type ) {
+					elementContent = postBodyElements[courseAreaIndex - 1].content;
+				}
+				matchedDescription = elementContent.match(/^►([^&]*)/);
+				if ( matchedLink && matchedDescription ) {
+					matchedButtonText = matchedLink[0].replace(/.+\/\/|www.|\..+/g, '');
+					matchedDescription = matchedDescription[0].replace(/(http:\/\/|https:\/\/).*/, '');
+					matchedDescription = matchedDescription.replace(/►/, '');
+					courseViewInfo = [ matchedLink[0], matchedDescription, matchedButtonText.toUpperCase() ];
+				}
+			}
+			return courseViewInfo;
 		}
 
-		/**
-		 * If the sentence contains a link, replace it with a course area.
-		 * Else, output the sentence in a richtext component.
-		 *
-		 * @param {String} sentence
-		 * @returns	{React.Component}
-		 */
-		const RichTextOrCourse = (sentence, index) => {
-			return stringContainsLink(sentence) ?
-				<EmptyCourseArea courseSlot={index} /> :
-				<RichText key="" value={sentence} />
+		const PostBodyCourseArea = ({element, courseAreaIndex}) => {
+			const courseTypes = [ "courseLink", "courseDescription", "courseLinkAndDescription" ];
+			if ( "courseLinkAndDescription" === element.type || "courseLink" === element.type ) {
+				const [ courseLink, courseDescription, buttonText ] = getCourseViewInfo(element, courseAreaIndex);
+				return (<article className="post-body-course-area course">
+					<img src={''} alt="" />
+					<div className="course-card-body">
+						<p className="body-text">{courseDescription}</p>
+						<a className="course-url-button" href={courseLink}>{buttonText}</a>
+					</div>
+				</article>)
+			} else {
+				return (
+					<div className="post-body-course-area no-course">
+						{<p>{ __('Select a course to fill this area or leave blank.')}</p>}
+					</div>
+				)
+			}
 		}
 
 		return (
@@ -384,17 +423,21 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 					title={__('Post body course slots')}
 					className="post-body-course-slots-panel"
 				>
-					{ postBodyCourses && postBodyCourses.map((course, index) => (
-						<PanelRow>
-							<SelectControl
-								id={`body-course-slot-select-${index + 1}`}
-								label={__('Course slot') + ` ${index + 1}`}
-								value={postBodyCourses[index]}
-								options={courseOptions}
-								onChange={ (newValue) => handlePostBodyCourseChange(newValue, index) }
-							/>
-						</PanelRow>
-					))}
+					{ postBodyElements && postBodyElements.map((element, index) => {
+						if ( "courseLink" === element.type ) {
+							return (
+								<PanelRow>
+									<SelectControl
+										id={index}
+										label={__('Course slot line') + ` ${index + 1}`}
+										value={element.course}
+										options={courseOptionsWithAuto}
+										onChange={ (newValue) => handlePostBodyCourseChange(newValue, index) }
+										/>
+								</PanelRow>
+							)
+						}
+					})}
 				</PluginDocumentSettingPanel>
 				<PluginDocumentSettingPanel
 					name="song-difficulty-attributes"
@@ -450,14 +493,20 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 					<h2>{__('Post Body')}</h2>
 					{ videoID ? <>
 						<div className="youtube-post-video-area">
-							{ ( videoURL ) && <iframe width="560" height="715" src={videoURL} className={0 !== sidebarCourseSlotOne ? 'iframe-two-third-width' : 'iframe-full-width'} title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> }
-							{ ( 0 !== sidebarCourseSlotOne ) && <div className="course-sidebar">
-								{ 0 !== sidebarCourseSlotOne && <SidebarCourseArea courseID={sidebarCourseSlotOne} />}
-								{ 0 !== sidebarCourseSlotTwo && <SidebarCourseArea courseID={sidebarCourseSlotTwo} />}
+							{ ( videoURL ) && <iframe width="560" height="715" src={videoURL} className={sidebarCourseSlotOne > 0 ? 'iframe-two-third-width' : 'iframe-full-width'} title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> }
+							{ ( sidebarCourseSlotOne > 0 || sidebarCourseSlotTwo > 0 ) && <div className="course-sidebar">
+								{ ( sidebarCourseSlotOne > 0 && has(courseDetails, courseID) ) && <SidebarCourseArea courseID={sidebarCourseSlotOne} />}
+								{ ( sidebarCourseSlotTwo > 0 && has(courseDetails, courseID) ) && <SidebarCourseArea courseID={sidebarCourseSlotTwo} />}
 							</div> }
 						</div>
 						<div className="post-content-video-description">
-							{ videoDescription && videoDescription.map((sentence, index) => RichTextOrCourse(sentence, index)) }
+							{ postBodyElements && postBodyElements.map((element, index) => {
+								if ("text" === element.type) {
+									return <RichText value={element.content} />;
+								} else if ("courseLink" === element.type || "courseLinkAndDescription" === element.type) {
+									return <PostBodyCourseArea element={element} courseAreaIndex={index} />
+								}
+							})}
 						</div>
 					</> : <span className="empty-post-body-msg">{__('Submit URL to populate post body.')}</span> }
 				</section>

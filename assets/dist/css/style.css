@@ -726,6 +726,7 @@ template {
 @keyframes animationName {}
 body {
   background-color: #fff;
+  box-sizing: border-box;
 }
 body .youtube-post .entry-header, body .youtube-post .entry-content {
   padding: 1rem 3rem;

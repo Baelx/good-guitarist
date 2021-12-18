@@ -739,19 +739,15 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
     },
     sidebarCourseSlotOne: {
       type: 'integer',
-      "default": 0
+      "default": -1
     },
     sidebarCourseSlotTwo: {
       type: 'integer',
-      "default": 0
+      "default": -1
     },
-    postBodyCourses: {
+    postBodyElements: {
       type: 'array',
       "default": []
-    },
-    courseSlotFour: {
-      type: 'integer',
-      "default": 0
     }
   },
   edit: function edit(_ref) {
@@ -762,17 +758,12 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
         videoID = attributes.videoID,
         videoURL = attributes.videoURL,
         videoTitle = attributes.videoTitle,
-        videoDescription = attributes.videoDescription,
         videoThumbnail = attributes.videoThumbnail,
         songTitle = attributes.songTitle,
         sidebarCourseSlotOne = attributes.sidebarCourseSlotOne,
         sidebarCourseSlotTwo = attributes.sidebarCourseSlotTwo,
-        postBodyCourses = attributes.postBodyCourses;
+        postBodyElements = attributes.postBodyElements;
     var blockProps = useBlockProps();
-    var courseOptions = [{
-      label: 'None',
-      value: null
-    }];
     var postBody = useRef();
 
     var _useState = useState({
@@ -786,6 +777,14 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
     var _useSelect = useSelect(function (select) {
       var courses = select('core').getEntityRecords('postType', 'course');
       var courseDetails = {};
+      var courseOptions = [{
+        label: 'None',
+        value: -1
+      }];
+      var courseOptionsWithAuto = [{
+        label: 'Autodetect',
+        value: 0
+      }].concat(courseOptions);
 
       if (courses) {
         courses.forEach(function (course) {
@@ -804,6 +803,10 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
           courseOptions.push({
             label: course.title.raw,
             value: parseInt(course.id)
+          });
+          courseOptionsWithAuto.push({
+            label: course.title.raw,
+            value: parseInt(course.id)
           }); // Keep separate courseDetail objects used to populate attributes.
 
           courseDetails[course.id] = {
@@ -818,11 +821,15 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
 
       return {
         postMeta: select('core/editor').getEditedPostAttribute('meta'),
-        courseDetails: courseDetails
+        courseDetails: courseDetails,
+        courseOptions: courseOptions,
+        courseOptionsWithAuto: courseOptionsWithAuto
       };
     }),
         postMeta = _useSelect.postMeta,
-        courseDetails = _useSelect.courseDetails;
+        courseDetails = _useSelect.courseDetails,
+        courseOptions = _useSelect.courseOptions,
+        courseOptionsWithAuto = _useSelect.courseOptionsWithAuto;
 
     var _useDispatch = useDispatch('core/editor', [postMeta.difficulty]),
         editPost = _useDispatch.editPost;
@@ -836,21 +843,28 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
     var stringContainsLink = function stringContainsLink(stringToCheck) {
       var containsLink = false;
 
-      if (stringToCheck.search(/(http:\/\/|https:\/\/).*/g) >= 0) {
+      if ('string' === typeof stringToCheck && stringToCheck.search(/(http:\/\/|https:\/\/).*/g) >= 0) {
         containsLink = true;
       }
 
       return containsLink;
     };
     /**
-     * Get all post body course area elements from a given dom Ref(useRef).
+     * Checks if a string begins with an arrow character.
      *
-     * @param {*} domRef
+     * @param {String} stringtoCheck
+     * @returns
      */
 
 
-    var getCourseAreaElements = function getCourseAreaElements(domRef) {
-      return domRef.current.querySelectorAll('.post-body-course-area');
+    var stringContainsArrow = function stringContainsArrow(stringToCheck) {
+      var containsArrow = false;
+
+      if ('string' === typeof stringToCheck && stringToCheck.search(/^►([^&]*)/) >= 0) {
+        containsArrow = true;
+      }
+
+      return containsArrow;
     };
     /**
      * Parse the youtube video ID from the URL.
@@ -907,6 +921,30 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
       }, 3000);
     };
     /**
+     * If individual paragraphs of the youtube post description are found
+     * to include an arrow character, a link, or both, output a type
+     * accordingly.
+     *
+     * @param {String} element
+     */
+
+
+    var postBodyElementType = function postBodyElementType(element) {
+      var elementType = "text";
+
+      if (stringContainsLink(element)) {
+        if (stringContainsArrow(element)) {
+          elementType = "courseLinkAndDescription";
+        } else {
+          elementType = "courseLink";
+        }
+      } else if (stringContainsArrow(element)) {
+        elementType = "courseDescription";
+      }
+
+      return elementType;
+    };
+    /**
      * Handle a successful youtube video fetch.
      *
      * @param {Object} response
@@ -915,27 +953,20 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
 
     var handleFetchResponse = function handleFetchResponse(response) {
       try {
-        var detectedPostBodyCourseAreas = 0;
         var fetchedTitle = response.result.items[0].snippet.title;
         var fetchedDescription = response.result.items[0].snippet.description;
         var fetchedThumbnail = response.result.items[0].snippet.thumbnails.medium.url;
         var descriptionArray = fetchedDescription.split('\n');
-        descriptionArray.forEach(function (sentence) {
-          /**
-           * If a link is found in the sentence, increment the
-           * amount of post body course areas.
-           */
-          if (stringContainsLink(sentence)) {
-            detectedPostBodyCourseAreas++;
-          }
+        var postBodyContentArray = descriptionArray.map(function (element) {
+          return {
+            content: element,
+            type: postBodyElementType(element),
+            course: 0
+          };
         });
-        /**
-         * Set post body array attribute to be an array of detectedPostBodyCourseAreas length,
-         * with each element being 0 to start(empty course selection).
-         */
-
+        console.log("the post body", postBodyContentArray);
         setAttributes({
-          postBodyCourses: Array(detectedPostBodyCourseAreas).fill(0)
+          postBodyElements: postBodyContentArray
         }); // Update the post title.
 
         dispatch('core/editor').editPost({
@@ -953,9 +984,10 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
         }); // Give some feedback to the user that the fetch has completed.
 
         showFetchCompleteMessage(true);
-      } catch (_unused) {
+      } catch (error) {
         // Let the user know the operation failed.
         showFetchCompleteMessage(false);
+        console.error(error);
       }
     };
     /**
@@ -992,23 +1024,24 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
       });
     };
 
-    var handlePostBodyCourseChange = function handlePostBodyCourseChange(newCourse, courseAreaAttributeToUpdate) {
-      var courseAreaElements = getCourseAreaElements(postBody);
+    var handlePostBodyCourseChange = function handlePostBodyCourseChange(newCourse, courseAreaIndex) {
+      console.log('the post body element', postBodyElements);
       /**
        * If the course area select box has a matching element in the post body,
        * update the corresponding position in the array attribute and update the
        * course area HTML.
        */
 
-      if (courseAreaElements[courseAreaAttributeToUpdate]) {
-        var newPostBodyCourses = postBodyCourses.fill(newCourse, courseAreaAttributeToUpdate, courseAreaAttributeToUpdate + 1);
-        setAttributes({
-          postBodyCourses: newPostBodyCourses
-        });
-        courseAreaElements.forEach(function (courseArea) {
-          return console.log('sus', courseArea.dataset.courseSlot);
-        }); // courseAreaElements[courseAreaAttributeToUpdate].classList.remove('no-course');
-      }
+      var newCourseObject = postBodyElements[courseAreaIndex];
+      newCourseObject.course = parseInt(newCourse); // if (courseAreaElements[courseAreaAttributeToUpdate]) {
+
+      var newPostBodyElements = postBodyElements.fill(newCourseObject, courseAreaIndex, courseAreaIndex + 1);
+      console.log('the new ones', newPostBodyElements);
+      setAttributes({
+        postBodyElements: newPostBodyElements
+      }); // 	courseAreaElements.forEach(courseArea => console.log('sus', courseArea.dataset.courseSlot));
+      // 	// courseAreaElements[courseAreaAttributeToUpdate].classList.remove('no-course');
+      // }
     };
 
     var handleCourseChange = function handleCourseChange(newValue, id) {
@@ -1039,63 +1072,80 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
       }
     };
 
-    var SidebarCourseArea = function SidebarCourseArea(props) {
-      console.log(props.courseID);
-
-      if ('None' !== props.courseID) {
-        var course = courseDetails[props.courseID];
-        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("div", {
-          className: "sidebar-course-card"
-        }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("img", {
-          src: course.imageUrl,
-          alt: ""
-        }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("div", {
-          className: "course-card-body"
-        }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("p", {
-          className: "body-text"
-        }, course.description), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("a", {
-          className: "course-url-button",
-          href: course.courseUrl
-        }, 'Get it now!')));
-      }
-    };
-
-    var EmptyCourseArea = function EmptyCourseArea(props) {
+    var SidebarCourseArea = function SidebarCourseArea(_ref2) {
+      var courseID = _ref2.courseID;
+      console.log('course?', courseID, courseDetails);
+      var course = courseDetails[props.courseID];
       return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("div", {
-        "data-course-slot": props.courseSlot,
-        className: "post-body-course-area no-course"
-      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("p", null, __('Select a course to fill this area or leave blank.')));
-    };
-
-    var PostBodyCourseArea = function PostBodyCourseArea() {
-      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("img", {
-        src: '',
+        className: "sidebar-course-card"
+      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("img", {
+        src: course.imageUrl,
         alt: ""
       }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("div", {
         className: "course-card-body"
       }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("p", {
         className: "body-text"
-      }, ''), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("a", {
+      }, course.description), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("a", {
         className: "course-url-button",
-        href: ''
+        href: course.courseUrl
       }, 'Get it now!')));
     };
-    /**
-     * If the sentence contains a link, replace it with a course area.
-     * Else, output the sentence in a richtext component.
-     *
-     * @param {String} sentence
-     * @returns	{React.Component}
-     */
 
+    var getCourseViewInfo = function getCourseViewInfo(element, courseAreaIndex) {
+      var courseViewInfo = ['', '', ''];
+      var elementContent = element.content;
+      var matchedDescription = '';
+      var matchedButtonText = '';
+      var matchedLink = elementContent.match(/(http:\/\/|https:\/\/).*/);
 
-    var RichTextOrCourse = function RichTextOrCourse(sentence, index) {
-      return stringContainsLink(sentence) ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(EmptyCourseArea, {
-        courseSlot: index
-      }) : (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(RichText, {
-        key: "",
-        value: sentence
-      });
+      if ("string" === typeof elementContent) {
+        if ("courseLink" === element.type) {
+          elementContent = postBodyElements[courseAreaIndex - 1].content;
+        }
+
+        matchedDescription = elementContent.match(/^►([^&]*)/);
+
+        if (matchedLink && matchedDescription) {
+          matchedButtonText = matchedLink[0].replace(/.+\/\/|www.|\..+/g, '');
+          matchedDescription = matchedDescription[0].replace(/(http:\/\/|https:\/\/).*/, '');
+          matchedDescription = matchedDescription.replace(/►/, '');
+          courseViewInfo = [matchedLink[0], matchedDescription, matchedButtonText.toUpperCase()];
+        }
+      }
+
+      return courseViewInfo;
+    };
+
+    var PostBodyCourseArea = function PostBodyCourseArea(_ref3) {
+      var element = _ref3.element,
+          courseAreaIndex = _ref3.courseAreaIndex;
+      var courseTypes = ["courseLink", "courseDescription", "courseLinkAndDescription"];
+
+      if ("courseLinkAndDescription" === element.type || "courseLink" === element.type) {
+        var _getCourseViewInfo = getCourseViewInfo(element, courseAreaIndex),
+            _getCourseViewInfo2 = (0,_babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_1__.default)(_getCourseViewInfo, 3),
+            courseLink = _getCourseViewInfo2[0],
+            courseDescription = _getCourseViewInfo2[1],
+            buttonText = _getCourseViewInfo2[2];
+
+        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("article", {
+          className: "post-body-course-area course"
+        }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("img", {
+          src: '',
+          alt: ""
+        }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("div", {
+          className: "course-card-body"
+        }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("p", {
+          className: "body-text"
+        }, courseDescription), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("a", {
+          className: "course-url-button",
+          href: courseLink
+        }, buttonText)));
+      } else {
+        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("div", {
+          className: "post-body-course-area no-course"
+        }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("p", null, __('Select a course to fill this area or leave blank.')));
+      }
     };
 
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("div", (0,_babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__.default)({}, blockProps, {
@@ -1124,16 +1174,18 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
       name: "post-body-course-slots",
       title: __('Post body course slots'),
       className: "post-body-course-slots-panel"
-    }, postBodyCourses && postBodyCourses.map(function (course, index) {
-      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(PanelRow, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(SelectControl, {
-        id: "body-course-slot-select-".concat(index + 1),
-        label: __('Course slot') + " ".concat(index + 1),
-        value: postBodyCourses[index],
-        options: courseOptions,
-        onChange: function onChange(newValue) {
-          return handlePostBodyCourseChange(newValue, index);
-        }
-      }));
+    }, postBodyElements && postBodyElements.map(function (element, index) {
+      if ("courseLink" === element.type) {
+        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(PanelRow, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(SelectControl, {
+          id: index,
+          label: __('Course slot line') + " ".concat(index + 1),
+          value: element.course,
+          options: courseOptionsWithAuto,
+          onChange: function onChange(newValue) {
+            return handlePostBodyCourseChange(newValue, index);
+          }
+        }));
+      }
     })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(PluginDocumentSettingPanel, {
       name: "song-difficulty-attributes",
       title: __('Song difficulty'),
@@ -1216,21 +1268,30 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
       width: "560",
       height: "715",
       src: videoURL,
-      className: 0 !== sidebarCourseSlotOne ? 'iframe-two-third-width' : 'iframe-full-width',
+      className: sidebarCourseSlotOne > 0 ? 'iframe-two-third-width' : 'iframe-full-width',
       title: "YouTube video player",
       frameborder: "0",
       allow: "accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture",
       allowfullscreen: true
-    }), 0 !== sidebarCourseSlotOne && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("div", {
+    }), (sidebarCourseSlotOne > 0 || sidebarCourseSlotTwo > 0) && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("div", {
       className: "course-sidebar"
-    }, 0 !== sidebarCourseSlotOne && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(SidebarCourseArea, {
+    }, sidebarCourseSlotOne > 0 && has(courseDetails, courseID) && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(SidebarCourseArea, {
       courseID: sidebarCourseSlotOne
-    }), 0 !== sidebarCourseSlotTwo && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(SidebarCourseArea, {
+    }), sidebarCourseSlotTwo > 0 && has(courseDetails, courseID) && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(SidebarCourseArea, {
       courseID: sidebarCourseSlotTwo
     }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("div", {
       className: "post-content-video-description"
-    }, videoDescription && videoDescription.map(function (sentence, index) {
-      return RichTextOrCourse(sentence, index);
+    }, postBodyElements && postBodyElements.map(function (element, index) {
+      if ("text" === element.type) {
+        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(RichText, {
+          value: element.content
+        });
+      } else if ("courseLink" === element.type || "courseLinkAndDescription" === element.type) {
+        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(PostBodyCourseArea, {
+          element: element,
+          courseAreaIndex: index
+        });
+      }
     }))) : (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("span", {
       className: "empty-post-body-msg"
     }, __('Submit URL to populate post body.'))));

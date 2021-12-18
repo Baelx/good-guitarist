@@ -57,10 +57,10 @@ function _createClass(Constructor, protoProps, staticProps) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _modules_carousel_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/carousel.js */ "./assets/src/scripts/modules/carousel.js");
+/* harmony import */ var _modules_carousel__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/carousel */ "./assets/src/scripts/modules/carousel.js");
 /* provided dependency */ var $ = __webpack_require__(/*! jquery */ "jquery");
 
-var carousel = new _modules_carousel_js__WEBPACK_IMPORTED_MODULE_0__.default();
+var carousel = new _modules_carousel__WEBPACK_IMPORTED_MODULE_0__.default();
 var $siteNav = $('#site-navigation');
 $('.mobile-nav-button').on('click', function () {
   console.log("button");

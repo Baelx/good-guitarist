@@ -1,4 +1,4 @@
-import Carousel from './modules/carousel.js';
+import Carousel from './modules/carousel';
 
 const carousel = new Carousel();
 
@@ -21,4 +21,4 @@ $('.close-nav-button').on('click', () => {
 
 	// No scroll on body when nav menu is visible.
 	$('body').style('overflow-y', 'hidden');
-})
+});

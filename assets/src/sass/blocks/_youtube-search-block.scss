@@ -1,25 +1,74 @@
 #ypt-ajax-filter-search {
 	display: flex;
 	margin: 1rem;
+	flex-direction: column;
+
+	@include atTablet {
+		flex-direction: row;
+	}
 
 	form {
-		width: 25%;
+		width: 100%;
 		min-width: 25%;
 		display: block;
-		max-height: 80vh;
 		background-color: $ypt-search-form-bg;
 		border-radius: 6px;
+		z-index: 1;
+
+		@include atTablet {
+			width: 25%;
+			max-height: 80vh;
+		}
 
 		.search-text-section {
-			padding-bottom: 2rem;
 			padding-top: 1rem;
-			margin-left: 1rem;
+
+			@include atTablet {
+				padding-bottom: 2rem;
+			}
+
+			label {
+				margin-left: 1rem;
+			}
 
 			#songSearchText {
 				border: 2px solid $black;
 				border-radius: 3px;
 				padding: 0.5rem;
-				width: 85%;
+				padding-left: 1rem;
+				margin-left: 1rem;
+				margin-top: 1rem;
+				display: block;
+				width: 50%;
+
+				@include atTablet {
+					width: 85%;
+				}
+			}
+
+			.filters-expand-button {
+				background: none;
+				border: none;
+				text-decoration: underline;
+				padding-top: 1.5rem;
+				padding-bottom: 0.75rem;
+				font-size: 1.2rem;
+				font-weight: bold;
+				cursor: pointer;
+				display: block;
+				margin: auto;
+
+				@include atTablet {
+					display: none;
+				}
+
+				span {
+					width: inherit;
+					height: inherit;
+					text-decoration: none;
+					font-size: 1.5rem;
+					transition: transform 0.5s ease-in-out;
+				}
 			}
 		}
 
@@ -31,10 +80,17 @@
 		}
 
 		.search-filters-section {
-			max-height: 70%;
+			max-height: 450px;
 			display: block;
 			overflow-y: auto;
 			background-color: $ypt-nested-search-form-bg;
+			height: 0px;
+			transition: height 0.75s ease-in-out;
+
+			@include atTablet {
+				height: inherit;
+				max-height: 65%;
+			}
 
 			.search-filter {
 				margin-left: 1rem;
@@ -72,19 +128,34 @@
 			}
 		}
 
-		.search-btn {
-			margin-top: 1rem;
-			margin-left: 1rem;
-			background-color: $white;
-			border: 2px solid $black;
+		.search-button-area {
+			background-color: $ypt-search-form-bg;
+
+			.search-btn {
+				margin: 1rem;
+				background-color: $white;
+				border: 2px solid $black;
+			}
 		}
 	}
 
 	#ypt-ajax-search-results {
 		margin-top: 0;
 		display: grid;
-		grid-template-columns: 1fr 1fr 1fr;
+		grid-template-columns: 1fr;
 		list-style-type: none;
+		padding-left: 0;
+		padding-top: 1rem;
+
+		@include atMobile {
+			grid-template-columns: 1fr 1fr;
+		}
+
+		@include atTablet {
+			grid-template-columns: 1fr 1fr 1fr;
+			padding-left: 2rem;
+			padding-top: 0;
+		}
 
 		.ypt-result {
 			margin: 1rem;
@@ -95,6 +166,11 @@
 				img {
 					width: 100%;
 					max-width: inherit;
+				}
+
+				h3 {
+					font-size: 1.1rem;
+					line-height: 1.3;
 				}
 			}
 		}
