@@ -413,6 +413,8 @@
 @media (min-width: 901px) {
   #ypt-ajax-filter-search {
     flex-direction: row;
+    min-height: 700px;
+    height: 90vh;
   }
 }
 #ypt-ajax-filter-search form {
@@ -426,14 +428,17 @@
 @media (min-width: 901px) {
   #ypt-ajax-filter-search form {
     width: 25%;
-    max-height: 80vh;
+    max-height: 100%;
   }
 }
 #ypt-ajax-filter-search form .search-text-section {
+  display: flex;
+  flex-direction: column;
   padding-top: 1rem;
 }
 @media (min-width: 901px) {
   #ypt-ajax-filter-search form .search-text-section {
+    display: inherit;
     padding-bottom: 2rem;
   }
 }
@@ -445,13 +450,14 @@
   border-radius: 3px;
   padding: 0.5rem;
   padding-left: 1rem;
-  margin-left: 1rem;
-  margin-top: 1rem;
   display: block;
-  width: 50%;
+  width: 80%;
+  align-self: center;
 }
 @media (min-width: 901px) {
   #ypt-ajax-filter-search form .search-text-section #songSearchText {
+    margin-top: 1rem;
+    margin-left: 1rem;
     width: 85%;
   }
 }
@@ -486,7 +492,7 @@
   color: #000;
 }
 #ypt-ajax-filter-search form .search-filters-section {
-  max-height: 450px;
+  max-height: 300px;
   display: block;
   overflow-y: auto;
   background-color: #edf7fb;
@@ -528,14 +534,63 @@
   color: #000;
 }
 #ypt-ajax-filter-search form .search-button-area {
+  display: flex;
+  flex-direction: column;
   background-color: #e1f3f9;
 }
+@media (min-width: 901px) {
+  #ypt-ajax-filter-search form .search-button-area {
+    display: inherit;
+  }
+}
 #ypt-ajax-filter-search form .search-button-area .search-btn {
+  width: 70%;
+  align-self: center;
   margin: 1rem;
   background-color: #fff;
   border: 2px solid #000;
 }
-#ypt-ajax-filter-search #ypt-ajax-search-results {
+#ypt-ajax-filter-search .song-search-results {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+#ypt-ajax-filter-search .song-search-results .search-results-count {
+  display: flex;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 1rem 0;
+  padding-bottom: 0.5rem;
+}
+@media (min-width: 901px) {
+  #ypt-ajax-filter-search .song-search-results .search-results-count {
+    border-bottom: 2px solid #b3ecff;
+    margin: 0px 33rem;
+  }
+}
+#ypt-ajax-filter-search .song-search-results .search-results-count .count {
+  padding: 0 0.25rem;
+}
+#ypt-ajax-filter-search .song-search-results .search-results-controls {
+  display: flex;
+  justify-content: space-between;
+}
+#ypt-ajax-filter-search .song-search-results .search-results-controls button {
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-bottom: 2px solid #b3ecff;
+  margin: 0 1rem;
+}
+#ypt-ajax-filter-search .song-search-results .search-results-controls .search-results-page-count .current-page, #ypt-ajax-filter-search .song-search-results .search-results-controls .search-results-page-count .last-page {
+  font-weight: bold;
+  padding: 0 0.25rem;
+}
+#ypt-ajax-filter-search .song-search-results #ypt-ajax-search-results {
+  height: 100%;
   margin-top: 0;
   display: grid;
   grid-template-columns: 1fr;
@@ -544,28 +599,29 @@
   padding-top: 1rem;
 }
 @media (min-width: 601px) {
-  #ypt-ajax-filter-search #ypt-ajax-search-results {
+  #ypt-ajax-filter-search .song-search-results #ypt-ajax-search-results {
     grid-template-columns: 1fr 1fr;
   }
 }
 @media (min-width: 901px) {
-  #ypt-ajax-filter-search #ypt-ajax-search-results {
+  #ypt-ajax-filter-search .song-search-results #ypt-ajax-search-results {
+    grid-template-rows: 1fr 1fr;
     grid-template-columns: 1fr 1fr 1fr;
     padding-left: 2rem;
     padding-top: 0;
   }
 }
-#ypt-ajax-filter-search #ypt-ajax-search-results .ypt-result {
+#ypt-ajax-filter-search .song-search-results #ypt-ajax-search-results .ypt-result {
   margin: 1rem;
 }
-#ypt-ajax-filter-search #ypt-ajax-search-results .ypt-result a {
+#ypt-ajax-filter-search .song-search-results #ypt-ajax-search-results .ypt-result a {
   color: black;
 }
-#ypt-ajax-filter-search #ypt-ajax-search-results .ypt-result a img {
+#ypt-ajax-filter-search .song-search-results #ypt-ajax-search-results .ypt-result a img {
   width: 100%;
   max-width: inherit;
 }
-#ypt-ajax-filter-search #ypt-ajax-search-results .ypt-result a h3 {
+#ypt-ajax-filter-search .song-search-results #ypt-ajax-search-results .ypt-result a h3 {
   font-size: 1.1rem;
   line-height: 1.3;
 }

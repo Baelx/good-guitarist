@@ -7,37 +7,24 @@
  * @package good-guitarist
  */
 
+use GoodGuitarist\Custom\PostTypes;
+$the_post = get_post();
+$ypt_atts = PostTypes::get_block_attributes_from_post_content( $the_post->post_content, 'gutenberg-good-guitarist/ypt' );
 ?>
 
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-	<header class="entry-header">
-		<?php the_title( '<h2 class="entry-title"><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">', '</a></h2>' ); ?>
+	<?php if ( 'youtube-post' === get_post_type() ): ?>
+		<a class="ypt-link-wrapper" aria-label="<?php the_title(); ?>" href="<?php echo esc_url( the_permalink() ); ?>">
+			<img src="<?php echo esc_url( $ypt_atts['videoThumbnail'] ); ?>">
+			<h2 class="entry-title"><?php the_title(); ?></h2>
+		</a>
+	<?php else: ?>
 
-				<?php if ( 'post' === get_post_type() ) : ?>
-						<div class="entry-meta">
-							<?php GoodGuitarist\Core\Tags::posted_on(); ?>
-						</div><!-- .entry-meta -->
-
-		<?php endif; ?>
-	</header><!-- .entry-header -->
+	<?php endif; ?>
 
 	<div class="entry-content">
 		<?php
-			the_content(
-				sprintf(
-					wp_kses(
-						/* translators: %s: Name of current post. */
-						__( 'Continue reading %s <span class="meta-nav">&rarr;</span>', 'good-guitarist' ),
-						array(
-							'span' => array(
-								'class' => array(),
-							),
-						)
-					),
-					the_title( '<span class="screen-reader-text">"', '"</span>', false )
-				)
-			);
-
+			the_excerpt();
 			wp_link_pages(
 				array(
 					'before' => '<div class="page-links">' . esc_html__( 'Pages:', 'good-guitarist' ),

@@ -147,23 +147,37 @@ class PostTypes {
 	 * @param	array	$course_id	The ID of the course details to fetch.
 	 * @return	array
 	 */
-	public static function get_course_details( $course_id ) {
+	public static function get_course_details( int $course_id ) {
 		$course_details = [];
 		$course = get_post( $course_id );
 		if ($course) {
 			$course_details['courseTitle'] = $course->post_title;
-			$parsed_blocks = parse_blocks( $course->post_content );
-			/**
-			 * The course post may use multiple blocks but only find the
-			 * (hopefully) single instance of the course template block
-			 * in order to get its attributes.
-			 */
-			$course_template_block = array_filter( $parsed_blocks, function( $block ) {
-				return 'gutenberg-good-guitarist/course-template' === $block['blockName'];
-			} );
-			$course_details = array_merge( $course_details, $course_template_block[0]['attrs'] );
+			$post_attributes = static::get_block_attributes_from_post_content(
+								$course->post_content,
+								'gutenberg-good-guitarist/course-template' );
+			$course_details = array_merge( $course_details, $post_attributes );
 		}
 		return $course_details;
+	}
+
+	/**
+	 * Accepts post content and the block attributes to get(by block slug).
+	 * Return an array of the block attributes.
+	 *
+	 * @param	string	$post_content	Post content string.
+	 * @param	string	$block_slug		String of block slug to get attributes for.
+	 * @return	array
+	 */
+	public static function get_block_attributes_from_post_content( string $post_content, string $block_slug ): array {
+		$block_attributes = [];
+		$parsed_blocks = parse_blocks( $post_content );
+		$ypt_block = array_filter( $parsed_blocks, function( $block ) use ( $block_slug ) {
+			return $block['blockName'] === $block_slug;
+		} );
+		if ( ! empty( $ypt_block ) ) {
+			$block_attributes = $ypt_block[0]['attrs'];
+		}
+		return $block_attributes;
 	}
 
 	/**
@@ -222,6 +236,60 @@ class PostTypes {
 			}
 		}
 		return $post_terms;
+	}
+
+	/**
+	 * Get "related" posts. Performs an inclusive search based on $post_id's
+	 * taxonomy and returns three matches. The taxonomy slug is used in a query for
+	 * posts with terms under that taxonomy. Only searches posts of the same type as
+	 * the post ID.
+	 *
+	 * @param	int		 $post_id		The ID to get related posts for.
+	 * @param	string	 $taxonomy_slug	The taxonomy to match terms by.
+	 * @param	int|null $num_posts		The amount of posts to return.
+	 * @return	array
+	 */
+	public static function get_related_posts( int $post_id, string $taxonomy_slug, $num_posts = null ): array {
+		$related_youtube_posts = [];
+		$genres = get_the_terms( $post_id, $taxonomy_slug );
+		if ( $genres ) {
+			$genres = array_map( function( $term_object ) {
+				$term_array = (array) $term_object;
+				$term_array = array_filter( $term_array, function( $key ) {
+					return 'slug' === $key;
+				}, ARRAY_FILTER_USE_KEY );
+				return $term_array;
+			}, $genres );
+
+			$search_args = [
+				'post_type' => get_post_type( $post_id ) && 'post',
+				'posts_per_page' => is_null( $num_posts ) ? $num_posts : -1,
+			];
+
+			$tax_args = [
+				'tax_query' => [
+					'relation' => 'OR',
+					[
+						'taxonomy' => $taxonomy_slug,
+						'field'    => 'slug',
+						'terms'    => $genres,
+					]
+				]
+			];
+
+			$tax_query = new WP_Query( array_merge( $search_args, $tax_args ) );
+
+			if ( $tax_query->have_posts() ) {
+				$related_youtube_posts = $tax_query->posts;
+			} else {
+				$all_posts_query = new WP_Query( $search_args );
+				if ( $all_posts_query->have_posts() ) {
+					$related_youtube_posts = $all_posts_query->posts;
+				}
+			}
+		}
+
+		return $related_youtube_posts;
 	}
 }
 

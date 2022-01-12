@@ -4,19 +4,32 @@
 	text-align: center;
 
 	h2 {
-		padding: 0 15%;
+		padding: 0;
 		line-height: 1.15;
+
+		@include atMobile {
+			padding: 0 15%;
+		}
 	}
 
 	.social-links-footer-section {
 		display: flex;
 		justify-content: space-around;
-		background-color: $gg-blue;
-		padding: 2rem 3rem;
+		padding: 3rem 0 0 0;
 
-		.dashicons {
-			font-size: 4rem;
-			color: $white;
+		@include atMobile {
+			padding: 2rem 3rem;
+		}
+
+		a {
+
+			img {
+				max-height: 40px;
+
+				@include atMobile {
+					max-height: 70px;
+				}
+			}
 		}
 
 	}

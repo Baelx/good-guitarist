@@ -7,7 +7,7 @@ AjaxHandler::ypt_filter_search_scripts();
 			<div class="search-text-section">
 				<label class="search-label" for="songSearchText"><?php esc_html_e('Search by song title, description.'); ?></label>
 				<input type="text" name="songSearchText" id="songSearchText">
-				<button class="filters-expand-button">
+				<button class="filters-expand-button" type="button">
 					<span class="dashicons dashicons-arrow-down-alt2"></span>
 					<?php esc_html_e('Search filters'); ?>
 				</button>
@@ -154,5 +154,19 @@ AjaxHandler::ypt_filter_search_scripts();
 				<input class="btn search-btn" type="submit" id="submit" name="submit" value="Search">
 			</div>
         </form>
-        <ul id="ypt-ajax-search-results"></ul>
+		<div class="song-search-results">
+			<?php /* translators: i.e. 99 search results. */ ?>
+			<div class="search-results-count"><span class="count"></span><?php esc_html_e( 'result(s)' ); ?></div>
+			<ul id="ypt-ajax-search-results"></ul>
+			<div class="search-results-controls">
+				<?php /* translators: Previous page of search results. */ ?>
+				<button class="previous-page"><span class="dashicons dashicons-arrow-left-alt2"></span><?php esc_html_e( 'Previous' ); ?></button>
+				<div class="search-results-page-count">
+					<?php /* translators: i.e. 1 of 4 page of search results. */ ?>
+					<span class="current-page" data-page="0"></span><?php esc_html_e('of'); ?><span class="last-page"></span>
+				</div>
+				<?php /* translators: Next page of search results. */ ?>
+				<button class="next-page"><?php esc_html_e( 'Next' ); ?><span class="dashicons dashicons-arrow-right-alt2"></span></button>
+			</div>
+		</div>
     </div>

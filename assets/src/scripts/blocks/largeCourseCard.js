@@ -45,7 +45,6 @@ registerBlockType( 'gutenberg-good-guitarist/large-course-card', {
 			default: ''
 		}
 	},
-
 	edit({ attributes, className, setAttributes }) {
 		const { selectedCourseId  } = attributes;
 

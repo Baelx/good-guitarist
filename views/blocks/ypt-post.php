@@ -60,6 +60,11 @@ $taxonomies = PostTypes::get_single_youtube_post_terms_and_meta( get_the_ID() );
 			<?php endforeach; ?>
 		<?php endif; ?>
 	</div>
-	<div class="post-body"><?php esc_html_e( $atts['videoDescription'] ); ?></div>
+	<section class="post-body"><?php esc_html_e( $atts['videoDescription'] ); ?></section>
+	<section class="post-footer">
+		<div class="related-youtube-posts">
+			
+		</div>
+	</section>
 </div>
 

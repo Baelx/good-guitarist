@@ -1,9 +1,10 @@
 'use strict';
+const { chunk } = lodash;
 
 /**
  * Add search action and verify the form checkboxes. Return their data.
  *
- * @param {Element} form
+ * @param {HTMLElement} form
  * @param {Array|null} songFilterCheckboxes
  * @returns {array}
  */
@@ -48,42 +49,116 @@ const getCheckedSongFilters = ( inputName ) => {
  * Send the AJAX request to the server. Check if the search results element
  * can be found before making the request.
  *
- * @param {Element} yptSearchResultsElement
+ * @param {HTMLElement} yptSearchResultsElement
  * @param {Object} searchFormData
  * @returns {undefined}
  */
 const sendAjaxRequest = ( yptSearchResultsElement, searchFormData ) => {
-	console.log('the datae', searchFormData)
+	const yptSearchResultsCountElement = $('.search-results-count .count');
 	if (yptSearchResultsElement) {
 		$.ajax({
-			// Global variable YPTSEARCHAJAX created by wp_inline_script()
+			// Global variable YPTSEARCHAJAX created by wp_inline_script().
 			url : YPTSEARCHAJAX.ajax_url,
 			data : searchFormData,
 			success : (response) => {
 				console.log(" the response is", response);
 				yptSearchResultsElement.empty();
-				if (200 === response.status) {
-					response.data.forEach((post) => {
-						// console.log('the post', post)
-						let html = "<li class='ypt-result' id='ypt-" + post.id + "'>";
-						html += "  <a href='" + post.permalink + "' title='" + post.title + "'>";
-						html += "	   <img src='" + post.content[0].attrs.videoThumbnail + "' />";
-						html += "      <div class='ypt-info'>";
-						html += "          <h3>" + post.title + "</h3>";
-						html += "      </div>";
-						html += "  </a>";
-						html += "</li>";
-
-						yptSearchResultsElement.append(html);
-					})
-				} else {
-					let html  = "<li class='no-result'>No matching songs found. Try a different filter or search keyword</li>";
-					yptSearchResultsElement.append(html);
-				}
+				yptSearchResultsCountElement.each(function() {
+					$(this).text(response.data.length);
+				});
+				paginateSearchResults(response.data, yptSearchResultsElement);
 			}
 		});
 	}
 }
+
+/**
+ *
+ * @param {*} results
+ * @param {*} yptSearchResultsElement
+ */
+const populateSearchResults = (results, yptSearchResultsElement) => {
+	results.forEach((post) => {
+		let html = "<li class='ypt-result' id='ypt-" + post.id + "'>";
+		html += "  <a href='" + post.permalink + "' title='" + post.title + "'>";
+		html += "	   <img src='" + post.content[0].attrs.videoThumbnail + "' />";
+		html += "      <div class='ypt-info'>";
+		html += "          <h3>" + post.title + "</h3>";
+		html += "      </div>";
+		html += "  </a>";
+		html += "</li>";
+
+		yptSearchResultsElement.append(html);
+	});
+}
+
+/**
+ *
+ * @param {*} results
+ * @param {*} yptSearchResultsElement
+ */
+const paginateSearchResults = (results, yptSearchResultsElement, yptSearchResultsCountElement) => {
+	const resultsPerPage = 6;
+	const yptSearchPreviousPageButton = $('.search-results-controls .previous-page');
+	const yptSearchNextPageButton = $('.search-results-controls .next-page');
+	const yptSearchResultsPageCountElement = $('.search-results-page-count');
+	yptSearchPreviousPageButton.prop("disabled", false).css("cursor", "pointer");
+	yptSearchNextPageButton.prop("disabled", false).css("cursor", "pointer");
+	yptSearchResultsPageCountElement.find('.current-page').text('1');
+	yptSearchResultsPageCountElement.find('.last-page').text('1');
+	yptSearchResultsElement.empty();
+	if (results.length >= resultsPerPage) {
+		const chunkedResults = chunk(results, resultsPerPage);
+		yptSearchResultsPageCountElement.find('.current-page').text('1');
+		yptSearchResultsPageCountElement.find('.last-page').text(chunkedResults.length);
+		populateSearchResults(chunkedResults[0], yptSearchResultsElement, yptSearchResultsCountElement);
+		// Event listeners for previous and next page buttons.
+		yptSearchPreviousPageButton.on('click', (e) => {
+			const newPageCount = updatePageCount(e.target, false, chunkedResults.length, yptSearchResultsPageCountElement);
+			yptSearchResultsElement.empty();
+			populateSearchResults(chunkedResults[newPageCount], yptSearchResultsElement, yptSearchResultsCountElement);
+		});
+		yptSearchNextPageButton.on('click', (e) => {
+			const newPageCount = updatePageCount(e.target, true, chunkedResults.length, yptSearchResultsPageCountElement);
+			yptSearchResultsElement.empty();
+			populateSearchResults(chunkedResults[newPageCount], yptSearchResultsElement, yptSearchResultsCountElement);
+		});
+	} else {
+		populateSearchResults(results, yptSearchResultsElement, yptSearchResultsCountElement);
+		yptSearchPreviousPageButton.prop("disabled", true).css("cursor", "not-allowed");
+		yptSearchNextPageButton.prop("disabled", true).css("cursor", "not-allowed");
+		yptSearchResultsPageCountElement.find('.current-page').text('1');
+		yptSearchResultsPageCountElement.find('.last-page').text('1');
+	}
+
+}
+
+/**
+ *
+ * @param {*} changePageButton
+ * @param {*} increasePage
+ * @param {*} pageCount
+ * @param {*} yptSearchResultsPageCountElement
+ * @returns
+ */
+const updatePageCount = (changePageButton, increasePage, pageCount, yptSearchResultsPageCountElement) => {
+	const $pageCountElement = $(changePageButton).parent().first().find('.search-results-page-count .current-page').first();
+	let currentPage = Number($pageCountElement.data('page'));
+	let humanCurrentPage = currentPage + 1;
+
+	if (increasePage) {
+		if (currentPage < pageCount - 1) {
+			yptSearchResultsPageCountElement.find('.current-page').text(humanCurrentPage + 1);
+			$pageCountElement.data('page', currentPage + 1);
+		}
+	} else if (currentPage > 0) {
+		yptSearchResultsPageCountElement.find('.current-page').text(humanCurrentPage - 1);
+		$pageCountElement.data('page', currentPage - 1);
+	}
+
+	return $pageCountElement.data('page');
+}
+
 
 /**
  * Set aria-expanded attributes for mobile devices(less than 901px wide).

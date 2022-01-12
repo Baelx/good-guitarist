@@ -10,14 +10,17 @@
  */
 
 ?>
-
 	</div><!-- #content -->
 
 	<?php
 	if ( is_customize_preview() ) {
 		echo '<div id="awps-footer-control" style="margin-top:-30px;position:absolute;"></div>';
 	}
-	$footer_font_color = get_theme_mod( 'gg_footer_font_color', '#000' );
+	$footer_font_color = get_theme_mod( 'gg_footer_font_color', 'black' );
+	$footer_font_color_filter_map = [
+		'black' => 'unset',
+		'white' => 'invert()'
+	];
 	?>
 
 	<footer id="colophon" class="site-footer container-fluid" role="contentinfo" style="<?php esc_attr_e( 'background-color: ' . get_theme_mod( 'gg_footer_background_color', '#fff' ) ); ?>">
@@ -25,32 +28,26 @@
 			<?php esc_html_e( get_theme_mod( 'gg_footer_header_text', '' ) ); ?>
 		</h2>
 		<section class="social-links-footer-section">
-			<div class="social-icon-container social-icon-label-youtube">
-				<a style="<?php esc_attr_e( 'color: ' . $footer_font_color ) ?>"
-				   href="<?php esc_attr_e( get_theme_mod( 'gg_youtube_url', '#' ) ); ?>"
-				   class="">
-				   <img src="<?php echo get_template_directory_uri() . '/assets/dist/images' ?>" />
-				</a>
-			</div>
-			<div class="social-icon-container social-icon-label-instagram">
-				<a style="<?php esc_attr_e( 'color: ' . $footer_font_color ) ?>"
-				   href="<?php esc_attr_e( get_theme_mod( 'gg_instagram_url', '#' ) ); ?>"
-				   class="dashicons dashicons-instagram">
-				</a>
-			</div>
-			<div class="social-icon-container social-icon-label-facebook">
-				<a style="<?php esc_attr_e( 'color: ' . $footer_font_color ) ?>"
-				   href="<?php esc_attr_e( get_theme_mod( 'gg_facebook_url', '#' ) ); ?>"
-				   class="dashicons dashicons-facebook">
-				</a>
-			</div>
-			<div class="social-icon-container social-icon-label-patreon">
-				<a style="<?php esc_attr_e( 'color: ' . $footer_font_color ) ?>"
-				   href="<?php esc_attr_e( get_theme_mod( 'gg_patreon_url', '#' ) ); ?>"
-				   class="dashicons dashicons-facebook">
-				   <svg>
-				</a>
-			</div>
+			<a style="<?php esc_attr_e( 'filter: ' . $footer_font_color_filter_map[$footer_font_color] ) ?>"
+				href="<?php esc_attr_e( get_theme_mod( 'gg_youtube_url', '#' ) ); ?>"
+				class="">
+				<img src="<?php echo get_template_directory_uri() . '/assets/dist/images/youtube-icon.png' ?>" />
+			</a>
+			<a style="<?php esc_attr_e( 'filter: ' . $footer_font_color_filter_map[$footer_font_color] ) ?>"
+				href="<?php esc_attr_e( get_theme_mod( 'gg_instagram_url', '#' ) ); ?>"
+				class="">
+				<img src="<?php echo get_template_directory_uri() . '/assets/dist/images/instagram-icon.png' ?>" />
+			</a>
+			<a style="<?php esc_attr_e( 'filter: ' . $footer_font_color_filter_map[$footer_font_color] ) ?>"
+				href="<?php esc_attr_e( get_theme_mod( 'gg_facebook_url', '#' ) ); ?>"
+				class="">
+				<img src="<?php echo get_template_directory_uri() . '/assets/dist/images/facebook-icon.png' ?>" />
+			</a>
+			<a style="<?php esc_attr_e( 'filter: ' . $footer_font_color_filter_map[$footer_font_color] ) ?>"
+				href="<?php esc_attr_e( get_theme_mod( 'gg_patreon_url', '#' ) ); ?>"
+				class="">
+				<img src="<?php echo get_template_directory_uri() . '/assets/dist/images/patreon-icon.png' ?>" />
+			</a>
 		</section>
 		<div class="site-info">
 			<?php

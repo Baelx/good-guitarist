@@ -20,7 +20,7 @@ class AjaxHandler {
 	 * @return void
 	 */
 	public static function ypt_filter_search_scripts(): void {
-		wp_enqueue_script( 'ypt_filter_search', mix('js/yptSearch.js'), ['jquery'], '1.0.0', true );
+		wp_enqueue_script( 'ypt_filter_search', mix('js/yptSearch.js'), [ 'jquery', 'lodash' ], '1.0.0', true );
 		wp_add_inline_script( 'ypt_filter_search', 'const YPTSEARCHAJAX = ' . json_encode( [
 			'ajax_url' => admin_url( 'admin-ajax.php' ),
 		 ] ), 'before' );

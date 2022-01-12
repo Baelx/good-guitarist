@@ -1,5 +1,12 @@
 header {
 	position: relative;
+	&.entry-header {
+		margin: 1rem;
+	}
+
+	.page-title {
+		margin: 1rem;
+	}
 
 	.header-row {
 		position: relative;
@@ -102,6 +109,42 @@ header {
 				}
 			}
 
+			.search-form {
+				display: flex;
+
+				.search-form-box {
+					width: 0px;
+					overflow: hidden;
+					display: block;
+					border-width: 0px;
+					border-style: solid;
+					border-color: $black;
+					border-radius: 4px;
+					background: $transparent-white;
+					transition: all 0.3s ease-in-out;
+
+					.search-field {
+						border: none;
+						background: none;
+					}
+				}
+
+				.header-search-submit {
+					cursor: pointer;
+					min-width: 30px;
+					min-height: 30px;
+					margin: 0;
+					padding: 0px;
+					background: none;
+					border: none;
+					margin-left: 0.5rem;
+
+					&::before {
+						font-size: 30px;
+					}
+				}
+			}
+
 			.close-nav-button {
 				cursor: pointer;
 				display: inherit;
@@ -119,6 +162,7 @@ header {
 		}
 	}
 
+	// Make adjustments to CSS if header is transparent.
 	&.transparent-header {
 		position: absolute;
 		z-index: 10;
@@ -151,6 +195,16 @@ header {
 							}
 						}
 					}
+				}
+			}
+
+			.search-form {
+				.search-form-box {
+					border-color: $white;
+				}
+
+				.header-search-submit {
+					color: $white;
 				}
 			}
 		}

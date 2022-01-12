@@ -14,7 +14,6 @@ $post = get_post();
 
 if ( has_blocks( $post->post_content ) ) {
     $blocks = parse_blocks( $post->post_content );
-
     if ( $blocks[0]['blockName'] === 'core/cover' ) {
 		$header_classes .= ' transparent-header';
     }
@@ -63,6 +62,13 @@ if ( has_blocks( $post->post_content ) ) {
 							);
 						endif;
 						?>
+						<form role="search" method="get" class="search-form" action="http://localhost:8000/">
+							<label class="search-form-box">
+								<span class="screen-reader-text">Search for:</span>
+								<input type="search" class="search-field" placeholder="Search …" value="" name="s">
+							</label>
+							<button type="submit" aria-expanded="false" class="header-search-submit dashicons dashicons-search"></button>
+						</form>
 						<button class="dashicons dashicons-button dashicons-no-alt close-nav-button"
 								aria-hidden="true"
 								tabindex="">
