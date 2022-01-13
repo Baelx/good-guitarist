@@ -22,8 +22,7 @@ class PostTypes {
     * Create Custom Post Types
     * @return The registered post type object, or an error object
     */
-    public function custom_post_type()
-    {
+    public function custom_post_type() {
 		/**
 		 * Add the post types and their details
 		 */
@@ -112,8 +111,7 @@ class PostTypes {
     * Flush Rewrite on CPT activation
     * @return empty
     */
-    public function rewrite_flush()
-    {
+    public function rewrite_flush() {
         // Flush the rewrite rules only on theme activation
         flush_rewrite_rules();
     }
@@ -250,20 +248,17 @@ class PostTypes {
 	 * @return	array
 	 */
 	public static function get_related_posts( int $post_id, string $taxonomy_slug, $num_posts = null ): array {
-		$related_youtube_posts = [];
+		$related_posts = [];
 		$genres = get_the_terms( $post_id, $taxonomy_slug );
 		if ( $genres ) {
 			$genres = array_map( function( $term_object ) {
 				$term_array = (array) $term_object;
-				$term_array = array_filter( $term_array, function( $key ) {
-					return 'slug' === $key;
-				}, ARRAY_FILTER_USE_KEY );
-				return $term_array;
+				return $term_array['slug'];
 			}, $genres );
 
 			$search_args = [
-				'post_type' => get_post_type( $post_id ) && 'post',
-				'posts_per_page' => is_null( $num_posts ) ? $num_posts : -1,
+				'post_type' => get_post_type( $post_id ) ?? 'post',
+				'posts_per_page' => is_null( $num_posts ) ? -1 : $num_posts,
 			];
 
 			$tax_args = [
@@ -277,19 +272,33 @@ class PostTypes {
 				]
 			];
 
-			$tax_query = new WP_Query( array_merge( $search_args, $tax_args ) );
+			$tax_query = new \WP_Query( array_merge( $search_args, $tax_args ) );
 
 			if ( $tax_query->have_posts() ) {
-				$related_youtube_posts = $tax_query->posts;
+				$related_posts = static::filterPostFromPostList( $post_id, $tax_query->posts);
 			} else {
-				$all_posts_query = new WP_Query( $search_args );
+				$all_posts_query = new \WP_Query( $search_args );
 				if ( $all_posts_query->have_posts() ) {
-					$related_youtube_posts = $all_posts_query->posts;
+					$related_posts = static::filterPostFromPostList( $post_id, $all_posts_query->posts);
 				}
 			}
 		}
 
-		return $related_youtube_posts;
+		return $related_posts;
+	}
+
+	/**
+	 * Makes sure a list of WP_Posts doesn't contain a post with ID
+	 * of $post_to_filter.
+	 *
+	 * @param	int		$post_to_filter		Filter array by excluding post of this ID.
+	 * @param	array	$related_posts		Array to filter.
+	 * @return	array
+	 */
+	public static function filterPostFromPostList( int $post_to_filter, array $post_list ): array {
+		return array_filter( $post_list, function( $post ) use ( $post_to_filter ) {
+			return $post->ID !== $post_to_filter;
+		} );
 	}
 }
 

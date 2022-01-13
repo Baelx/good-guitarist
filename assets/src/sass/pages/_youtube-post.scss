@@ -94,4 +94,25 @@
 		white-space: pre-wrap;
 		margin-top: 7.5%;
 	}
+
+	.related-posts-heading {
+		font-size: 1.75rem;
+	}
+
+	.related-youtube-posts {
+		list-style-type: none;
+		padding: 0;
+		display: grid;
+		grid-template-rows: 1fr;
+		grid-template-columns: 1fr 1fr 1fr 1fr;
+
+		li {
+			margin: 0.5rem;
+			text-align: center;
+
+			h3 {
+				font-size: 1.1rem;
+			}
+		}
+	}
 }

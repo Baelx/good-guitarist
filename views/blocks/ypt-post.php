@@ -10,6 +10,11 @@ if ( $atts['courseSlotTwo'] ?? false ) {
 }
 $youtube_iframe_class = empty( $upper_slot_courses ) ? "no-upper-courses" : "";
 $taxonomies = PostTypes::get_single_youtube_post_terms_and_meta( get_the_ID() );
+$related_posts = PostTypes::get_related_posts( get_the_ID(), 'genre', 5 );
+
+foreach($related_posts as $post) {
+	$post->atts = PostTypes::get_block_attributes_from_post_content( $post->post_content, 'gutenberg-good-guitarist/ypt' );
+}
 ?>
 <div className="youtube-post">
 	<h3 class="song-and-artist">
@@ -34,15 +39,15 @@ $taxonomies = PostTypes::get_single_youtube_post_terms_and_meta( get_the_ID() );
 		<iframe class="<?php esc_attr_e( $youtube_iframe_class ); ?>" width="560" height="515" src="<?php esc_attr_e( $atts['videoURL'])?>" title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 		<?php if ( ! empty( $upper_slot_courses ) ): ?>
 		<div class="upper-course-area">
-				<?php foreach( $upper_slot_courses as $course ): ?>
-				<div class="small-course-card">
-					<img src="<?php esc_attr_e( $course['imageUrl'] ); ?>" alt="" />
-					<div class="course-card-body">
-						<p class="body-text"><?php esc_html_e( $course['courseDescription'] ); ?></p>
-						<a class="course-url-button" target="_blank" href="<?php esc_attr_e( $course['courseUrl'] ); ?>">Get it now!</a>
-					</div>
+			<?php foreach( $upper_slot_courses as $course ): ?>
+			<div class="small-course-card">
+				<img src="<?php esc_attr_e( $course['imageUrl'] ); ?>" alt="" />
+				<div class="course-card-body">
+					<p class="body-text"><?php esc_html_e( $course['courseDescription'] ); ?></p>
+					<a class="course-url-button" target="_blank" href="<?php esc_attr_e( $course['courseUrl'] ); ?>">Get it now!</a>
 				</div>
-				<?php endforeach; ?>
+			</div>
+			<?php endforeach; ?>
 		</div>
 		<?php endif; ?>
 	</div>
@@ -62,9 +67,17 @@ $taxonomies = PostTypes::get_single_youtube_post_terms_and_meta( get_the_ID() );
 	</div>
 	<section class="post-body"><?php esc_html_e( $atts['videoDescription'] ); ?></section>
 	<section class="post-footer">
-		<div class="related-youtube-posts">
-			
-		</div>
+		<h2 class="related-posts-heading"><?php esc_html_e( 'Related Posts' ); ?></h2>
+		<ul class="related-youtube-posts">
+			<?php foreach( $related_posts as $post ): ?>
+				<li>
+					<a href="<?php the_permalink( $post->ID ); ?>">
+						<img src="<?php esc_attr_e( $post->atts['videoThumbnail'] ); ?>"/>
+						<h3><?php esc_html_e( $post->post_title ); ?></h3>
+					</a>
+				</li>
+			<?php endforeach; ?>
+		</ul>
 	</section>
 </div>
 

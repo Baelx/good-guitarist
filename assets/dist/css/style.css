@@ -6375,6 +6375,23 @@ aside {
   white-space: pre-wrap;
   margin-top: 7.5%;
 }
+.youtube-post .related-posts-heading {
+  font-size: 1.75rem;
+}
+.youtube-post .related-youtube-posts {
+  list-style-type: none;
+  padding: 0;
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+.youtube-post .related-youtube-posts li {
+  margin: 0.5rem;
+  text-align: center;
+}
+.youtube-post .related-youtube-posts li h3 {
+  font-size: 1.1rem;
+}
 
 /*--------------------------------------------------------------
 # Blocks
