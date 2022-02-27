@@ -143,6 +143,13 @@
   font-style: italic;
 }
 
+.small-cta {
+  padding: 1rem;
+  border: 1px solid grey;
+  border-radius: 3px;
+  display: flex;
+}
+
 *[data-type="gutenberg-good-guitarist/large-course-card"] {
   max-width: 400px;
   margin-left: initial;

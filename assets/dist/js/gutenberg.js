@@ -616,19 +616,22 @@ registerBlockType('gutenberg-good-guitarist/latest-lessons', {
 
 /***/ }),
 
-/***/ "./assets/src/scripts/blocks/smallCourseCard.js":
-/*!******************************************************!*\
-  !*** ./assets/src/scripts/blocks/smallCourseCard.js ***!
-  \******************************************************/
+/***/ "./assets/src/scripts/blocks/smallCta.js":
+/*!***********************************************!*\
+  !*** ./assets/src/scripts/blocks/smallCta.js ***!
+  \***********************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/extends */ "./node_modules/@babel/runtime/helpers/esm/extends.js");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__);
+
 
 var registerBlockType = wp.blocks.registerBlockType;
 var Fragment = wp.element.Fragment;
+var __ = wp.i18n.__;
 var _wp$editor = wp.editor,
     PlainText = _wp$editor.PlainText,
     RichText = _wp$editor.RichText,
@@ -637,40 +640,134 @@ var _wp$editor = wp.editor,
     InspectorControls = _wp$editor.InspectorControls,
     ColorPalette = _wp$editor.ColorPalette,
     getColorClass = _wp$editor.getColorClass;
+var useBlockProps = wp.blockEditor.useBlockProps;
 var _wp$components = wp.components,
     IconButton = _wp$components.IconButton,
     RangeControl = _wp$components.RangeControl,
-    PanelBody = _wp$components.PanelBody;
-registerBlockType('gutenberg-good-guitarist/small-course-card', {
-  title: 'Small Course Card',
+    PanelBody = _wp$components.PanelBody,
+    TextControl = _wp$components.TextControl,
+    TextareaControl = _wp$components.TextareaControl;
+registerBlockType('gutenberg-good-guitarist/small-cta', {
+  title: 'Small Call to Action',
   icon: 'format-image',
   category: 'layout',
-  className: 'small-course-card',
-  attributes: {},
-  edit: function edit() {
-    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: ""
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
-      src: "",
-      alt: ""
-    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", null));
+  className: 'small-cta',
+  attributes: {
+    description: {
+      type: 'string',
+      "default": ''
+    },
+    link: {
+      type: 'string',
+      "default": ''
+    },
+    buttonText: {
+      type: 'string',
+      "default": ''
+    },
+    mediaId: {
+      type: "number"
+    },
+    mediaUrl: {
+      type: "string"
+    }
   },
-  save: function save() {
-    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: ""
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+  edit: function edit(_ref) {
+    var className = _ref.className,
+        attributes = _ref.attributes,
+        setAttributes = _ref.setAttributes;
+    var blockProps = useBlockProps();
+    var link = attributes.link,
+        description = attributes.description,
+        mediaId = attributes.mediaId,
+        mediaUrl = attributes.mediaUrl;
+    /**
+     * Event handler for When images is selected.
+     *
+     * @param   {object}  media  The media object, to set url, and id.
+     */
+
+    var onSelectImage = function onSelectImage(media) {
+      props.setAttributes({
+        mediaUrl: media.url,
+        mediaId: media.id
+      });
+    };
+    /**
+     *
+     */
+
+
+    var deleteSelectedImage = function deleteSelectedImage() {
+      props.setAttributes({
+        mediaUrl: "",
+        mediaId: ""
+      });
+    };
+
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("div", (0,_babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__.default)({}, blockProps, {
+      className: "small-cta"
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("img", {
       src: "",
       alt: ""
-    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", null));
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(MediaUpload, {
+      onSelect: onSelectImage,
+      allowedTypes: "image",
+      value: mediaId,
+      render: function render(_ref2) {
+        var open = _ref2.open;
+        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("div", {
+          className: "image-button-controls"
+        }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("a", {
+          className: "image-button add-image-button",
+          onClick: open,
+          tabIndex: "0"
+        }, !mediaId ? __("Upload Image") : __("Change Image")), mediaId && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("a", {
+          className: "image-button clear-image-button",
+          onClick: deleteSelectedImage,
+          tabIndex: "0"
+        }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("img", {
+          src: TrashIcon
+        })));
+      }
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(TextareaControl, {
+      label: "Description",
+      value: description,
+      onChange: function onChange(value) {
+        return setAttributes({
+          description: value
+        });
+      }
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(TextControl, {
+      label: "Link",
+      value: link,
+      onChange: function onChange(value) {
+        return setAttributes({
+          link: value
+        });
+      }
+    }));
+  },
+  save: function save(_ref3) {
+    var attributes = _ref3.attributes; // const blockProps = useBlockProps();
+
+    var link = attributes.link,
+        buttonText = attributes.buttonText;
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("div", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("img", {
+      src: "",
+      alt: ""
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("p", null, description), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("button", {
+      href: link
+    }, buttonText));
   }
 });
 
 /***/ }),
 
-/***/ "./assets/src/scripts/blocks/youtube-post-template.js":
-/*!************************************************************!*\
-  !*** ./assets/src/scripts/blocks/youtube-post-template.js ***!
-  \************************************************************/
+/***/ "./assets/src/scripts/blocks/youtubePostTemplate.js":
+/*!**********************************************************!*\
+  !*** ./assets/src/scripts/blocks/youtubePostTemplate.js ***!
+  \**********************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -679,13 +776,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ "./node_modules/@babel/runtime/helpers/esm/slicedToArray.js");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _youtube_api_config__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../youtube-api-config */ "./youtube-api-config.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _youtube_api_config__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../youtube-api-config */ "./youtube-api-config.js");
 
 
 
 var _wp$blocks = wp.blocks,
     registerBlockType = _wp$blocks.registerBlockType,
-    InnerBlocks = _wp$blocks.InnerBlocks;
+    createBlock = _wp$blocks.createBlock;
 var _wp$components = wp.components,
     TextControl = _wp$components.TextControl,
     PanelRow = _wp$components.PanelRow,
@@ -694,7 +793,7 @@ var _wp$components = wp.components,
 var _wp$blockEditor = wp.blockEditor,
     RichText = _wp$blockEditor.RichText,
     useBlockProps = _wp$blockEditor.useBlockProps,
-    MediaUpload = _wp$blockEditor.MediaUpload;
+    InnerBlocks = _wp$blockEditor.InnerBlocks;
 var PluginDocumentSettingPanel = wp.editPost.PluginDocumentSettingPanel;
 var _wp$data = wp.data,
     useSelect = _wp$data.useSelect,
@@ -705,6 +804,7 @@ var _wp$element = wp.element,
     useState = _wp$element.useState;
 var __ = wp.i18n.__;
 var parse = wp.blockSerializationDefaultParser.parse;
+
 
 registerBlockType('gutenberg-good-guitarist/ypt', {
   apiVersion: 2,
@@ -725,7 +825,7 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
       "default": gutenbergVars.image_dir + '/good-guitarist-preview-img.png'
     },
     videoDescription: {
-      type: 'string'
+      type: 'array'
     },
     videoURL: {
       type: 'string'
@@ -744,10 +844,15 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
     sidebarCourseSlotTwo: {
       type: 'integer',
       "default": -1
+    },
+    postBodyElements: {
+      type: 'array',
+      "default": []
     }
   },
   edit: function edit(_ref) {
-    var attributes = _ref.attributes,
+    var clientId = _ref.clientId,
+        attributes = _ref.attributes,
         className = _ref.className,
         setAttributes = _ref.setAttributes;
     var videoInfoFetched = attributes.videoInfoFetched,
@@ -755,10 +860,10 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
         videoURL = attributes.videoURL,
         videoTitle = attributes.videoTitle,
         videoThumbnail = attributes.videoThumbnail,
-        videoDescription = attributes.videoDescription,
         songTitle = attributes.songTitle,
         sidebarCourseSlotOne = attributes.sidebarCourseSlotOne,
-        sidebarCourseSlotTwo = attributes.sidebarCourseSlotTwo;
+        sidebarCourseSlotTwo = attributes.sidebarCourseSlotTwo,
+        postBodyElements = attributes.postBodyElements;
     var blockProps = useBlockProps();
     var postBody = useRef();
 
@@ -832,18 +937,19 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
     /**
      * Check if string has http:// or https:// in it.
      *
-     * @param {String} stringToCheck
+     * @param {string} stringToCheck
      */
 
 
     var stringContainsLink = function stringContainsLink(stringToCheck) {
-      var containsLink = false;
+      var linkRegex = /(http:\/\/|https:\/\/).*/g;
+      var matchedLink = '';
 
-      if ('string' === typeof stringToCheck && stringToCheck.search(/(http:\/\/|https:\/\/).*/g) >= 0) {
-        containsLink = true;
+      if ('string' === typeof stringToCheck && (stringToCheck === null || stringToCheck === void 0 ? void 0 : stringToCheck.search(linkRegex)) >= 0) {
+        matchedLink = stringToCheck.match(linkRegex);
       }
 
-      return containsLink;
+      return matchedLink;
     };
     /**
      * Checks if a string begins with an arrow character.
@@ -916,18 +1022,51 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
         });
       }, 3000);
     };
+    /**
+     * If individual paragraphs of the youtube post description are found
+     * to include an arrow character, a link, or both, output a type
+     * accordingly.
+     *
+     * @param {String} element
+     */
 
-    var createBlocksFromYTDescription = function createBlocksFromYTDescription(descriptionArray) {
-      var descriptionsWithoutEmpties = descriptionArray.filter(function (string) {
-        return string.length;
+
+    var postBodyElementType = function postBodyElementType(element) {
+      var elementType = "text";
+
+      if (stringContainsLink(element)) {
+        if (stringContainsArrow(element)) {
+          elementType = "courseLinkAndDescription";
+        } else {
+          elementType = "courseLink";
+        }
+      } else if (stringContainsArrow(element)) {
+        elementType = "courseDescription";
+      }
+
+      return elementType;
+    };
+
+    var createBlocksFromDescription = function createBlocksFromDescription(descriptionArray) {
+      var descriptionWithoutEmpties = descriptionArray.filter(function (description) {
+        return description.length;
       });
-      return descriptionsWithoutEmpties.map(function (description) {
-        var htmlDescription = description.replace(/(http:\/\/|https:\/\/).*/g, function (text) {
-          return "<a href=\"".concat(text, "\">").concat(text, "</a>");
-        });
-        return createBlock('core/paragraph', {
-          content: htmlDescription
-        });
+      return descriptionWithoutEmpties.map(function (description) {
+        var matchedLink = stringContainsLink(description);
+        var blockType = 'core/paragraph';
+        var blockAtts = {
+          content: description
+        };
+
+        if (matchedLink) {
+          blockType = 'gutenberg-good-guitarist/small-cta';
+          blockAtts = {
+            link: matchedLink,
+            description: description
+          };
+        }
+
+        return createBlock(blockType, blockAtts);
       });
     };
     /**
@@ -939,19 +1078,25 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
 
     var handleFetchResponse = function handleFetchResponse(response) {
       try {
+        dispatch('core/editor').insertBlocks([], 0, clientId);
         var fetchedTitle = response.result.items[0].snippet.title;
         var fetchedDescription = response.result.items[0].snippet.description;
         var fetchedThumbnail = response.result.items[0].snippet.thumbnails.medium.url;
         var descriptionArray = fetchedDescription.split('\n');
-        var htmlDescription = fetchedDescription.replace(/(http:\/\/|https:\/\/).*/g, function (text) {
-          return "<a href=\"".concat(text, "\">").concat(text, "</a>");
+        var postBodyBlocks = createBlocksFromDescription(descriptionArray);
+        console.log('the', postBodyBlocks);
+        dispatch('core/editor').insertBlocks(postBodyBlocks, 0, clientId);
+        var postBodyContentArray = descriptionArray.map(function (element) {
+          return {
+            content: element,
+            type: postBodyElementType(element),
+            course: 0
+          };
         });
-        htmlDescription = htmlDescription.replace(/\r|\n/g, function (text) {
-          return "<br>";
-        });
-        console.log('the content', htmlDescription);
-        var newBlocks = createBlocksFromYTDescription(descriptionArray); // dispatch('core/editor').insertBlocks()
-        // Update the post title.
+        console.log("the post body", postBodyContentArray);
+        setAttributes({
+          postBodyElements: postBodyContentArray
+        }); // Update the post title.
 
         dispatch('core/editor').editPost({
           title: fetchedTitle
@@ -959,7 +1104,7 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
 
         setAttributes({
           videoTitle: fetchedTitle,
-          videoDescription: htmlDescription,
+          videoDescription: descriptionArray,
           videoThumbnail: fetchedThumbnail
         }); // Todo: convert to useState()
 
@@ -993,7 +1138,7 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
       });
       gapi.load('client', function () {
         console.log('the vid id', videoID);
-        gapi.client.setApiKey(_youtube_api_config__WEBPACK_IMPORTED_MODULE_3__.youtubeAPIConfig.key);
+        gapi.client.setApiKey(_youtube_api_config__WEBPACK_IMPORTED_MODULE_4__.youtubeAPIConfig.key);
         gapi.client.load('youtube', 'v3', function () {
           gapi.client.youtube.videos.list({
             part: 'snippet',
@@ -1006,6 +1151,26 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
           });
         });
       });
+    };
+
+    var handlePostBodyCourseChange = function handlePostBodyCourseChange(newCourse, courseAreaIndex) {
+      console.log('the post body element', postBodyElements);
+      /**
+       * If the course area select box has a matching element in the post body,
+       * update the corresponding position in the array attribute and update the
+       * course area HTML.
+       */
+
+      var newCourseObject = postBodyElements[courseAreaIndex];
+      newCourseObject.course = parseInt(newCourse); // if (courseAreaElements[courseAreaAttributeToUpdate]) {
+
+      var newPostBodyElements = postBodyElements.fill(newCourseObject, courseAreaIndex, courseAreaIndex + 1);
+      console.log('the new ones', newPostBodyElements);
+      setAttributes({
+        postBodyElements: newPostBodyElements
+      }); // 	courseAreaElements.forEach(courseArea => console.log('sus', courseArea.dataset.courseSlot));
+      // 	// courseAreaElements[courseAreaAttributeToUpdate].classList.remove('no-course');
+      // }
     };
 
     var handleCourseChange = function handleCourseChange(newValue, id) {
@@ -1073,39 +1238,26 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
     // 	}
     // 	return courseViewInfo;
     // }
+    // const PostBodyCourseArea = ({element, courseAreaIndex}) => {
+    // 	const courseTypes = [ "courseLink", "courseDescription", "courseLinkAndDescription" ];
+    // 	if ( "courseLinkAndDescription" === element.type || "courseLink" === element.type ) {
+    // 		const [ courseLink, courseDescription, buttonText ] = getCourseViewInfo(element, courseAreaIndex);
+    // 		return (<article className="post-body-course-area course">
+    // 			<img src={''} alt="" />
+    // 			<div className="course-card-body">
+    // 				<p className="body-text">{courseDescription}</p>
+    // 				<a className="course-url-button" href={courseLink}>{buttonText}</a>
+    // 			</div>
+    // 		</article>)
+    // 	} else {
+    // 		return (
+    // 			<div className="post-body-course-area no-course">
+    // 				{<p>{ __('Select a course to fill this area or leave blank.')}</p>}
+    // 			</div>
+    // 		)
+    // 	}
+    // }
 
-
-    var PostBodyCourseArea = function PostBodyCourseArea(_ref3) {
-      var element = _ref3.element,
-          courseAreaIndex = _ref3.courseAreaIndex;
-      var courseTypes = ["courseLink", "courseDescription", "courseLinkAndDescription"];
-
-      if ("courseLinkAndDescription" === element.type || "courseLink" === element.type) {
-        var _getCourseViewInfo = getCourseViewInfo(element, courseAreaIndex),
-            _getCourseViewInfo2 = (0,_babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_1__.default)(_getCourseViewInfo, 3),
-            courseLink = _getCourseViewInfo2[0],
-            courseDescription = _getCourseViewInfo2[1],
-            buttonText = _getCourseViewInfo2[2];
-
-        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("article", {
-          className: "post-body-course-area course"
-        }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("img", {
-          src: '',
-          alt: ""
-        }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("div", {
-          className: "course-card-body"
-        }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("p", {
-          className: "body-text"
-        }, courseDescription), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("a", {
-          className: "course-url-button",
-          href: courseLink
-        }, buttonText)));
-      } else {
-        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("div", {
-          className: "post-body-course-area no-course"
-        }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("p", null, __('Select a course to fill this area or leave blank.')));
-      }
-    };
 
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("div", (0,_babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__.default)({}, blockProps, {
       className: className
@@ -1130,6 +1282,22 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
         return handleCourseChange(newValue, 'second-course-slot');
       }
     }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(PluginDocumentSettingPanel, {
+      name: "post-body-course-slots",
+      title: __('Post body course slots'),
+      className: "post-body-course-slots-panel"
+    }, postBodyElements && postBodyElements.map(function (element, index) {
+      if ("courseLink" === element.type) {
+        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(PanelRow, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(SelectControl, {
+          id: index,
+          label: __('Course slot line') + " ".concat(index + 1),
+          value: element.course,
+          options: courseOptionsWithAuto,
+          onChange: function onChange(newValue) {
+            return handlePostBodyCourseChange(newValue, index);
+          }
+        }));
+      }
+    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(PluginDocumentSettingPanel, {
       name: "song-difficulty-attributes",
       title: __('Song difficulty'),
       className: "song-difficulty-panel"
@@ -1228,9 +1396,9 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
       className: "empty-post-body-msg"
     }, __('Submit URL to populate post body.'))));
   },
-  save: function save(_ref4) {
-    var attributes = _ref4.attributes,
-        className = _ref4.className;
+  save: function save(_ref3) {
+    var attributes = _ref3.attributes,
+        className = _ref3.className;
     var videoURL = attributes.videoURL,
         videoDescription = attributes.videoDescription;
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("div", {
@@ -1243,18 +1411,18 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
       frameborder: "0",
       allow: "accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture",
       allowfullscreen: true
-    }) : '', (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(RichText, {
-      content: videoDescription
-    }));
+    }) : '', (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("div", {
+      "class": "youtube-post-type-video-description"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(InnerBlocks.Content, null)));
   }
 });
 
 /***/ }),
 
-/***/ "./assets/src/scripts/blocks/ypt-search.js":
-/*!*************************************************!*\
-  !*** ./assets/src/scripts/blocks/ypt-search.js ***!
-  \*************************************************/
+/***/ "./assets/src/scripts/blocks/yptSearch.js":
+/*!************************************************!*\
+  !*** ./assets/src/scripts/blocks/yptSearch.js ***!
+  \************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -1293,6 +1461,17 @@ __webpack_require__.r(__webpack_exports__);
 var youtubeAPIConfig = {
   key: 'AIzaSyAZ1ibASlnCXrLWO5UDk6Hu4hRnFtn_V9o'
 };
+
+/***/ }),
+
+/***/ "lodash":
+/*!*************************!*\
+  !*** external "lodash" ***!
+  \*************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = window["lodash"];
 
 /***/ }),
 
@@ -1384,7 +1563,7 @@ var __webpack_exports__ = {};
 /**
  * Import your Gutenberg custom blocks here
  */
-__webpack_require__(/*! ./blocks/smallCourseCard.js */ "./assets/src/scripts/blocks/smallCourseCard.js");
+__webpack_require__(/*! ./blocks/smallCta.js */ "./assets/src/scripts/blocks/smallCta.js");
 
 __webpack_require__(/*! ./blocks/largeCourseCard.js */ "./assets/src/scripts/blocks/largeCourseCard.js");
 
@@ -1396,9 +1575,9 @@ __webpack_require__(/*! ./blocks/group.js */ "./assets/src/scripts/blocks/group.
 
 __webpack_require__(/*! ./blocks/latestLessons.js */ "./assets/src/scripts/blocks/latestLessons.js");
 
-__webpack_require__(/*! ./blocks/youtube-post-template.js */ "./assets/src/scripts/blocks/youtube-post-template.js");
+__webpack_require__(/*! ./blocks/youtubePostTemplate.js */ "./assets/src/scripts/blocks/youtubePostTemplate.js");
 
-__webpack_require__(/*! ./blocks/ypt-search.js */ "./assets/src/scripts/blocks/ypt-search.js");
+__webpack_require__(/*! ./blocks/yptSearch.js */ "./assets/src/scripts/blocks/yptSearch.js");
 })();
 
 /******/ })()

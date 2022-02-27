@@ -91,7 +91,7 @@ class Gutenberg
 			'image_dir' => get_template_directory_uri() . '/assets/dist/images'
 		]);
 
-		register_block_type( 'gutenberg-good-guitarist/small-course-card', [
+		register_block_type( 'gutenberg-good-guitarist/small-cta', [
 			'editor_script' => 'gutenberg-good-guitarist',
 		]);
 
