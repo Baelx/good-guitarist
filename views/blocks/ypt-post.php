@@ -11,7 +11,7 @@ if ( $atts['courseSlotTwo'] ?? false ) {
 $youtube_iframe_class = empty( $upper_slot_courses ) ? "no-upper-courses" : "";
 $taxonomies = PostTypes::get_single_youtube_post_terms_and_meta( get_the_ID() );
 $related_posts = PostTypes::get_related_posts( get_the_ID(), 'genre', 5 );
-
+var_dump($atts);
 foreach($related_posts as $post) {
 	$post->atts = PostTypes::get_block_attributes_from_post_content( $post->post_content, 'gutenberg-good-guitarist/ypt' );
 }
@@ -65,7 +65,9 @@ foreach($related_posts as $post) {
 			<?php endforeach; ?>
 		<?php endif; ?>
 	</div>
-	<section class="post-body"><?php esc_html_e( $atts['videoDescription'] ); ?></section>
+	<section class="post-body">
+	<?php esc_html_e( $atts['videoDescription'] ); ?>
+	</section>
 	<section class="post-footer">
 		<h2 class="related-posts-heading"><?php esc_html_e( 'Related Posts' ); ?></h2>
 		<ul class="related-youtube-posts">

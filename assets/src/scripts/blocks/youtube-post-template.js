@@ -1,12 +1,11 @@
-const { registerBlockType } = wp.blocks;
+const { registerBlockType, InnerBlocks } = wp.blocks;
 const { TextControl, PanelRow, SelectControl, ToggleControl } = wp.components;
-const { RichText, useBlockProps } = wp.blockEditor;
+const { RichText, useBlockProps, MediaUpload } = wp.blockEditor;
 const { PluginDocumentSettingPanel } = wp.editPost;
 const { useSelect, dispatch, useDispatch } = wp.data;
 const { useRef, useState } = wp.element;
 const { __ } = wp.i18n;
 const { parse } = wp.blockSerializationDefaultParser;
-import { isEmpty } from 'lodash';
 import { youtubeAPIConfig } from '../../../../youtube-api-config'
 
 registerBlockType( 'gutenberg-good-guitarist/ypt', {
@@ -28,7 +27,7 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 			default: gutenbergVars.image_dir + '/good-guitarist-preview-img.png'
 		},
 		videoDescription: {
-			type: 'array',
+			type: 'string',
 		},
 		videoURL: {
 			type: 'string',
@@ -48,10 +47,6 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 			type: 'integer',
 			default: -1
 		},
-		postBodyElements: {
-			type: 'array',
-			default: []
-		}
 	},
 
 	edit({ attributes, className, setAttributes }) {
@@ -61,10 +56,10 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 			videoURL,
 			videoTitle,
 			videoThumbnail,
+			videoDescription,
 			songTitle,
 			sidebarCourseSlotOne,
 			sidebarCourseSlotTwo,
-			postBodyElements
 		} = attributes;
 
 		const blockProps = useBlockProps();
@@ -199,25 +194,12 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 			}, 3000);
 		}
 
-		/**
-		 * If individual paragraphs of the youtube post description are found
-		 * to include an arrow character, a link, or both, output a type
-		 * accordingly.
-		 *
-		 * @param {String} element
-		 */
-		const postBodyElementType = (element) => {
-			let elementType = "text";
-			if ( stringContainsLink(element) ) {
-				if ( stringContainsArrow(element) ) {
-					elementType = "courseLinkAndDescription"
-				} else {
-					elementType = "courseLink";
-				}
-			} else if ( stringContainsArrow(element) ) {
-				elementType = "courseDescription"
-			}
-			return elementType;
+		const createBlocksFromYTDescription = (descriptionArray) => {
+			const descriptionsWithoutEmpties = descriptionArray.filter(string => string.length);
+			return descriptionsWithoutEmpties.map(description => {
+				const htmlDescription = description.replace(/(http:\/\/|https:\/\/).*/g, (text) => (`<a href="${text}">${text}</a>`));
+				return createBlock('core/paragraph', { content: htmlDescription })
+			})
 		}
 
 		/**
@@ -231,17 +213,11 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 				const fetchedDescription = response.result.items[0].snippet.description;
 				const fetchedThumbnail = response.result.items[0].snippet.thumbnails.medium.url;
 				const descriptionArray = fetchedDescription.split('\n');
-				const postBodyContentArray = descriptionArray.map((element) => {
-					return {
-						content: element,
-						type: postBodyElementType(element),
-						course: 0
-					};
-				})
-
-				console.log("the post body", postBodyContentArray)
-
-				setAttributes({ postBodyElements: postBodyContentArray });
+				let htmlDescription = fetchedDescription.replace(/(http:\/\/|https:\/\/).*/g, (text) => (`<a href="${text}">${text}</a>`));
+				htmlDescription = htmlDescription.replace(/\r|\n/g, (text) => (`<br>`));
+				console.log('the content', htmlDescription);
+				const newBlocks = createBlocksFromYTDescription(descriptionArray);
+				// dispatch('core/editor').insertBlocks()
 
 				// Update the post title.
 				dispatch('core/editor').editPost({
@@ -251,7 +227,7 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 				// Set attributes from fetched video info.
 				setAttributes({
 					videoTitle: fetchedTitle,
-					videoDescription: descriptionArray,
+					videoDescription: htmlDescription,
 					videoThumbnail: fetchedThumbnail
 				})
 
@@ -300,25 +276,6 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 			})
 		}
 
-		const handlePostBodyCourseChange = (newCourse, courseAreaIndex) => {
-			console.log('the post body element', postBodyElements);
-			/**
-			 * If the course area select box has a matching element in the post body,
-			 * update the corresponding position in the array attribute and update the
-			 * course area HTML.
-			 */
-			const newCourseObject = postBodyElements[courseAreaIndex];
-			newCourseObject.course = parseInt(newCourse);
-			// if (courseAreaElements[courseAreaAttributeToUpdate]) {
-				const newPostBodyElements = postBodyElements.fill(newCourseObject, courseAreaIndex, courseAreaIndex + 1);
-				console.log('the new ones', newPostBodyElements)
-				setAttributes({ postBodyElements: newPostBodyElements });
-			// 	courseAreaElements.forEach(courseArea => console.log('sus', courseArea.dataset.courseSlot));
-
-			// 	// courseAreaElements[courseAreaAttributeToUpdate].classList.remove('no-course');
-			// }
-		}
-
 		const handleCourseChange = (newValue, id) => {
 			if ('first-course-slot' === id) {
 				console.log('it is set', newValue)
@@ -351,26 +308,26 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 			)
 		}
 
-		const getCourseViewInfo = (element, courseAreaIndex) => {
-			let courseViewInfo = [ '', '', '' ];
-			let elementContent = element.content;
-			let matchedDescription = '';
-			let matchedButtonText = '';
-			const matchedLink = elementContent.match(/(http:\/\/|https:\/\/).*/);
-			if ( "string" === typeof elementContent ) {
-				if ( "courseLink" === element.type ) {
-					elementContent = postBodyElements[courseAreaIndex - 1].content;
-				}
-				matchedDescription = elementContent.match(/^►([^&]*)/);
-				if ( matchedLink && matchedDescription ) {
-					matchedButtonText = matchedLink[0].replace(/.+\/\/|www.|\..+/g, '');
-					matchedDescription = matchedDescription[0].replace(/(http:\/\/|https:\/\/).*/, '');
-					matchedDescription = matchedDescription.replace(/►/, '');
-					courseViewInfo = [ matchedLink[0], matchedDescription, matchedButtonText.toUpperCase() ];
-				}
-			}
-			return courseViewInfo;
-		}
+		// const getCourseViewInfo = (element, courseAreaIndex) => {
+		// 	let courseViewInfo = [ '', '', '' ];
+		// 	let elementContent = element.content;
+		// 	let matchedDescription = '';
+		// 	let matchedButtonText = '';
+		// 	const matchedLink = elementContent.match(/(http:\/\/|https:\/\/).*/);
+		// 	if ( "string" === typeof elementContent ) {
+		// 		if ( "courseLink" === element.type ) {
+		// 			elementContent = postBodyElements[courseAreaIndex - 1].content;
+		// 		}
+		// 		matchedDescription = elementContent.match(/^►([^&]*)/);
+		// 		if ( matchedLink && matchedDescription ) {
+		// 			matchedButtonText = matchedLink[0].replace(/.+\/\/|www.|\..+/g, '');
+		// 			matchedDescription = matchedDescription[0].replace(/(http:\/\/|https:\/\/).*/, '');
+		// 			matchedDescription = matchedDescription.replace(/►/, '');
+		// 			courseViewInfo = [ matchedLink[0], matchedDescription, matchedButtonText.toUpperCase() ];
+		// 		}
+		// 	}
+		// 	return courseViewInfo;
+		// }
 
 		const PostBodyCourseArea = ({element, courseAreaIndex}) => {
 			const courseTypes = [ "courseLink", "courseDescription", "courseLinkAndDescription" ];
@@ -417,27 +374,6 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 							onChange={ (newValue) => handleCourseChange(newValue, 'second-course-slot') }
 						/>
 					</PanelRow> }
-				</PluginDocumentSettingPanel>
-				<PluginDocumentSettingPanel
-					name="post-body-course-slots"
-					title={__('Post body course slots')}
-					className="post-body-course-slots-panel"
-				>
-					{ postBodyElements && postBodyElements.map((element, index) => {
-						if ( "courseLink" === element.type ) {
-							return (
-								<PanelRow>
-									<SelectControl
-										id={index}
-										label={__('Course slot line') + ` ${index + 1}`}
-										value={element.course}
-										options={courseOptionsWithAuto}
-										onChange={ (newValue) => handlePostBodyCourseChange(newValue, index) }
-										/>
-								</PanelRow>
-							)
-						}
-					})}
 				</PluginDocumentSettingPanel>
 				<PluginDocumentSettingPanel
 					name="song-difficulty-attributes"
@@ -500,13 +436,7 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 							</div> }
 						</div>
 						<div className="post-content-video-description">
-							{ postBodyElements && postBodyElements.map((element, index) => {
-								if ("text" === element.type) {
-									return <RichText value={element.content} />;
-								} else if ("courseLink" === element.type || "courseLinkAndDescription" === element.type) {
-									return <PostBodyCourseArea element={element} courseAreaIndex={index} />
-								}
-							})}
+							<InnerBlocks />
 						</div>
 					</> : <span className="empty-post-body-msg">{__('Submit URL to populate post body.')}</span> }
 				</section>
@@ -514,7 +444,17 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 		);
 	},
 
-	save() {
-		return null;
+	save({ attributes, className }) {
+		const {
+			videoURL,
+			videoDescription
+		} = attributes;
+
+		return (
+			<div className={ className }>
+				{ videoURL ? <iframe width="560" height="515" src={videoURL} title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> : ''}
+				<RichText content={videoDescription} />
+			</div>
+		);
 	}
 });

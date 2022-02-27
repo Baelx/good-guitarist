@@ -679,13 +679,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ "./node_modules/@babel/runtime/helpers/esm/slicedToArray.js");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! lodash */ "lodash");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _youtube_api_config__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../youtube-api-config */ "./youtube-api-config.js");
+/* harmony import */ var _youtube_api_config__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../youtube-api-config */ "./youtube-api-config.js");
 
 
 
-var registerBlockType = wp.blocks.registerBlockType;
+var _wp$blocks = wp.blocks,
+    registerBlockType = _wp$blocks.registerBlockType,
+    InnerBlocks = _wp$blocks.InnerBlocks;
 var _wp$components = wp.components,
     TextControl = _wp$components.TextControl,
     PanelRow = _wp$components.PanelRow,
@@ -693,7 +693,8 @@ var _wp$components = wp.components,
     ToggleControl = _wp$components.ToggleControl;
 var _wp$blockEditor = wp.blockEditor,
     RichText = _wp$blockEditor.RichText,
-    useBlockProps = _wp$blockEditor.useBlockProps;
+    useBlockProps = _wp$blockEditor.useBlockProps,
+    MediaUpload = _wp$blockEditor.MediaUpload;
 var PluginDocumentSettingPanel = wp.editPost.PluginDocumentSettingPanel;
 var _wp$data = wp.data,
     useSelect = _wp$data.useSelect,
@@ -704,7 +705,6 @@ var _wp$element = wp.element,
     useState = _wp$element.useState;
 var __ = wp.i18n.__;
 var parse = wp.blockSerializationDefaultParser.parse;
-
 
 registerBlockType('gutenberg-good-guitarist/ypt', {
   apiVersion: 2,
@@ -725,7 +725,7 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
       "default": gutenbergVars.image_dir + '/good-guitarist-preview-img.png'
     },
     videoDescription: {
-      type: 'array'
+      type: 'string'
     },
     videoURL: {
       type: 'string'
@@ -744,10 +744,6 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
     sidebarCourseSlotTwo: {
       type: 'integer',
       "default": -1
-    },
-    postBodyElements: {
-      type: 'array',
-      "default": []
     }
   },
   edit: function edit(_ref) {
@@ -759,10 +755,10 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
         videoURL = attributes.videoURL,
         videoTitle = attributes.videoTitle,
         videoThumbnail = attributes.videoThumbnail,
+        videoDescription = attributes.videoDescription,
         songTitle = attributes.songTitle,
         sidebarCourseSlotOne = attributes.sidebarCourseSlotOne,
-        sidebarCourseSlotTwo = attributes.sidebarCourseSlotTwo,
-        postBodyElements = attributes.postBodyElements;
+        sidebarCourseSlotTwo = attributes.sidebarCourseSlotTwo;
     var blockProps = useBlockProps();
     var postBody = useRef();
 
@@ -920,29 +916,19 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
         });
       }, 3000);
     };
-    /**
-     * If individual paragraphs of the youtube post description are found
-     * to include an arrow character, a link, or both, output a type
-     * accordingly.
-     *
-     * @param {String} element
-     */
 
-
-    var postBodyElementType = function postBodyElementType(element) {
-      var elementType = "text";
-
-      if (stringContainsLink(element)) {
-        if (stringContainsArrow(element)) {
-          elementType = "courseLinkAndDescription";
-        } else {
-          elementType = "courseLink";
-        }
-      } else if (stringContainsArrow(element)) {
-        elementType = "courseDescription";
-      }
-
-      return elementType;
+    var createBlocksFromYTDescription = function createBlocksFromYTDescription(descriptionArray) {
+      var descriptionsWithoutEmpties = descriptionArray.filter(function (string) {
+        return string.length;
+      });
+      return descriptionsWithoutEmpties.map(function (description) {
+        var htmlDescription = description.replace(/(http:\/\/|https:\/\/).*/g, function (text) {
+          return "<a href=\"".concat(text, "\">").concat(text, "</a>");
+        });
+        return createBlock('core/paragraph', {
+          content: htmlDescription
+        });
+      });
     };
     /**
      * Handle a successful youtube video fetch.
@@ -957,17 +943,15 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
         var fetchedDescription = response.result.items[0].snippet.description;
         var fetchedThumbnail = response.result.items[0].snippet.thumbnails.medium.url;
         var descriptionArray = fetchedDescription.split('\n');
-        var postBodyContentArray = descriptionArray.map(function (element) {
-          return {
-            content: element,
-            type: postBodyElementType(element),
-            course: 0
-          };
+        var htmlDescription = fetchedDescription.replace(/(http:\/\/|https:\/\/).*/g, function (text) {
+          return "<a href=\"".concat(text, "\">").concat(text, "</a>");
         });
-        console.log("the post body", postBodyContentArray);
-        setAttributes({
-          postBodyElements: postBodyContentArray
-        }); // Update the post title.
+        htmlDescription = htmlDescription.replace(/\r|\n/g, function (text) {
+          return "<br>";
+        });
+        console.log('the content', htmlDescription);
+        var newBlocks = createBlocksFromYTDescription(descriptionArray); // dispatch('core/editor').insertBlocks()
+        // Update the post title.
 
         dispatch('core/editor').editPost({
           title: fetchedTitle
@@ -975,7 +959,7 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
 
         setAttributes({
           videoTitle: fetchedTitle,
-          videoDescription: descriptionArray,
+          videoDescription: htmlDescription,
           videoThumbnail: fetchedThumbnail
         }); // Todo: convert to useState()
 
@@ -1009,7 +993,7 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
       });
       gapi.load('client', function () {
         console.log('the vid id', videoID);
-        gapi.client.setApiKey(_youtube_api_config__WEBPACK_IMPORTED_MODULE_4__.youtubeAPIConfig.key);
+        gapi.client.setApiKey(_youtube_api_config__WEBPACK_IMPORTED_MODULE_3__.youtubeAPIConfig.key);
         gapi.client.load('youtube', 'v3', function () {
           gapi.client.youtube.videos.list({
             part: 'snippet',
@@ -1022,26 +1006,6 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
           });
         });
       });
-    };
-
-    var handlePostBodyCourseChange = function handlePostBodyCourseChange(newCourse, courseAreaIndex) {
-      console.log('the post body element', postBodyElements);
-      /**
-       * If the course area select box has a matching element in the post body,
-       * update the corresponding position in the array attribute and update the
-       * course area HTML.
-       */
-
-      var newCourseObject = postBodyElements[courseAreaIndex];
-      newCourseObject.course = parseInt(newCourse); // if (courseAreaElements[courseAreaAttributeToUpdate]) {
-
-      var newPostBodyElements = postBodyElements.fill(newCourseObject, courseAreaIndex, courseAreaIndex + 1);
-      console.log('the new ones', newPostBodyElements);
-      setAttributes({
-        postBodyElements: newPostBodyElements
-      }); // 	courseAreaElements.forEach(courseArea => console.log('sus', courseArea.dataset.courseSlot));
-      // 	// courseAreaElements[courseAreaAttributeToUpdate].classList.remove('no-course');
-      // }
     };
 
     var handleCourseChange = function handleCourseChange(newValue, id) {
@@ -1089,32 +1053,27 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
         className: "course-url-button",
         href: course.courseUrl
       }, 'Get it now!')));
-    };
+    }; // const getCourseViewInfo = (element, courseAreaIndex) => {
+    // 	let courseViewInfo = [ '', '', '' ];
+    // 	let elementContent = element.content;
+    // 	let matchedDescription = '';
+    // 	let matchedButtonText = '';
+    // 	const matchedLink = elementContent.match(/(http:\/\/|https:\/\/).*/);
+    // 	if ( "string" === typeof elementContent ) {
+    // 		if ( "courseLink" === element.type ) {
+    // 			elementContent = postBodyElements[courseAreaIndex - 1].content;
+    // 		}
+    // 		matchedDescription = elementContent.match(/^►([^&]*)/);
+    // 		if ( matchedLink && matchedDescription ) {
+    // 			matchedButtonText = matchedLink[0].replace(/.+\/\/|www.|\..+/g, '');
+    // 			matchedDescription = matchedDescription[0].replace(/(http:\/\/|https:\/\/).*/, '');
+    // 			matchedDescription = matchedDescription.replace(/►/, '');
+    // 			courseViewInfo = [ matchedLink[0], matchedDescription, matchedButtonText.toUpperCase() ];
+    // 		}
+    // 	}
+    // 	return courseViewInfo;
+    // }
 
-    var getCourseViewInfo = function getCourseViewInfo(element, courseAreaIndex) {
-      var courseViewInfo = ['', '', ''];
-      var elementContent = element.content;
-      var matchedDescription = '';
-      var matchedButtonText = '';
-      var matchedLink = elementContent.match(/(http:\/\/|https:\/\/).*/);
-
-      if ("string" === typeof elementContent) {
-        if ("courseLink" === element.type) {
-          elementContent = postBodyElements[courseAreaIndex - 1].content;
-        }
-
-        matchedDescription = elementContent.match(/^►([^&]*)/);
-
-        if (matchedLink && matchedDescription) {
-          matchedButtonText = matchedLink[0].replace(/.+\/\/|www.|\..+/g, '');
-          matchedDescription = matchedDescription[0].replace(/(http:\/\/|https:\/\/).*/, '');
-          matchedDescription = matchedDescription.replace(/►/, '');
-          courseViewInfo = [matchedLink[0], matchedDescription, matchedButtonText.toUpperCase()];
-        }
-      }
-
-      return courseViewInfo;
-    };
 
     var PostBodyCourseArea = function PostBodyCourseArea(_ref3) {
       var element = _ref3.element,
@@ -1171,22 +1130,6 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
         return handleCourseChange(newValue, 'second-course-slot');
       }
     }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(PluginDocumentSettingPanel, {
-      name: "post-body-course-slots",
-      title: __('Post body course slots'),
-      className: "post-body-course-slots-panel"
-    }, postBodyElements && postBodyElements.map(function (element, index) {
-      if ("courseLink" === element.type) {
-        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(PanelRow, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(SelectControl, {
-          id: index,
-          label: __('Course slot line') + " ".concat(index + 1),
-          value: element.course,
-          options: courseOptionsWithAuto,
-          onChange: function onChange(newValue) {
-            return handlePostBodyCourseChange(newValue, index);
-          }
-        }));
-      }
-    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(PluginDocumentSettingPanel, {
       name: "song-difficulty-attributes",
       title: __('Song difficulty'),
       className: "song-difficulty-panel"
@@ -1281,23 +1224,28 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
       courseID: sidebarCourseSlotTwo
     }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("div", {
       className: "post-content-video-description"
-    }, postBodyElements && postBodyElements.map(function (element, index) {
-      if ("text" === element.type) {
-        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(RichText, {
-          value: element.content
-        });
-      } else if ("courseLink" === element.type || "courseLinkAndDescription" === element.type) {
-        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(PostBodyCourseArea, {
-          element: element,
-          courseAreaIndex: index
-        });
-      }
-    }))) : (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("span", {
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(InnerBlocks, null))) : (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("span", {
       className: "empty-post-body-msg"
     }, __('Submit URL to populate post body.'))));
   },
-  save: function save() {
-    return null;
+  save: function save(_ref4) {
+    var attributes = _ref4.attributes,
+        className = _ref4.className;
+    var videoURL = attributes.videoURL,
+        videoDescription = attributes.videoDescription;
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("div", {
+      className: className
+    }, videoURL ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("iframe", {
+      width: "560",
+      height: "515",
+      src: videoURL,
+      title: "YouTube video player",
+      frameborder: "0",
+      allow: "accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture",
+      allowfullscreen: true
+    }) : '', (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(RichText, {
+      content: videoDescription
+    }));
   }
 });
 
@@ -1345,17 +1293,6 @@ __webpack_require__.r(__webpack_exports__);
 var youtubeAPIConfig = {
   key: 'AIzaSyAZ1ibASlnCXrLWO5UDk6Hu4hRnFtn_V9o'
 };
-
-/***/ }),
-
-/***/ "lodash":
-/*!*************************!*\
-  !*** external "lodash" ***!
-  \*************************/
-/***/ ((module) => {
-
-"use strict";
-module.exports = window["lodash"];
 
 /***/ }),
 
