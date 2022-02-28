@@ -87,6 +87,10 @@ class Gutenberg
 			[ 'wp-blocks', 'wp-element', 'wp-editor', 'wp-edit-post', 'gutenberg-good-guitarist-youtube-js' ]
 		);
 
+		/**
+		 * Expose static images to Gutenberg blocks since you can't load
+		 * images how you normally would by bundling them with React.
+		 */
 		wp_localize_script( 'gutenberg-good-guitarist', 'gutenbergVars', [
 			'image_dir' => get_template_directory_uri() . '/assets/dist/images'
 		]);
@@ -95,9 +99,9 @@ class Gutenberg
 			'editor_script' => 'gutenberg-good-guitarist',
 		]);
 
-		register_block_type( 'gutenberg-good-guitarist/large-course-card', [
+		register_block_type( 'gutenberg-good-guitarist/large-cta', [
 			'editor_script' => 'gutenberg-good-guitarist',
-			'render_callback' => [ $this, 'large_course_card_render' ]
+			'render_callback' => [ $this, 'large_cta_render' ]
 		]);
 
 		register_block_type( 'gutenberg-good-guitarist/latest-lessons', [
@@ -107,7 +111,6 @@ class Gutenberg
 
 		register_block_type( 'gutenberg-good-guitarist/ypt', [
 			'editor_script' => 'gutenberg-good-guitarist',
-			'render_callback' => [ $this, 'youtube_post_block_render' ]
 		]);
 
 		register_block_type( 'gutenberg-good-guitarist/course-template', [
@@ -125,7 +128,7 @@ class Gutenberg
 	 * @return
 	 */
 	public function gutenberg_assets() {
-		wp_enqueue_style( 'gutenberg-good-guitarist-cta', get_template_directory_uri() . '/assets/dist/css/gutenberg.css', null );
+		wp_enqueue_style( 'gutenberg-good-guitarist', get_template_directory_uri() . '/assets/dist/css/gutenberg.css', null );
 	}
 
 	/**
@@ -156,14 +159,14 @@ class Gutenberg
 	}
 
 	/**
-	 * Render the large course card block.
+	 * Render the large call to action block.
 	 *
 	 * @param	array	$atts   	Block attributes.
 	 * @param	string	$content	Block content
 	 */
-	public function large_course_card_render( $atts, $content ) {
+	public function large_cta_render( $atts, $content ) {
 		ob_start();
-		include get_template_directory() . '/views/blocks/large-course-card.php';
+		include get_template_directory() . '/views/blocks/large-cta.php';
 		return ob_get_clean();
 	}
 

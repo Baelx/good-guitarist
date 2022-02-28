@@ -14,11 +14,11 @@ const { useSelect } = wp.data;
 const { parse } = wp.blockSerializationDefaultParser;
 const { __ } = wp.i18n;
 
-registerBlockType( 'gutenberg-good-guitarist/large-course-card', {
-	title: 'Large Course Card',
-	icon: 'format-image',
+registerBlockType( 'gutenberg-good-guitarist/large-cta', {
+	title: 'Large Call to Action',
+	icon: 'megaphone',
 	category: 'layout',
-	className: 'large-course-card',
+	className: 'large-cta',
 	attributes: {
 		selectedCourseId: {
 			type: 'integer',
@@ -59,7 +59,7 @@ registerBlockType( 'gutenberg-good-guitarist/large-course-card', {
 		});
 
 		const courseOptions = [
-			{ label: 'Select a course', value: null, default: true }
+			{ label: 'Select a call to action', value: null, default: true }
 		];
 		const courseDetails = {};
 		if ( courseData ) {

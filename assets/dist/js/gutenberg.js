@@ -436,11 +436,11 @@ var _wp$components = wp.components,
 var useSelect = wp.data.useSelect;
 var parse = wp.blockSerializationDefaultParser.parse;
 var __ = wp.i18n.__;
-registerBlockType('gutenberg-good-guitarist/large-course-card', {
-  title: 'Large Course Card',
-  icon: 'format-image',
+registerBlockType('gutenberg-good-guitarist/large-cta', {
+  title: 'Large Call to Action',
+  icon: 'megaphone',
   category: 'layout',
-  className: 'large-course-card',
+  className: 'large-cta',
   attributes: {
     selectedCourseId: {
       type: 'integer',
@@ -479,7 +479,7 @@ registerBlockType('gutenberg-good-guitarist/large-course-card', {
       return select('core/data').isResolving('core', 'getEntityRecords', ['postType', 'course']);
     });
     var courseOptions = [{
-      label: 'Select a course',
+      label: 'Select a call to action',
       value: null,
       "default": true
     }];
@@ -649,7 +649,7 @@ var _wp$components = wp.components,
     TextareaControl = _wp$components.TextareaControl;
 registerBlockType('gutenberg-good-guitarist/small-cta', {
   title: 'Small Call to Action',
-  icon: 'format-image',
+  icon: 's',
   category: 'layout',
   className: 'small-cta',
   attributes: {
@@ -663,13 +663,14 @@ registerBlockType('gutenberg-good-guitarist/small-cta', {
     },
     buttonText: {
       type: 'string',
-      "default": ''
+      "default": 'Click here'
     },
     mediaId: {
       type: "number"
     },
     mediaUrl: {
-      type: "string"
+      type: "string",
+      "default": "".concat(gutenbergVars.image_dir, "/good-guitarist-preview-img.png")
     }
   },
   edit: function edit(_ref) {
@@ -678,6 +679,7 @@ registerBlockType('gutenberg-good-guitarist/small-cta', {
         setAttributes = _ref.setAttributes;
     var blockProps = useBlockProps();
     var link = attributes.link,
+        buttonText = attributes.buttonText,
         description = attributes.description,
         mediaId = attributes.mediaId,
         mediaUrl = attributes.mediaUrl;
@@ -688,7 +690,7 @@ registerBlockType('gutenberg-good-guitarist/small-cta', {
      */
 
     var onSelectImage = function onSelectImage(media) {
-      props.setAttributes({
+      setAttributes({
         mediaUrl: media.url,
         mediaId: media.id
       });
@@ -699,7 +701,7 @@ registerBlockType('gutenberg-good-guitarist/small-cta', {
 
 
     var deleteSelectedImage = function deleteSelectedImage() {
-      props.setAttributes({
+      setAttributes({
         mediaUrl: "",
         mediaId: ""
       });
@@ -707,8 +709,10 @@ registerBlockType('gutenberg-good-guitarist/small-cta', {
 
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("div", (0,_babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__.default)({}, blockProps, {
       className: "small-cta"
-    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("img", {
-      src: "",
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("div", {
+      className: "image-container"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("img", {
+      src: mediaUrl,
       alt: ""
     }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(MediaUpload, {
       onSelect: onSelectImage,
@@ -716,21 +720,15 @@ registerBlockType('gutenberg-good-guitarist/small-cta', {
       value: mediaId,
       render: function render(_ref2) {
         var open = _ref2.open;
-        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("div", {
-          className: "image-button-controls"
-        }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("a", {
-          className: "image-button add-image-button",
-          onClick: open,
-          tabIndex: "0"
-        }, !mediaId ? __("Upload Image") : __("Change Image")), mediaId && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("a", {
-          className: "image-button clear-image-button",
-          onClick: deleteSelectedImage,
-          tabIndex: "0"
-        }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("img", {
-          src: TrashIcon
-        })));
+        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("button", {
+          type: "text",
+          className: "image-button change-image-button",
+          onClick: open
+        }, __("Change Image"));
       }
-    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(TextareaControl, {
+    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("div", {
+      className: "details-container"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(TextareaControl, {
       label: "Description",
       value: description,
       onChange: function onChange(value) {
@@ -746,19 +744,34 @@ registerBlockType('gutenberg-good-guitarist/small-cta', {
           link: value
         });
       }
-    }));
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(TextControl, {
+      className: "button-text-input",
+      label: "Button text",
+      value: buttonText,
+      onChange: function onChange(value) {
+        return setAttributes({
+          buttonText: value
+        });
+      }
+    })));
   },
   save: function save(_ref3) {
-    var attributes = _ref3.attributes; // const blockProps = useBlockProps();
-
+    var attributes = _ref3.attributes;
     var link = attributes.link,
-        buttonText = attributes.buttonText;
-    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("div", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("img", {
-      src: "",
+        buttonText = attributes.buttonText,
+        description = attributes.description,
+        mediaUrl = attributes.mediaUrl;
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("div", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("div", {
+      className: "image-container"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("img", {
+      src: mediaUrl,
       alt: ""
-    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("p", null, description), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("button", {
+    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("div", {
+      className: "details-container"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("p", null, description), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("button", {
+      className: "cta-button",
       href: link
-    }, buttonText));
+    }, buttonText)));
   }
 });
 

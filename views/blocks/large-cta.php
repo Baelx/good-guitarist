@@ -5,7 +5,7 @@ $course = PostTypes::get_course_details( $atts['selectedCourseId'] );
 // $course_img_src = ! empty( $atts['selectedCourseImageUrl'] ) ? $atts['selectedCourseImageUrl'] : '';
 ?>
 <?php if ( isset( $atts['selectedCourseId'] ) && is_int( $atts['selectedCourseId'] ) ): ?>
-<div class="large-course-card">
+<div class="large-cta">
 	<img class="lcc-image" src="<?php echo esc_url( $course['imageUrl'] ); ?>" />
 	<div>
 		<h3 class="lcc-heading"><?php esc_html_e( $course['courseTitle'] ); ?></h3>

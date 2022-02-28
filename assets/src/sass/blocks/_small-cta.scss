@@ -1,10 +1,35 @@
-[data-type="gutenberg-good-guitarist/small-cta"] {
-
-}
-
-.small-cta {
+.small-cta, .wp-block-gutenberg-good-guitarist-small-cta {
 	padding: 1rem;
-	border: 1px solid grey;
+	border: 1px solid $grey;
 	border-radius: 3px;
 	display: flex;
+
+	.image-container {
+		max-width: 30%;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+
+		button {
+			background: none;
+			border: none;
+			color: $gg-blue;
+			cursor: pointer;
+		}
+	}
+
+	.details-container {
+		margin-left: 1rem;
+		flex-grow: 1;
+
+		.button-text-input {
+			max-width: 50%;
+		}
+
+		// Appears on frontend.
+		.cta-button {
+			align-self: center;
+		}
+	}
 }

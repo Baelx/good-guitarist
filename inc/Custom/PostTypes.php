@@ -28,14 +28,14 @@ class PostTypes {
 		 */
 		$custom_posts = [
 			[
-				'slug' => 'course',
-				'singular' => 'Course or Ebook',
-				'plural' => 'Courses & Ebooks',
+				'slug' => 'cta',
+				'singular' => 'Call to Action',
+				'plural' => 'Call to Actions',
 				'menu_icon' => 'dashicons-admin-customizer',
 				'menu_position' => 18,
 				'text_domain' => 'good-guitarist',
 				'supports' => [ 'title', 'editor', 'thumbnail' , 'excerpt', 'author', 'custom-fields'],
-				'description' => 'Course & Ebook Custom Post Type',
+				'description' => 'Call to Action Custom Post Type',
 				'public' => true,
 				'publicly_queryable' => true,
 				'show_ui' => true,

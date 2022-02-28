@@ -15,7 +15,7 @@ const { IconButton, RangeControl, PanelBody, TextControl, TextareaControl } = wp
 
 registerBlockType( 'gutenberg-good-guitarist/small-cta', {
 	title: 'Small Call to Action',
-	icon: 'format-image',
+	icon: 's',
 	category: 'layout',
 	className: 'small-cta',
 	attributes: {
@@ -29,18 +29,19 @@ registerBlockType( 'gutenberg-good-guitarist/small-cta', {
 		},
 		buttonText: {
 			type: 'string',
-			default: ''
+			default: 'Click here'
 		},
 		mediaId: {
 			type: "number",
 		},
 		mediaUrl: {
 			type: "string",
+			default: `${gutenbergVars.image_dir}/good-guitarist-preview-img.png`
 		},
 	},
 	edit({ className, attributes, setAttributes }) {
 		const blockProps = useBlockProps();
-		const { link, description, mediaId, mediaUrl } = attributes;
+		const { link, buttonText, description, mediaId, mediaUrl } = attributes;
 
 		/**
 		 * Event handler for When images is selected.
@@ -48,7 +49,7 @@ registerBlockType( 'gutenberg-good-guitarist/small-cta', {
 		 * @param   {object}  media  The media object, to set url, and id.
 		 */
 		const onSelectImage = (media) => {
-			props.setAttributes({
+			setAttributes({
 				mediaUrl: media.url,
 				mediaId: media.id,
 			});
@@ -58,7 +59,7 @@ registerBlockType( 'gutenberg-good-guitarist/small-cta', {
 		 *
 		 */
 		const deleteSelectedImage = () => {
-			props.setAttributes({
+			setAttributes({
 				mediaUrl: "",
 				mediaId: "",
 			});
@@ -66,57 +67,55 @@ registerBlockType( 'gutenberg-good-guitarist/small-cta', {
 
 		return (
 			<div {...blockProps} className="small-cta">
-				<img src="" alt="" />
-				<MediaUpload
-					onSelect={onSelectImage}
-					allowedTypes="image"
-					value={mediaId}
-					render={({ open }) => (
-					<div className="image-button-controls">
-						<a
-						className={"image-button add-image-button"}
-						onClick={open}
-						tabIndex="0"
-						>
-						{!mediaId
-							? __("Upload Image")
-							: __("Change Image")}
-						</a>
-						{mediaId && (
-						<a
-							className={"image-button clear-image-button"}
-							onClick={deleteSelectedImage}
-							tabIndex="0"
-						>
-							<img src={TrashIcon} />
-						</a>
+				<div className="image-container">
+					<img src={mediaUrl} alt="" />
+					<MediaUpload
+						onSelect={onSelectImage}
+						allowedTypes="image"
+						value={mediaId}
+						render={({ open }) => (
+							<button
+							type="text"
+							className={"image-button change-image-button"}
+							onClick={open}
+							>{__("Change Image")}</button>
 						)}
-					</div>
-					)}
-				/>
-				<TextareaControl
-					label="Description"
-					value={description}
-					onChange={value => setAttributes({ description: value })}
-				/>
-				<TextControl
-					label="Link"
-					value={link}
-					onChange={value => setAttributes({ link: value })}
-				/>
+					/>
+				</div>
+				<div className="details-container">
+					<TextareaControl
+						label="Description"
+						value={description}
+						onChange={value => setAttributes({ description: value })}
+						/>
+					<TextControl
+						label="Link"
+						value={link}
+						onChange={value => setAttributes({ link: value })}
+					/>
+					<TextControl
+						className="button-text-input"
+						label="Button text"
+						value={buttonText}
+						onChange={value => setAttributes({ buttonText: value })}
+					/>
+				</div>
  			</div>
 		)
 
 	},
 	save({ attributes }) {
-		// const blockProps = useBlockProps();
-		const { link, buttonText } = attributes;
+		const { link, buttonText, description, mediaUrl } = attributes;
 
 		return (
 			<div>
-				<img src="" alt="" />
-				<p>{description}</p>
-				<button href={link}>{buttonText}</button>
+				<div className="image-container">
+					<img src={mediaUrl} alt="" />
+				</div>
+				<div className="details-container">
+					<p>{description}</p>
+					<button className="cta-button" href={link}>{buttonText}</button>
+				</div>
 			</div>
 		)
 	}

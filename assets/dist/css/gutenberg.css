@@ -143,11 +143,34 @@
   font-style: italic;
 }
 
-.small-cta {
+.small-cta, .wp-block-gutenberg-good-guitarist-small-cta {
   padding: 1rem;
-  border: 1px solid grey;
+  border: 1px solid #818181;
   border-radius: 3px;
   display: flex;
+}
+.small-cta .image-container, .wp-block-gutenberg-good-guitarist-small-cta .image-container {
+  max-width: 30%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.small-cta .image-container button, .wp-block-gutenberg-good-guitarist-small-cta .image-container button {
+  background: none;
+  border: none;
+  color: #0872bb;
+  cursor: pointer;
+}
+.small-cta .details-container, .wp-block-gutenberg-good-guitarist-small-cta .details-container {
+  margin-left: 1rem;
+  flex-grow: 1;
+}
+.small-cta .details-container .button-text-input, .wp-block-gutenberg-good-guitarist-small-cta .details-container .button-text-input {
+  max-width: 50%;
+}
+.small-cta .details-container .cta-button, .wp-block-gutenberg-good-guitarist-small-cta .details-container .cta-button {
+  align-self: center;
 }
 
 *[data-type="gutenberg-good-guitarist/large-course-card"] {
@@ -320,10 +343,6 @@
 }
 [data-type="gutenberg-good-guitarist/ypt"] .components-base-control > div label {
   width: 100%;
-}
-[data-type="gutenberg-good-guitarist/ypt"] .components-base-control > div textarea {
-  width: 100%;
-  min-height: 400px;
 }
 [data-type="gutenberg-good-guitarist/ypt"] .fetch-message {
   height: 22px;
