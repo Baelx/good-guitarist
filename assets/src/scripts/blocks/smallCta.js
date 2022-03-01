@@ -1,3 +1,4 @@
+import { getAllCtasData } from "../utils/ctaUtils";
 const { registerBlockType } = wp.blocks;
 const { Fragment } = wp.element;
 const { __ } = wp.i18n;
@@ -5,17 +6,25 @@ const {
 	PlainText,
 	RichText,
 	MediaUpload,
-	BlockControls,
 	InspectorControls,
 	ColorPalette,
 	getColorClass
 } = wp.editor;
-const { useBlockProps } = wp.blockEditor;
-const { IconButton, RangeControl, PanelBody, TextControl, TextareaControl } = wp.components;
+const { useBlockProps, BlockControls } = wp.blockEditor;
+const {
+	Icon,
+	ToolbarButton,
+	ToolbarGroup,
+	ToolbarDropdownMenu,
+	RangeControl,
+	PanelBody,
+	TextControl,
+	TextareaControl
+} = wp.components;
 
 registerBlockType( 'gutenberg-good-guitarist/small-cta', {
 	title: 'Small Call to Action',
-	icon: 's',
+	icon: 'megaphone',
 	category: 'layout',
 	className: 'small-cta',
 	attributes: {
@@ -43,6 +52,20 @@ registerBlockType( 'gutenberg-good-guitarist/small-cta', {
 		const blockProps = useBlockProps();
 		const { link, buttonText, description, mediaId, mediaUrl } = attributes;
 
+		getAllCtasData().then(res => console.log('sus', res))
+
+		const ctaSelectOptions = ctaData.map((cta) => {
+			return {
+				title: cta.title,
+				onClick: setAttributes({
+					description: cta.description,
+					link: cta.link,
+					mediaId: cta.mediaId,
+					mediaUrl: ctaa.mediaUrl
+				})
+			}
+		});
+
 		/**
 		 * Event handler for When images is selected.
 		 *
@@ -55,18 +78,15 @@ registerBlockType( 'gutenberg-good-guitarist/small-cta', {
 			});
 		};
 
-		/**
-		 *
-		 */
-		const deleteSelectedImage = () => {
-			setAttributes({
-				mediaUrl: "",
-				mediaId: "",
-			});
-		};
-
 		return (
 			<div {...blockProps} className="small-cta">
+				    <BlockControls>
+						<ToolbarDropdownMenu
+							icon="update"
+							label="Use with an existing course"
+							controls={ctaSelectOptions}
+						/>
+                    </BlockControls>
 				<div className="image-container">
 					<img src={mediaUrl} alt="" />
 					<MediaUpload
@@ -119,5 +139,4 @@ registerBlockType( 'gutenberg-good-guitarist/small-cta', {
 			</div>
 		)
 	}
-
 });

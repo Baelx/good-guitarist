@@ -113,7 +113,7 @@ class Gutenberg
 			'editor_script' => 'gutenberg-good-guitarist',
 		]);
 
-		register_block_type( 'gutenberg-good-guitarist/course-template', [
+		register_block_type( 'gutenberg-good-guitarist/cta-template', [
 			'editor_script' => 'gutenberg-good-guitarist'
 		]);
 

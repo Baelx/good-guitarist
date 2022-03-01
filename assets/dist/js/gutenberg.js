@@ -41,6 +41,55 @@ function _arrayWithHoles(arr) {
 
 /***/ }),
 
+/***/ "./node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js":
+/*!*********************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js ***!
+  \*********************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ _asyncToGenerator)
+/* harmony export */ });
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
+  try {
+    var info = gen[key](arg);
+    var value = info.value;
+  } catch (error) {
+    reject(error);
+    return;
+  }
+
+  if (info.done) {
+    resolve(value);
+  } else {
+    Promise.resolve(value).then(_next, _throw);
+  }
+}
+
+function _asyncToGenerator(fn) {
+  return function () {
+    var self = this,
+        args = arguments;
+    return new Promise(function (resolve, reject) {
+      var gen = fn.apply(self, args);
+
+      function _next(value) {
+        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
+      }
+
+      function _throw(err) {
+        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
+      }
+
+      _next(undefined);
+    });
+  };
+}
+
+/***/ }),
+
 /***/ "./node_modules/@babel/runtime/helpers/esm/defineProperty.js":
 /*!*******************************************************************!*\
   !*** ./node_modules/@babel/runtime/helpers/esm/defineProperty.js ***!
@@ -206,10 +255,20 @@ function _unsupportedIterableToArray(o, minLen) {
 
 /***/ }),
 
-/***/ "./assets/src/scripts/blocks/courseTemplate.js":
-/*!*****************************************************!*\
-  !*** ./assets/src/scripts/blocks/courseTemplate.js ***!
-  \*****************************************************/
+/***/ "./assets/src/scripts/blocks/cover.js":
+/*!********************************************!*\
+  !*** ./assets/src/scripts/blocks/cover.js ***!
+  \********************************************/
+/***/ (() => {
+
+
+
+/***/ }),
+
+/***/ "./assets/src/scripts/blocks/ctaTemplate.js":
+/*!**************************************************!*\
+  !*** ./assets/src/scripts/blocks/ctaTemplate.js ***!
+  \**************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -232,8 +291,8 @@ var _wp$data = wp.data,
     useDispatch = _wp$data.useDispatch;
 var useEntityProp = wp.coreData.useEntityProp;
 var __ = wp.i18n.__;
-registerBlockType('gutenberg-good-guitarist/course-template', {
-  title: 'Course or Ebook Template',
+registerBlockType('gutenberg-good-guitarist/cta-template', {
+  title: 'Call to Action Template',
   icon: 'admin-customizer',
   category: 'text',
   attributes: {
@@ -323,16 +382,6 @@ registerBlockType('gutenberg-good-guitarist/course-template', {
 
 /***/ }),
 
-/***/ "./assets/src/scripts/blocks/cover.js":
-/*!********************************************!*\
-  !*** ./assets/src/scripts/blocks/cover.js ***!
-  \********************************************/
-/***/ (() => {
-
-
-
-/***/ }),
-
 /***/ "./assets/src/scripts/blocks/group.js":
 /*!********************************************!*\
   !*** ./assets/src/scripts/blocks/group.js ***!
@@ -405,10 +454,10 @@ modifyGroupBlock // function to run
 
 /***/ }),
 
-/***/ "./assets/src/scripts/blocks/largeCourseCard.js":
-/*!******************************************************!*\
-  !*** ./assets/src/scripts/blocks/largeCourseCard.js ***!
-  \******************************************************/
+/***/ "./assets/src/scripts/blocks/largeCta.js":
+/*!***********************************************!*\
+  !*** ./assets/src/scripts/blocks/largeCta.js ***!
+  \***********************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -627,6 +676,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/extends */ "./node_modules/@babel/runtime/helpers/esm/extends.js");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _utils_ctaUtils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/ctaUtils */ "./assets/src/scripts/utils/ctaUtils.js");
+
 
 
 var registerBlockType = wp.blocks.registerBlockType;
@@ -636,20 +687,24 @@ var _wp$editor = wp.editor,
     PlainText = _wp$editor.PlainText,
     RichText = _wp$editor.RichText,
     MediaUpload = _wp$editor.MediaUpload,
-    BlockControls = _wp$editor.BlockControls,
     InspectorControls = _wp$editor.InspectorControls,
     ColorPalette = _wp$editor.ColorPalette,
     getColorClass = _wp$editor.getColorClass;
-var useBlockProps = wp.blockEditor.useBlockProps;
+var _wp$blockEditor = wp.blockEditor,
+    useBlockProps = _wp$blockEditor.useBlockProps,
+    BlockControls = _wp$blockEditor.BlockControls;
 var _wp$components = wp.components,
-    IconButton = _wp$components.IconButton,
+    Icon = _wp$components.Icon,
+    ToolbarButton = _wp$components.ToolbarButton,
+    ToolbarGroup = _wp$components.ToolbarGroup,
+    ToolbarDropdownMenu = _wp$components.ToolbarDropdownMenu,
     RangeControl = _wp$components.RangeControl,
     PanelBody = _wp$components.PanelBody,
     TextControl = _wp$components.TextControl,
     TextareaControl = _wp$components.TextareaControl;
 registerBlockType('gutenberg-good-guitarist/small-cta', {
   title: 'Small Call to Action',
-  icon: 's',
+  icon: 'megaphone',
   category: 'layout',
   className: 'small-cta',
   attributes: {
@@ -683,6 +738,20 @@ registerBlockType('gutenberg-good-guitarist/small-cta', {
         description = attributes.description,
         mediaId = attributes.mediaId,
         mediaUrl = attributes.mediaUrl;
+    (0,_utils_ctaUtils__WEBPACK_IMPORTED_MODULE_2__.getAllCtasData)().then(function (res) {
+      return console.log('sus', res);
+    });
+    var ctaSelectOptions = ctaData.map(function (cta) {
+      return {
+        title: cta.title,
+        onClick: setAttributes({
+          description: cta.description,
+          link: cta.link,
+          mediaId: cta.mediaId,
+          mediaUrl: ctaa.mediaUrl
+        })
+      };
+    });
     /**
      * Event handler for When images is selected.
      *
@@ -695,21 +764,14 @@ registerBlockType('gutenberg-good-guitarist/small-cta', {
         mediaId: media.id
       });
     };
-    /**
-     *
-     */
-
-
-    var deleteSelectedImage = function deleteSelectedImage() {
-      setAttributes({
-        mediaUrl: "",
-        mediaId: ""
-      });
-    };
 
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("div", (0,_babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__.default)({}, blockProps, {
       className: "small-cta"
-    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("div", {
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(BlockControls, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(ToolbarDropdownMenu, {
+      icon: "update",
+      label: "Use with an existing course",
+      controls: ctaSelectOptions
+    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("div", {
       className: "image-container"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("img", {
       src: mediaUrl,
@@ -789,9 +851,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ "./node_modules/@babel/runtime/helpers/esm/slicedToArray.js");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! lodash */ "lodash");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _youtube_api_config__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../youtube-api-config */ "./youtube-api-config.js");
+/* harmony import */ var _youtube_api_config__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../youtube-api-config */ "./youtube-api-config.js");
 
 
 
@@ -817,7 +877,6 @@ var _wp$element = wp.element,
     useState = _wp$element.useState;
 var __ = wp.i18n.__;
 var parse = wp.blockSerializationDefaultParser.parse;
-
 
 registerBlockType('gutenberg-good-guitarist/ypt', {
   apiVersion: 2,
@@ -1059,6 +1118,14 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
 
       return elementType;
     };
+    /**
+     * Create a gutenberg block for each paragraph of the fetched
+     * youtube description.
+     *
+     * @param {array} descriptionArray
+     * @returns
+     */
+
 
     var createBlocksFromDescription = function createBlocksFromDescription(descriptionArray) {
       var descriptionWithoutEmpties = descriptionArray.filter(function (description) {
@@ -1096,32 +1163,17 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
         var fetchedDescription = response.result.items[0].snippet.description;
         var fetchedThumbnail = response.result.items[0].snippet.thumbnails.medium.url;
         var descriptionArray = fetchedDescription.split('\n');
-        var postBodyBlocks = createBlocksFromDescription(descriptionArray);
-        console.log('the', postBodyBlocks);
-        dispatch('core/editor').insertBlocks(postBodyBlocks, 0, clientId);
-        var postBodyContentArray = descriptionArray.map(function (element) {
-          return {
-            content: element,
-            type: postBodyElementType(element),
-            course: 0
-          };
-        });
-        console.log("the post body", postBodyContentArray);
-        setAttributes({
-          postBodyElements: postBodyContentArray
-        }); // Update the post title.
+        var postBodyBlocks = createBlocksFromDescription(descriptionArray); // Update the post title.
 
         dispatch('core/editor').editPost({
           title: fetchedTitle
-        }); // Set attributes from fetched video info.
+        }); // Update post body.
+
+        dispatch('core/editor').insertBlocks(postBodyBlocks, 0, clientId); // Set attributes from fetched video info.
 
         setAttributes({
           videoTitle: fetchedTitle,
-          videoDescription: descriptionArray,
-          videoThumbnail: fetchedThumbnail
-        }); // Todo: convert to useState()
-
-        setAttributes({
+          videoThumbnail: fetchedThumbnail,
           videoInfoFetched: true
         }); // Give some feedback to the user that the fetch has completed.
 
@@ -1151,7 +1203,7 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
       });
       gapi.load('client', function () {
         console.log('the vid id', videoID);
-        gapi.client.setApiKey(_youtube_api_config__WEBPACK_IMPORTED_MODULE_4__.youtubeAPIConfig.key);
+        gapi.client.setApiKey(_youtube_api_config__WEBPACK_IMPORTED_MODULE_3__.youtubeAPIConfig.key);
         gapi.client.load('youtube', 'v3', function () {
           gapi.client.youtube.videos.list({
             part: 'snippet',
@@ -1165,26 +1217,12 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
         });
       });
     };
+    /**
+     *
+     * @param {*} newValue
+     * @param {*} id
+     */
 
-    var handlePostBodyCourseChange = function handlePostBodyCourseChange(newCourse, courseAreaIndex) {
-      console.log('the post body element', postBodyElements);
-      /**
-       * If the course area select box has a matching element in the post body,
-       * update the corresponding position in the array attribute and update the
-       * course area HTML.
-       */
-
-      var newCourseObject = postBodyElements[courseAreaIndex];
-      newCourseObject.course = parseInt(newCourse); // if (courseAreaElements[courseAreaAttributeToUpdate]) {
-
-      var newPostBodyElements = postBodyElements.fill(newCourseObject, courseAreaIndex, courseAreaIndex + 1);
-      console.log('the new ones', newPostBodyElements);
-      setAttributes({
-        postBodyElements: newPostBodyElements
-      }); // 	courseAreaElements.forEach(courseArea => console.log('sus', courseArea.dataset.courseSlot));
-      // 	// courseAreaElements[courseAreaAttributeToUpdate].classList.remove('no-course');
-      // }
-    };
 
     var handleCourseChange = function handleCourseChange(newValue, id) {
       if ('first-course-slot' === id) {
@@ -1213,6 +1251,12 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
         }
       }
     };
+    /**
+     *
+     * @param {*} param0
+     * @returns
+     */
+
 
     var SidebarCourseArea = function SidebarCourseArea(_ref2) {
       var courseID = _ref2.courseID;
@@ -1231,46 +1275,7 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
         className: "course-url-button",
         href: course.courseUrl
       }, 'Get it now!')));
-    }; // const getCourseViewInfo = (element, courseAreaIndex) => {
-    // 	let courseViewInfo = [ '', '', '' ];
-    // 	let elementContent = element.content;
-    // 	let matchedDescription = '';
-    // 	let matchedButtonText = '';
-    // 	const matchedLink = elementContent.match(/(http:\/\/|https:\/\/).*/);
-    // 	if ( "string" === typeof elementContent ) {
-    // 		if ( "courseLink" === element.type ) {
-    // 			elementContent = postBodyElements[courseAreaIndex - 1].content;
-    // 		}
-    // 		matchedDescription = elementContent.match(/^►([^&]*)/);
-    // 		if ( matchedLink && matchedDescription ) {
-    // 			matchedButtonText = matchedLink[0].replace(/.+\/\/|www.|\..+/g, '');
-    // 			matchedDescription = matchedDescription[0].replace(/(http:\/\/|https:\/\/).*/, '');
-    // 			matchedDescription = matchedDescription.replace(/►/, '');
-    // 			courseViewInfo = [ matchedLink[0], matchedDescription, matchedButtonText.toUpperCase() ];
-    // 		}
-    // 	}
-    // 	return courseViewInfo;
-    // }
-    // const PostBodyCourseArea = ({element, courseAreaIndex}) => {
-    // 	const courseTypes = [ "courseLink", "courseDescription", "courseLinkAndDescription" ];
-    // 	if ( "courseLinkAndDescription" === element.type || "courseLink" === element.type ) {
-    // 		const [ courseLink, courseDescription, buttonText ] = getCourseViewInfo(element, courseAreaIndex);
-    // 		return (<article className="post-body-course-area course">
-    // 			<img src={''} alt="" />
-    // 			<div className="course-card-body">
-    // 				<p className="body-text">{courseDescription}</p>
-    // 				<a className="course-url-button" href={courseLink}>{buttonText}</a>
-    // 			</div>
-    // 		</article>)
-    // 	} else {
-    // 		return (
-    // 			<div className="post-body-course-area no-course">
-    // 				{<p>{ __('Select a course to fill this area or leave blank.')}</p>}
-    // 			</div>
-    // 		)
-    // 	}
-    // }
-
+    };
 
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("div", (0,_babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__.default)({}, blockProps, {
       className: className
@@ -1295,22 +1300,6 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
         return handleCourseChange(newValue, 'second-course-slot');
       }
     }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(PluginDocumentSettingPanel, {
-      name: "post-body-course-slots",
-      title: __('Post body course slots'),
-      className: "post-body-course-slots-panel"
-    }, postBodyElements && postBodyElements.map(function (element, index) {
-      if ("courseLink" === element.type) {
-        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(PanelRow, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(SelectControl, {
-          id: index,
-          label: __('Course slot line') + " ".concat(index + 1),
-          value: element.course,
-          options: courseOptionsWithAuto,
-          onChange: function onChange(newValue) {
-            return handlePostBodyCourseChange(newValue, index);
-          }
-        }));
-      }
-    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(PluginDocumentSettingPanel, {
       name: "song-difficulty-attributes",
       title: __('Song difficulty'),
       className: "song-difficulty-panel"
@@ -1460,6 +1449,87 @@ registerBlockType('gutenberg-good-guitarist/ypt-search', {
 
 /***/ }),
 
+/***/ "./assets/src/scripts/utils/ctaUtils.js":
+/*!**********************************************!*\
+  !*** ./assets/src/scripts/utils/ctaUtils.js ***!
+  \**********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "getAllCtasData": () => (/* binding */ getAllCtasData)
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/regenerator */ "@babel/runtime/regenerator");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1__);
+
+
+var select = wp.data.select;
+var getAllCtasData = /*#__PURE__*/function () {
+  var _ref = (0,_babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__.default)( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default().mark(function _callee() {
+    var ctaPosts;
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default().wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            _context.next = 2;
+            return select('core').getEntityRecords('postType', 'cta');
+
+          case 2:
+            ctaPosts = _context.sent;
+            console.log('lol', ctaPosts);
+
+            if (ctaPosts) {
+              _context.next = 6;
+              break;
+            }
+
+            return _context.abrupt("return", []);
+
+          case 6:
+            return _context.abrupt("return", ctaPosts.forEach(function (course) {
+              if (course.id) {
+                var parsedBlocks = parse(course.content.raw);
+                /**
+                 * There may be multiple blocks in the course post.
+                 *
+                 * Find the course template block(which should be the first)
+                 * and get its attributes.
+                 */
+
+                var ctaTemplateBlock = parsedBlocks.find(function (block) {
+                  return 'gutenberg-good-guitarist/cta-template' === block.blockName;
+                });
+                var ctaAtts = ctaTemplateBlock.attrs;
+
+                if (ctaAtts) {
+                  return {
+                    title: course.title.raw,
+                    description: courseAtts.courseDescription,
+                    link: courseAtts.courseUrl,
+                    mediaId: courseAtts.imageId,
+                    mediaUrl: courseAtts.imageUrl
+                  };
+                }
+              }
+            }));
+
+          case 7:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee);
+  }));
+
+  return function getAllCtasData() {
+    return _ref.apply(this, arguments);
+  };
+}();
+
+/***/ }),
+
 /***/ "./youtube-api-config.js":
 /*!*******************************!*\
   !*** ./youtube-api-config.js ***!
@@ -1477,14 +1547,14 @@ var youtubeAPIConfig = {
 
 /***/ }),
 
-/***/ "lodash":
-/*!*************************!*\
-  !*** external "lodash" ***!
-  \*************************/
+/***/ "@babel/runtime/regenerator":
+/*!*************************************!*\
+  !*** external "regeneratorRuntime" ***!
+  \*************************************/
 /***/ ((module) => {
 
 "use strict";
-module.exports = window["lodash"];
+module.exports = window["regeneratorRuntime"];
 
 /***/ }),
 
@@ -1578,11 +1648,11 @@ var __webpack_exports__ = {};
  */
 __webpack_require__(/*! ./blocks/smallCta.js */ "./assets/src/scripts/blocks/smallCta.js");
 
-__webpack_require__(/*! ./blocks/largeCourseCard.js */ "./assets/src/scripts/blocks/largeCourseCard.js");
+__webpack_require__(/*! ./blocks/largeCta.js */ "./assets/src/scripts/blocks/largeCta.js");
 
 __webpack_require__(/*! ./blocks/cover.js */ "./assets/src/scripts/blocks/cover.js");
 
-__webpack_require__(/*! ./blocks/courseTemplate.js */ "./assets/src/scripts/blocks/courseTemplate.js");
+__webpack_require__(/*! ./blocks/ctaTemplate.js */ "./assets/src/scripts/blocks/ctaTemplate.js");
 
 __webpack_require__(/*! ./blocks/group.js */ "./assets/src/scripts/blocks/group.js");
 

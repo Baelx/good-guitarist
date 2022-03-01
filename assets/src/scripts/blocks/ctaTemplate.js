@@ -5,8 +5,8 @@ const { useSelect, useDispatch } = wp.data;
 const { useEntityProp } = wp.coreData;
 const { __ } = wp.i18n;
 
-registerBlockType( 'gutenberg-good-guitarist/course-template', {
-    title: 'Course or Ebook Template',
+registerBlockType( 'gutenberg-good-guitarist/cta-template', {
+    title: 'Call to Action Template',
     icon: 'admin-customizer',
     category: 'text',
 	attributes: {
