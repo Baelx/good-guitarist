@@ -10,11 +10,11 @@ registerBlockType( 'gutenberg-good-guitarist/cta-template', {
     icon: 'admin-customizer',
     category: 'text',
 	attributes: {
-		courseDescription: {
+		description: {
 			type: 'string',
 			default: ''
 		},
-		courseUrl: {
+		url: {
 			type: 'string',
 			default: ''
 		},
@@ -28,7 +28,7 @@ registerBlockType( 'gutenberg-good-guitarist/cta-template', {
 		}
 	},
     edit({attributes, setAttributes}) {
-		const {courseUrl, courseDescription, imageId, imageUrl} = attributes;
+		const {url, description, imageId, imageUrl} = attributes;
         const blockProps = useBlockProps();
 
 		const onSelectMedia = (newImage) => {
@@ -49,13 +49,13 @@ registerBlockType( 'gutenberg-good-guitarist/cta-template', {
             <div { ...blockProps }>
 				<TextControl
 					label={__('Description')}
-					value={courseDescription}
-					onChange={(newValue) => setAttributes({courseDescription: newValue})}
+					value={description}
+					onChange={(newValue) => setAttributes({description: newValue})}
 				/>
                 <TextControl
                     label={__('URL')}
-                    value={courseUrl}
-                    onChange={(newValue) => setAttributes({courseUrl: newValue})}
+                    value={url}
+                    onChange={(newValue) => setAttributes({url: newValue})}
                 />
 				<div className="media-upload-component">
 					<label className="image-label">{__('Course Thumbnail')}</label>

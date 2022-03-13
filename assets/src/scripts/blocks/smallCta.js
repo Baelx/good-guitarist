@@ -1,6 +1,5 @@
-import { getAllCtasData } from "../utils/ctaUtils";
+import { getCtaDataFromPosts } from "../utils";
 const { registerBlockType } = wp.blocks;
-const { Fragment } = wp.element;
 const { __ } = wp.i18n;
 const {
 	PlainText,
@@ -21,6 +20,7 @@ const {
 	TextControl,
 	TextareaControl
 } = wp.components;
+const { useSelect } = wp.data;
 
 registerBlockType( 'gutenberg-good-guitarist/small-cta', {
 	title: 'Small Call to Action',
@@ -52,17 +52,23 @@ registerBlockType( 'gutenberg-good-guitarist/small-cta', {
 		const blockProps = useBlockProps();
 		const { link, buttonText, description, mediaId, mediaUrl } = attributes;
 
-		getAllCtasData().then(res => console.log('sus', res))
+		const ctaSelectOptions = useSelect(select => {
+			const ctaPosts = select('core').getEntityRecords('postType', 'cta');
+			if (ctaPosts) {
+				const ctaData = getCtaDataFromPosts(ctaPosts);
 
-		const ctaSelectOptions = ctaData.map((cta) => {
-			return {
-				title: cta.title,
-				onClick: setAttributes({
-					description: cta.description,
-					link: cta.link,
-					mediaId: cta.mediaId,
-					mediaUrl: ctaa.mediaUrl
-				})
+				// Create dropdown options.
+				return ctaData.map((cta) => {
+					return {
+						title: cta.title,
+						onClick: setAttributes({
+							description: cta.description,
+							link: cta.link,
+							mediaId: cta.mediaId,
+							mediaUrl: cta.mediaUrl
+						})
+					}
+				});
 			}
 		});
 
@@ -80,13 +86,13 @@ registerBlockType( 'gutenberg-good-guitarist/small-cta', {
 
 		return (
 			<div {...blockProps} className="small-cta">
-				    <BlockControls>
-						<ToolbarDropdownMenu
-							icon="update"
-							label="Use with an existing course"
-							controls={ctaSelectOptions}
-						/>
-                    </BlockControls>
+				<BlockControls>
+					{ctaSelectOptions && <ToolbarDropdownMenu
+						icon="update"
+						label="Use with an existing course"
+						controls={ctaSelectOptions}
+					/>}
+				</BlockControls>
 				<div className="image-container">
 					<img src={mediaUrl} alt="" />
 					<MediaUpload
