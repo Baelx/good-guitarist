@@ -10,12 +10,12 @@
 ?>
 
 <div class="wrap">
-	<h1>Good Guitarist Settings Page</h1>
+	<h1><?php _e( 'Good Guitarist Settings Page' ); ?></h1>
 	<?php settings_errors(); ?>
 
 	<form method="post" action="options.php">
-		<?php settings_fields( 'awps_options_group' ); ?>
-		<?php do_settings_sections( 'good-guitarist' ); ?>
+		<?php settings_fields( 'good_guitarist_options_group' ); ?>
+		<?php do_settings_sections( 'good_guitarist_settings' ); ?>
 		<?php submit_button(); ?>
 	</form>
 </div>

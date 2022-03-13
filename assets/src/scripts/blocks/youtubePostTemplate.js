@@ -6,7 +6,6 @@ const { useSelect, dispatch, useDispatch } = wp.data;
 const { useRef, useState } = wp.element;
 const { __ } = wp.i18n;
 const { parse } = wp.blockSerializationDefaultParser;
-import { youtubeAPIConfig } from '../../../../youtube-api-config'
 
 registerBlockType( 'gutenberg-good-guitarist/ypt', {
 	apiVersion: 2,
@@ -295,7 +294,7 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 			});
 			gapi.load('client', () => {
 				console.log('the vid id', videoID)
-				gapi.client.setApiKey(youtubeAPIConfig.key);
+				gapi.client.setApiKey(gutenbergVars.youtube_api_key);
 				gapi.client.load('youtube', 'v3', () => {
 					gapi.client.youtube.videos.list({
 						part: 'snippet',

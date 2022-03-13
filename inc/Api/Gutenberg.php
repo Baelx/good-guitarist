@@ -8,19 +8,26 @@
 namespace GoodGuitarist\Api;
 
 use GoodGuitarist\Custom\PostTypes;
+use GoodGuitarist\Custom\DataEncryption;
 
 /**
  * Customizer class
  */
-class Gutenberg
-{
+class Gutenberg {
+	/**
+	 * Data encryption class.
+	 * @var private
+	 */
+	private $data_encryption;
+
 	/**
 	 * Register default hooks and actions for WordPress
 	 *
-	 * @return WordPress add_action()
+	 * @return void
 	 */
-	public function register()
-	{
+	public function register() {
+		$this->data_encryption = new DataEncryption();
+
 		if ( ! function_exists( 'register_block_type' ) ) {
 			return;
 		}
@@ -36,8 +43,7 @@ class Gutenberg
 	 * Custom Gutenberg settings
 	 * @return
 	 */
-	public function gutenberg_init()
-	{
+	public function gutenberg_init() {
 		add_theme_support( 'gutenberg', array(
 			// Theme supports responsive video embeds
 			'responsive-embeds' => true,
@@ -90,9 +96,12 @@ class Gutenberg
 		/**
 		 * Expose static images to Gutenberg blocks since you can't load
 		 * images how you normally would by bundling them with React.
+		 *
+		 * Also expose Youtube API key to Gutenberg to be able to fetch YT data.
 		 */
 		wp_localize_script( 'gutenberg-good-guitarist', 'gutenbergVars', [
-			'image_dir' => get_template_directory_uri() . '/assets/dist/images'
+			'image_dir' => get_template_directory_uri() . '/assets/dist/images',
+			'youtube_api_key' => $this->data_encryption->decrypt( get_option( 'gg_youtube_api_key' ) )
 		]);
 
 		register_block_type( 'gutenberg-good-guitarist/small-cta', [

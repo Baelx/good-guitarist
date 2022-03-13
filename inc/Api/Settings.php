@@ -7,6 +7,8 @@
 
 namespace GoodGuitarist\Api;
 
+use GoodGuitarist\Custom\DataEncryption;
+
 /**
  * Settings API Class
  */
@@ -15,19 +17,25 @@ class Settings {
 	 * Settings array
 	 * @var private array
 	 */
-	public $settings = array();
+	public $settings = [];
+
+	/**
+	 * Array of settings that need encryption.
+	 * @var private array
+	 */
+	private $secret_settings = [];
 
 	/**
 	 * Sections array
 	 * @var private array
 	 */
-	public $sections = array();
+	public $sections = [];
 
 	/**
 	 * Fields array
 	 * @var private array
 	 */
-	public $fields = array();
+	public $fields = [];
 
 	/**
 	 * Script path
@@ -39,34 +47,83 @@ class Settings {
 	 * Enqueues array
 	 * @var private array
 	 */
-	public $enqueues = array();
+	public $enqueues = [];
 
 	/**
 	 * Admin pages array to enqueue scripts
 	 * @var private array
 	 */
-	public $enqueue_on_pages = array();
+	public $enqueue_on_pages = [];
 
 	/**
 	 * Admin pages array
 	 * @var private array
 	 */
-	public $admin_pages = array();
+	public $admin_pages = [];
 
 	/**
 	 * Admin subpages array
 	 * @var private array
 	 */
-	public $admin_subpages = array();
+	public $admin_subpages = [];
+
+	/**
+	 * Data encryption class.
+	 * @var private
+	 */
+	private $data_encryption;
 
 	/**
 	 * Constructor
 	 */
 	public function __construct() {
+		$this->data_encryption = new DataEncryption();
+		$this->secret_settings = [ 'gg_youtube_api_key' ];
+		$pages = [
+				[
+				'page_title' => __( 'Good Guitarist Settings' ),
+				'menu_title' => __( 'GG Settings' ),
+				'capability' => 'admin',
+				'menu_slug' => 'good_guitarist_settings',
+				'callback' => [ $this, 'admin_page_render' ],
+				'icon_url' => 'dashicons-admin-generic',
+				'position' => 99
+			]
+		];
+		$settings = [
+			[
+				'option_group' => 'good_guitarist_options_group',
+				'option_name' => 'gg_youtube_api_key'
+			]
+		];
+		$sections = [
+			[
+				'id' => 'gg_youtube',
+				'title' => __( 'Youtube API settings' ),
+				'callback' => '',
+				'page' => 'good_guitarist_settings'
+			]
+		];
+		$fields = [
+			[
+				'id' => 'gg_youtube_api_key',
+				'title' => __( 'Youtube API Key' ),
+				'callback' => [ $this, 'youtube_settings_render' ],
+				'page' => 'good_guitarist_settings',
+				'section' => 'gg_youtube'
+			]
+		];
 
+		$this->add_pages( $pages );
+		$this->add_settings( $settings )->add_sections( $sections )->add_fields( $fields );
 	}
 
-	public function register() {
+	/**
+	 * Register setttings and set up settings hooks.
+	 *
+	 * @return	void
+	 */
+	public function register(): void {
 		if ( !empty( $this->enqueues ) )
 			add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );
 
@@ -75,15 +132,28 @@ class Settings {
 
 		if ( !empty( $this->settings ) )
 			add_action( 'admin_init', array( $this, 'register_custom_settings' ) );
+
+		$this->encrypt_secret_settings();
 	}
 
 	/**
-	 * Dinamically enqueue styles and scripts in admin area
+	 * Sets up a filter when a secret setting is saved.
+	 *
+	 * @return	void
+	 */
+	private function encrypt_secret_settings(): void {
+		add_filter( "pre_update_option_gg_youtube_api_key", function( $new_value ) {
+			return $this->data_encryption->encrypt( $new_value );
+		}, 10, 2 );
+	}
+
+	/**
+	 * Dynamically enqueue styles and scripts in admin area
 	 *
 	 * @param  array  $scripts file paths or wp related keywords of embedded files
 	 * @param  array  $pages    pages id where to load scripts
 	 */
-	public function admin_enqueue( $scripts = array(), $pages = array() ) {
+	public function admin_enqueue( $scripts = [], $pages = [] ) {
 		if ( empty( $scripts ) )
 			return;
 
@@ -103,15 +173,23 @@ class Settings {
 	}
 
 	/**
+	 * Render the admin page.
 	 *
+	 * @return	void
 	 */
-	public function app_enqueue() {
-		['script' => array(
-			'font-awesome',
-			'https://use.fontawesome.com/d156204254.js',
-		)];
+	public function admin_page_render(): void {
+		ob_start();
+		include \get_template_directory() . '/views/admin/index.php';
+		echo ob_get_clean();
+	}
 
-		// $this->enqueues[ $i ] = $this->enqueue_script( $val, $key );
+	/**
+	 * Render the youtube settings input.
+	 */
+	public function youtube_settings_render(): void {
+		ob_start();
+		include \get_template_directory() . '/views/admin/youtube-settings.php';
+		echo ob_get_clean();
 	}
 
 	/**
@@ -121,7 +199,7 @@ class Settings {
 	 * @param  var $type      style | script
 	 * @return variable functions
 	 */
-	private function enqueue_script( $script, $type ) {
+	private function enqueue_script( array $script, $type ) {
 		if ( $script === 'media_uploader' )
 			return 'wp_enqueue_media';
 
@@ -154,13 +232,13 @@ class Settings {
 	 *
 	 * @param  var $pages      array of user's defined pages
 	 */
-	public function addPages( $pages ) {
+	public function add_pages( $pages ) {
 		$this->admin_pages = $pages;
 
 		return $this;
 	}
 
-	public function withSubPage( $title = null ) {
+	public function with_sub_page( $title = null ) {
 		if ( empty( $this->admin_pages ) ) {
 			return $this;
 		}
@@ -188,7 +266,7 @@ class Settings {
 	 *
 	 * @param  var $pages      array of user's defined pages
 	 */
-	public function addSubPages( $pages ) {
+	public function add_sub_pages( $pages ) {
 		$this->admin_subpages = ( count( $this->admin_subpages ) == 0 ) ? $pages : array_merge( $this->admin_subpages, $pages );
 
 		return $this;

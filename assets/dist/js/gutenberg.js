@@ -851,7 +851,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ "./node_modules/@babel/runtime/helpers/esm/slicedToArray.js");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _youtube_api_config__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../youtube-api-config */ "./youtube-api-config.js");
 
 
 
@@ -877,7 +876,6 @@ var _wp$element = wp.element,
     useState = _wp$element.useState;
 var __ = wp.i18n.__;
 var parse = wp.blockSerializationDefaultParser.parse;
-
 registerBlockType('gutenberg-good-guitarist/ypt', {
   apiVersion: 2,
   title: 'Youtube Post Template',
@@ -1203,7 +1201,7 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
       });
       gapi.load('client', function () {
         console.log('the vid id', videoID);
-        gapi.client.setApiKey(_youtube_api_config__WEBPACK_IMPORTED_MODULE_3__.youtubeAPIConfig.key);
+        gapi.client.setApiKey(gutenbergVars.youtube_api_key);
         gapi.client.load('youtube', 'v3', function () {
           gapi.client.youtube.videos.list({
             part: 'snippet',
@@ -1527,23 +1525,6 @@ var getAllCtasData = /*#__PURE__*/function () {
     return _ref.apply(this, arguments);
   };
 }();
-
-/***/ }),
-
-/***/ "./youtube-api-config.js":
-/*!*******************************!*\
-  !*** ./youtube-api-config.js ***!
-  \*******************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "youtubeAPIConfig": () => (/* binding */ youtubeAPIConfig)
-/* harmony export */ });
-var youtubeAPIConfig = {
-  key: 'AIzaSyAZ1ibASlnCXrLWO5UDk6Hu4hRnFtn_V9o'
-};
 
 /***/ }),
 

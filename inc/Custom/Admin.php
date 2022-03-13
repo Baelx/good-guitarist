@@ -26,7 +26,7 @@ class Admin {
 	 * Trigger the register method of the Settings API Class
 	 * @return
 	 */
-	private function register_settings() {
+	public function register() {
 		$this->settings->register();
 	}
 
