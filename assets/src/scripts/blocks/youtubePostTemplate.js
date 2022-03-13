@@ -3,7 +3,7 @@ const { TextControl, PanelRow, SelectControl, ToggleControl } = wp.components;
 const { RichText, useBlockProps, InnerBlocks } = wp.blockEditor;
 const { PluginDocumentSettingPanel } = wp.editPost;
 const { useSelect, dispatch, useDispatch } = wp.data;
-const { useRef, useState } = wp.element;
+const { useRef, useState, useEffect } = wp.element;
 const { __ } = wp.i18n;
 const { parse } = wp.blockSerializationDefaultParser;
 
@@ -61,18 +61,28 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 			videoThumbnail,
 			songTitle,
 			sidebarCourseSlotOne,
-			sidebarCourseSlotTwo,
-			postBodyElements
+			sidebarCourseSlotTwo
 		} = attributes;
 
 		const blockProps = useBlockProps();
 		const postBody = useRef();
-		const [fetchStatus, setFetchStatus] = useState({
+		const [errorMessage, setErrorMessage] = useState({
 			class: 'fetch-message-hidden',
 			message: ''
 		});
 
-		const { postMeta, courseDetails, courseOptions, courseOptionsWithAuto } = useSelect( ( select ) => {
+		useEffect(() => {
+			console.log('lol', gutenbergVars.youtube_api_key);
+
+			if (!gutenbergVars.youtube_api_key) {
+				setErrorMessage({
+					class: 'fetch-message-fail',
+					message: 'Youtube API key not detected. Please ensure you have entered a valid API key in the "GG Settings" section.'
+				});
+			}
+		}, []);
+
+		const { postMeta, courseDetails, courseOptions } = useSelect( ( select ) => {
 			const courses = select( 'core' ).getEntityRecords( 'postType', 'course' );
 			const courseDetails = {};
 			const courseOptions = [{
@@ -118,7 +128,6 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 				postMeta: select( 'core/editor' ).getEditedPostAttribute( 'meta' ),
 				courseDetails: courseDetails,
 				courseOptions: courseOptions,
-				courseOptionsWithAuto: courseOptionsWithAuto
 			};
 		} );
 		const { editPost } = useDispatch( 'core/editor', [ postMeta.difficulty ] );
@@ -186,12 +195,12 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 				fetchMessageClass = 'fetch-message-fail';
 				fetchMessageText = __('Couldn\'t fetch video information.') + ` ${errorMessage}`;
 			}
-			setFetchStatus({
+			setErrorMessage({
 				class: fetchMessageClass,
 				message: fetchMessageText
 			});
 			setTimeout(() => {
-				setFetchStatus({
+				setErrorMessage({
 					class: 'fetch-message-hidden',
 					message: ''
 				})
@@ -288,7 +297,7 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 		 */
 		const initFetch = (event, videoID) => {
 			event.preventDefault();
-			setFetchStatus({
+			setErrorMessage({
 				class: 'fetch-message-hidden',
 				message: ''
 			});
@@ -406,7 +415,7 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 				</PluginDocumentSettingPanel>
 				<section className="video-details">
 					<h2>{__('Video Details')}</h2>
-					<span className={`fetch-message ${fetchStatus.class}`}>{fetchStatus.message}</span>
+					<span className={`fetch-message ${errorMessage.class}`}>{errorMessage.message}</span>
 					<label className="youtube-post-label" htmlFor="youtube-video-url">Search by Youtube video URL</label>
 					<form onSubmit={(event) => initFetch(event, videoID)}>
 						<input

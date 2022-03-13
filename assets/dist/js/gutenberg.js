@@ -873,7 +873,8 @@ var _wp$data = wp.data,
     useDispatch = _wp$data.useDispatch;
 var _wp$element = wp.element,
     useRef = _wp$element.useRef,
-    useState = _wp$element.useState;
+    useState = _wp$element.useState,
+    useEffect = _wp$element.useEffect;
 var __ = wp.i18n.__;
 var parse = wp.blockSerializationDefaultParser.parse;
 registerBlockType('gutenberg-good-guitarist/ypt', {
@@ -932,8 +933,7 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
         videoThumbnail = attributes.videoThumbnail,
         songTitle = attributes.songTitle,
         sidebarCourseSlotOne = attributes.sidebarCourseSlotOne,
-        sidebarCourseSlotTwo = attributes.sidebarCourseSlotTwo,
-        postBodyElements = attributes.postBodyElements;
+        sidebarCourseSlotTwo = attributes.sidebarCourseSlotTwo;
     var blockProps = useBlockProps();
     var postBody = useRef();
 
@@ -942,8 +942,19 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
       message: ''
     }),
         _useState2 = (0,_babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_1__.default)(_useState, 2),
-        fetchStatus = _useState2[0],
-        setFetchStatus = _useState2[1];
+        errorMessage = _useState2[0],
+        setErrorMessage = _useState2[1];
+
+    useEffect(function () {
+      console.log('lol', gutenbergVars.youtube_api_key);
+
+      if (!gutenbergVars.youtube_api_key) {
+        setErrorMessage({
+          "class": 'fetch-message-fail',
+          message: 'Youtube API key not detected. Please ensure you have entered a valid API key in the "GG Settings" section.'
+        });
+      }
+    }, []);
 
     var _useSelect = useSelect(function (select) {
       var courses = select('core').getEntityRecords('postType', 'course');
@@ -993,14 +1004,12 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
       return {
         postMeta: select('core/editor').getEditedPostAttribute('meta'),
         courseDetails: courseDetails,
-        courseOptions: courseOptions,
-        courseOptionsWithAuto: courseOptionsWithAuto
+        courseOptions: courseOptions
       };
     }),
         postMeta = _useSelect.postMeta,
         courseDetails = _useSelect.courseDetails,
-        courseOptions = _useSelect.courseOptions,
-        courseOptionsWithAuto = _useSelect.courseOptionsWithAuto;
+        courseOptions = _useSelect.courseOptions;
 
     var _useDispatch = useDispatch('core/editor', [postMeta.difficulty]),
         editPost = _useDispatch.editPost;
@@ -1081,12 +1090,12 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
         fetchMessageText = __('Couldn\'t fetch video information.') + " ".concat(errorMessage);
       }
 
-      setFetchStatus({
+      setErrorMessage({
         "class": fetchMessageClass,
         message: fetchMessageText
       });
       setTimeout(function () {
-        setFetchStatus({
+        setErrorMessage({
           "class": 'fetch-message-hidden',
           message: ''
         });
@@ -1195,7 +1204,7 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
 
     var initFetch = function initFetch(event, videoID) {
       event.preventDefault();
-      setFetchStatus({
+      setErrorMessage({
         "class": 'fetch-message-hidden',
         message: ''
       });
@@ -1328,8 +1337,8 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
     }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("section", {
       className: "video-details"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("h2", null, __('Video Details')), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("span", {
-      className: "fetch-message ".concat(fetchStatus["class"])
-    }, fetchStatus.message), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("label", {
+      className: "fetch-message ".concat(errorMessage["class"])
+    }, errorMessage.message), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("label", {
       className: "youtube-post-label",
       htmlFor: "youtube-video-url"
     }, "Search by Youtube video URL"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("form", {

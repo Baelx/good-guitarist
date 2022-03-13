@@ -62,7 +62,7 @@ if ( has_blocks( $post->post_content ) ) {
 							);
 						endif;
 						?>
-						<form role="search" method="get" class="search-form" action="http://localhost:8000/">
+						<form role="search" method="get" class="search-form" action="<?php echo get_site_url(); ?>">
 							<label class="search-form-box">
 								<span class="screen-reader-text">Search for:</span>
 								<input type="search" class="search-field" placeholder="Search …" value="" name="s">

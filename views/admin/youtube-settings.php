@@ -1,6 +1,9 @@
-<input
-	type="password"
-	name="gg_youtube_api_key"
-	id="gg_youtube_api_key"
-	value="<?php esc_attr_e( get_option( 'gg_youtube_api_key' ) ); ?>"
-/>
+<label>
+	<?php _e(
+		'To fetch Youtube information, you will need to create
+		an API key and enter it here. To do that, Google search
+		"create youtube API key" or click' ); ?>
+	<a href="https://developers.google.com/youtube/registering_an_application">
+		<?php _e( 'here' ); ?>
+	</a>
+</label>

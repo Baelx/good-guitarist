@@ -100,7 +100,7 @@ class Settings {
 			[
 				'id' => 'gg_youtube',
 				'title' => __( 'Youtube API settings' ),
-				'callback' => '',
+				'callback' => [ $this, 'youtube_settings_render' ],
 				'page' => 'good_guitarist_settings'
 			]
 		];
@@ -108,7 +108,7 @@ class Settings {
 			[
 				'id' => 'gg_youtube_api_key',
 				'title' => __( 'Youtube API Key' ),
-				'callback' => [ $this, 'youtube_settings_render' ],
+				'callback' => [ $this, 'youtube_api_input_render' ],
 				'page' => 'good_guitarist_settings',
 				'section' => 'gg_youtube'
 			]
@@ -184,11 +184,20 @@ class Settings {
 	}
 
 	/**
-	 * Render the youtube settings input.
+	 * Render the youtube settings section.
 	 */
 	public function youtube_settings_render(): void {
 		ob_start();
 		include \get_template_directory() . '/views/admin/youtube-settings.php';
+		echo ob_get_clean();
+	}
+
+	/**
+	 * Render the youtube api input.
+	 */
+	public function youtube_api_input_render(): void {
+		ob_start();
+		include \get_template_directory() . '/views/admin/youtube-api.php';
 		echo ob_get_clean();
 	}
 
