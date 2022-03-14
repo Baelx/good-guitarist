@@ -1,25 +1,9 @@
 import { getCtaDataFromPosts } from "../utils";
 const { registerBlockType } = wp.blocks;
 const { __ } = wp.i18n;
-const {
-	PlainText,
-	RichText,
-	MediaUpload,
-	InspectorControls,
-	ColorPalette,
-	getColorClass
-} = wp.editor;
+const { MediaUpload } = wp.editor;
 const { useBlockProps, BlockControls } = wp.blockEditor;
-const {
-	Icon,
-	ToolbarButton,
-	ToolbarGroup,
-	ToolbarDropdownMenu,
-	RangeControl,
-	PanelBody,
-	TextControl,
-	TextareaControl
-} = wp.components;
+const { Toolbar, ToolbarDropdownMenu, TextControl, TextareaControl } = wp.components;
 const { useSelect } = wp.data;
 
 registerBlockType( 'gutenberg-good-guitarist/small-cta', {
@@ -32,7 +16,7 @@ registerBlockType( 'gutenberg-good-guitarist/small-cta', {
 			type: 'string',
 			default: ''
 		},
-		link: {
+		url: {
 			type: 'string',
 			default: ''
 		},
@@ -40,17 +24,17 @@ registerBlockType( 'gutenberg-good-guitarist/small-cta', {
 			type: 'string',
 			default: 'Click here'
 		},
-		mediaId: {
+		imageId: {
 			type: "number",
 		},
-		mediaUrl: {
+		imageUrl: {
 			type: "string",
 			default: `${gutenbergVars.image_dir}/good-guitarist-preview-img.png`
 		},
 	},
-	edit({ className, attributes, setAttributes }) {
+	edit({ attributes, setAttributes }) {
 		const blockProps = useBlockProps();
-		const { link, buttonText, description, mediaId, mediaUrl } = attributes;
+		const { url, buttonText, description, imageId, imageUrl } = attributes;
 
 		const ctaSelectOptions = useSelect(select => {
 			const ctaPosts = select('core').getEntityRecords('postType', 'cta');
@@ -61,11 +45,11 @@ registerBlockType( 'gutenberg-good-guitarist/small-cta', {
 				return ctaData.map((cta) => {
 					return {
 						title: cta.title,
-						onClick: setAttributes({
+						onClick: () => setAttributes({
 							description: cta.description,
-							link: cta.link,
-							mediaId: cta.mediaId,
-							mediaUrl: cta.mediaUrl
+							url: cta.url,
+							imageId: cta.imageId,
+							imageUrl: cta.imageUrl
 						})
 					}
 				});
@@ -79,26 +63,28 @@ registerBlockType( 'gutenberg-good-guitarist/small-cta', {
 		 */
 		const onSelectImage = (media) => {
 			setAttributes({
-				mediaUrl: media.url,
-				mediaId: media.id,
+				imageUrl: media.url,
+				imageId: media.id,
 			});
 		};
 
 		return (
 			<div {...blockProps} className="small-cta">
 				<BlockControls>
-					{ctaSelectOptions && <ToolbarDropdownMenu
-						icon="update"
-						label="Use with an existing course"
-						controls={ctaSelectOptions}
-					/>}
+					<Toolbar>
+						{ctaSelectOptions && <ToolbarDropdownMenu
+							icon="update"
+							label="Use with an existing course"
+							controls={ctaSelectOptions}
+						/>}
+					</Toolbar>
 				</BlockControls>
 				<div className="image-container">
-					<img src={mediaUrl} alt="" />
+					<img src={imageUrl} alt="" />
 					<MediaUpload
 						onSelect={onSelectImage}
 						allowedTypes="image"
-						value={mediaId}
+						value={imageId}
 						render={({ open }) => (
 							<button
 							type="text"
@@ -116,8 +102,8 @@ registerBlockType( 'gutenberg-good-guitarist/small-cta', {
 						/>
 					<TextControl
 						label="Link"
-						value={link}
-						onChange={value => setAttributes({ link: value })}
+						value={url}
+						onChange={value => setAttributes({ url: value })}
 					/>
 					<TextControl
 						className="button-text-input"
@@ -131,16 +117,16 @@ registerBlockType( 'gutenberg-good-guitarist/small-cta', {
 
 	},
 	save({ attributes }) {
-		const { link, buttonText, description, mediaUrl } = attributes;
+		const { url, buttonText, description, imageUrl } = attributes;
 
 		return (
 			<div>
 				<div className="image-container">
-					<img src={mediaUrl} alt="" />
+					<img src={imageUrl} alt="" />
 				</div>
 				<div className="details-container">
 					<p>{description}</p>
-					<button className="cta-button" href={link}>{buttonText}</button>
+					<button className="cta-button" href={url}>{buttonText}</button>
 				</div>
 			</div>
 		)

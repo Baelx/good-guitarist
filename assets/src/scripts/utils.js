@@ -27,7 +27,7 @@ export const getCtaDataFromPosts = (ctaPosts) => {
 		return {
 			title: ctaPost.title.raw,
 			description: ctaAtts.description,
-			link: ctaAtts.url,
+			url: ctaAtts.url,
 			mediaId: ctaAtts.imageId,
 			mediaUrl: ctaAtts.imageUrl
 		}

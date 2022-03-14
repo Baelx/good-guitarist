@@ -633,23 +633,13 @@ __webpack_require__.r(__webpack_exports__);
 
 var registerBlockType = wp.blocks.registerBlockType;
 var __ = wp.i18n.__;
-var _wp$editor = wp.editor,
-    PlainText = _wp$editor.PlainText,
-    RichText = _wp$editor.RichText,
-    MediaUpload = _wp$editor.MediaUpload,
-    InspectorControls = _wp$editor.InspectorControls,
-    ColorPalette = _wp$editor.ColorPalette,
-    getColorClass = _wp$editor.getColorClass;
+var MediaUpload = wp.editor.MediaUpload;
 var _wp$blockEditor = wp.blockEditor,
     useBlockProps = _wp$blockEditor.useBlockProps,
     BlockControls = _wp$blockEditor.BlockControls;
 var _wp$components = wp.components,
-    Icon = _wp$components.Icon,
-    ToolbarButton = _wp$components.ToolbarButton,
-    ToolbarGroup = _wp$components.ToolbarGroup,
+    Toolbar = _wp$components.Toolbar,
     ToolbarDropdownMenu = _wp$components.ToolbarDropdownMenu,
-    RangeControl = _wp$components.RangeControl,
-    PanelBody = _wp$components.PanelBody,
     TextControl = _wp$components.TextControl,
     TextareaControl = _wp$components.TextareaControl;
 var useSelect = wp.data.useSelect;
@@ -663,7 +653,7 @@ registerBlockType('gutenberg-good-guitarist/small-cta', {
       type: 'string',
       "default": ''
     },
-    link: {
+    url: {
       type: 'string',
       "default": ''
     },
@@ -671,24 +661,23 @@ registerBlockType('gutenberg-good-guitarist/small-cta', {
       type: 'string',
       "default": 'Click here'
     },
-    mediaId: {
+    imageId: {
       type: "number"
     },
-    mediaUrl: {
+    imageUrl: {
       type: "string",
       "default": "".concat(gutenbergVars.image_dir, "/good-guitarist-preview-img.png")
     }
   },
   edit: function edit(_ref) {
-    var className = _ref.className,
-        attributes = _ref.attributes,
+    var attributes = _ref.attributes,
         setAttributes = _ref.setAttributes;
     var blockProps = useBlockProps();
-    var link = attributes.link,
+    var url = attributes.url,
         buttonText = attributes.buttonText,
         description = attributes.description,
-        mediaId = attributes.mediaId,
-        mediaUrl = attributes.mediaUrl;
+        imageId = attributes.imageId,
+        imageUrl = attributes.imageUrl;
     var ctaSelectOptions = useSelect(function (select) {
       var ctaPosts = select('core').getEntityRecords('postType', 'cta');
 
@@ -698,12 +687,14 @@ registerBlockType('gutenberg-good-guitarist/small-cta', {
         return ctaData.map(function (cta) {
           return {
             title: cta.title,
-            onClick: setAttributes({
-              description: cta.description,
-              link: cta.link,
-              mediaId: cta.mediaId,
-              mediaUrl: cta.mediaUrl
-            })
+            onClick: function onClick() {
+              return setAttributes({
+                description: cta.description,
+                url: cta.url,
+                imageId: cta.imageId,
+                imageUrl: cta.imageUrl
+              });
+            }
           };
         });
       }
@@ -716,26 +707,26 @@ registerBlockType('gutenberg-good-guitarist/small-cta', {
 
     var onSelectImage = function onSelectImage(media) {
       setAttributes({
-        mediaUrl: media.url,
-        mediaId: media.id
+        imageUrl: media.url,
+        imageId: media.id
       });
     };
 
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("div", (0,_babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__.default)({}, blockProps, {
       className: "small-cta"
-    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(BlockControls, null, ctaSelectOptions && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(ToolbarDropdownMenu, {
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(BlockControls, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(Toolbar, null, ctaSelectOptions && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(ToolbarDropdownMenu, {
       icon: "update",
       label: "Use with an existing course",
       controls: ctaSelectOptions
-    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("div", {
+    }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("div", {
       className: "image-container"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("img", {
-      src: mediaUrl,
+      src: imageUrl,
       alt: ""
     }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(MediaUpload, {
       onSelect: onSelectImage,
       allowedTypes: "image",
-      value: mediaId,
+      value: imageId,
       render: function render(_ref2) {
         var open = _ref2.open;
         return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("button", {
@@ -756,10 +747,10 @@ registerBlockType('gutenberg-good-guitarist/small-cta', {
       }
     }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(TextControl, {
       label: "Link",
-      value: link,
+      value: url,
       onChange: function onChange(value) {
         return setAttributes({
-          link: value
+          url: value
         });
       }
     }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(TextControl, {
@@ -775,20 +766,20 @@ registerBlockType('gutenberg-good-guitarist/small-cta', {
   },
   save: function save(_ref3) {
     var attributes = _ref3.attributes;
-    var link = attributes.link,
+    var url = attributes.url,
         buttonText = attributes.buttonText,
         description = attributes.description,
-        mediaUrl = attributes.mediaUrl;
+        imageUrl = attributes.imageUrl;
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("div", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("div", {
       className: "image-container"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("img", {
-      src: mediaUrl,
+      src: imageUrl,
       alt: ""
     })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("div", {
       className: "details-container"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("p", null, description), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)("button", {
       className: "cta-button",
-      href: link
+      href: url
     }, buttonText)));
   }
 });
@@ -1424,6 +1415,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "getCtaDataFromPosts": () => (/* binding */ getCtaDataFromPosts)
 /* harmony export */ });
 var parse = wp.blockSerializationDefaultParser.parse;
+/**
+ * Parse 'gutenberg-good-guitarist/cta-template' block from a post.
+ *
+ * @param {array} ctaPost
+ * @returns
+ */
 
 var getCtaTemplateBlockFromPost = function getCtaTemplateBlockFromPost(ctaPost) {
   var parsedBlocks = parse(ctaPost.content.raw);
@@ -1431,6 +1428,13 @@ var getCtaTemplateBlockFromPost = function getCtaTemplateBlockFromPost(ctaPost) 
     return 'gutenberg-good-guitarist/cta-template' === block.blockName;
   });
 };
+/**
+ *  Format CTA data from a CTA post.
+ *
+ * @param {array} ctaPosts
+ * @returns
+ */
+
 
 var getCtaDataFromPosts = function getCtaDataFromPosts(ctaPosts) {
   var validCtaPosts = ctaPosts.filter(function (ctaPost) {
@@ -1441,7 +1445,7 @@ var getCtaDataFromPosts = function getCtaDataFromPosts(ctaPosts) {
     return {
       title: ctaPost.title.raw,
       description: ctaAtts.description,
-      link: ctaAtts.url,
+      url: ctaAtts.url,
       mediaId: ctaAtts.imageId,
       mediaUrl: ctaAtts.imageUrl
     };
