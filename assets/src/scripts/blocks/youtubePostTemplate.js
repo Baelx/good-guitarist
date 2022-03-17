@@ -1,3 +1,4 @@
+import { getCtaDataFromPosts } from '../utils';
 const { registerBlockType, createBlock } = wp.blocks;
 const { TextControl, PanelRow, SelectControl, ToggleControl } = wp.components;
 const { RichText, useBlockProps, InnerBlocks } = wp.blockEditor;
@@ -72,8 +73,6 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 		});
 
 		useEffect(() => {
-			console.log('lol', gutenbergVars.youtube_api_key);
-
 			if (!gutenbergVars.youtube_api_key) {
 				setErrorMessage({
 					class: 'fetch-message-fail',
@@ -82,55 +81,68 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 			}
 		}, []);
 
-		const { postMeta, courseDetails, courseOptions } = useSelect( ( select ) => {
-			const courses = select( 'core' ).getEntityRecords( 'postType', 'course' );
+		const createCourseDropdownOptions = () => {
 			const courseDetails = {};
 			const courseOptions = [{
 				label: 'None',
 				value: -1
 			}];
-			const courseOptionsWithAuto = [{
-				label: 'Autodetect',
-				value: 0
-			}, ...courseOptions];
-			if (courses) {
-				courses.forEach((course) => {
-					const parsedBlocks = parse(course.content.raw);
-					/**
-					 * There may be multiple blocks in the course post.
-					 *
-					 * Find the course template block(which should be the first)
-					 * and get its attributes.
-					 */
-					const courseTemplateBlock = parsedBlocks.find(block => 'gutenberg-good-guitarist/course-template' === block.blockName);
-					const courseAtts = courseTemplateBlock.attrs;
+		}
 
-					courseOptions.push({
-						label: course.title.raw,
-						value: parseInt(course.id),
-					});
-					courseOptionsWithAuto.push({
-						label: course.title.raw,
-						value: parseInt(course.id),
-					});
-					// Keep separate courseDetail objects used to populate attributes.
-					courseDetails[course.id] = {
-						title: course.title.raw,
-						description: courseAtts.courseDescription,
-						url: courseAtts.courseUrl,
-						imageId: courseAtts.imageId,
-						imageUrl: courseAtts.imageUrl
+		const { postMeta } = useSelect( ( select ) => {
+			const ctaPosts = select( 'core' ).getEntityRecords( 'postType', 'cta' );
+			if (ctaPosts) {
+				const ctaData = getCtaDataFromPosts(ctaPosts);
+
+				// Create dropdown options.
+				return ctaData.map((cta) => {
+					return {
+						title: cta.title,
+						onClick: () => setAttributes({
+							description: cta.description,
+							url: cta.url,
+							imageId: cta.imageId,
+							imageUrl: cta.imageUrl
+						})
 					}
-				})
+				});
 			}
+			// if (courses) {
+			// 	courses.forEach((course) => {
+			// 		const parsedBlocks = parse(course.content.raw);
+			// 		/**
+			// 		 * There may be multiple blocks in the course post.
+			// 		 *
+			// 		 * Find the course template block(which should be the first)
+			// 		 * and get its attributes.
+			// 		 */
+			// 		const courseTemplateBlock = parsedBlocks.find(block => 'gutenberg-good-guitarist/course-template' === block.blockName);
+			// 		const courseAtts = courseTemplateBlock.attrs;
+
+			// 		courseOptions.push({
+			// 			label: course.title.raw,
+			// 			value: parseInt(course.id),
+			// 		});
+			// 		// Keep separate courseDetail objects used to populate attributes.
+			// 		courseDetails[course.id] = {
+			// 			title: course.title.raw,
+			// 			description: courseAtts.courseDescription,
+			// 			url: courseAtts.courseUrl,
+			// 			imageId: courseAtts.imageId,
+			// 			imageUrl: courseAtts.imageUrl
+			// 		}
+			// 	})
+			// }
 
 			return {
 				postMeta: select( 'core/editor' ).getEditedPostAttribute( 'meta' ),
-				courseDetails: courseDetails,
-				courseOptions: courseOptions,
+				// courseDetails: courseDetails,
+				// courseOptions: courseOptions,
 			};
 		} );
-		const { editPost } = useDispatch( 'core/editor', [ postMeta.difficulty ] );
+		if (postMeta) {
+			const { editPost } = useDispatch( 'core/editor', [ postMeta.difficulty ] );
+		}
 
 		/**
 		 * Check if string has http:// or https:// in it.
@@ -144,20 +156,6 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 				matchedLink = stringToCheck.match(linkRegex);
 			}
 			return matchedLink;
-		}
-
-		/**
-		 * Checks if a string begins with an arrow character.
-		 *
-		 * @param {String} stringtoCheck
-		 * @returns
-		 */
-		const stringContainsArrow = (stringToCheck) => {
-			let containsArrow = false;
-			if ( 'string' === typeof stringToCheck && stringToCheck.search(/^►([^&]*)/) >= 0) {
-				containsArrow = true;
-			}
-			return containsArrow;
 		}
 
 		/**
@@ -208,27 +206,6 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 		}
 
 		/**
-		 * If individual paragraphs of the youtube post description are found
-		 * to include an arrow character, a link, or both, output a type
-		 * accordingly.
-		 *
-		 * @param {String} element
-		 */
-		const postBodyElementType = (element) => {
-			let elementType = "text";
-			if ( stringContainsLink(element) ) {
-				if ( stringContainsArrow(element) ) {
-					elementType = "courseLinkAndDescription"
-				} else {
-					elementType = "courseLink";
-				}
-			} else if ( stringContainsArrow(element) ) {
-				elementType = "courseDescription"
-			}
-			return elementType;
-		}
-
-		/**
 		 * Create a gutenberg block for each paragraph of the fetched
 		 * youtube description.
 		 *
@@ -243,7 +220,7 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 				let blockAtts = { content: description };
 				if (matchedLink) {
 					blockType = 'gutenberg-good-guitarist/small-cta';
-					blockAtts = { link: matchedLink, description: description }
+					blockAtts = { url: matchedLink, description: description }
 				}
 				return createBlock(blockType, blockAtts);
 			});
@@ -347,19 +324,19 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 		 * @param {*} param0
 		 * @returns
 		 */
-		const SidebarCourseArea = ({courseID}) => {
-			console.log('course?', courseID, courseDetails)
-			const course = courseDetails[props.courseID];
-			return (
-				<div className="sidebar-course-card">
-					<img src={course.imageUrl} alt="" />
-					<div className="course-card-body">
-						<p className="body-text">{course.description}</p>
-						<a className="course-url-button" href={course.courseUrl}>{'Get it now!'}</a>
-					</div>
-				</div>
-			)
-		}
+		// const SidebarCourseArea = ({courseID}) => {
+		// 	console.log('course?', courseID, courseDetails)
+		// 	const course = courseDetails[props.courseID];
+		// 	return (
+		// 		<div className="sidebar-course-card">
+		// 			<img src={course.imageUrl} alt="" />
+		// 			<div className="course-card-body">
+		// 				<p className="body-text">{course.description}</p>
+		// 				<a className="course-url-button" href={course.courseUrl}>{'Get it now!'}</a>
+		// 			</div>
+		// 		</div>
+		// 	)
+		// }
 
 		return (
 			<div { ...blockProps } className={ className }>
@@ -368,7 +345,7 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 					title={__("Video sidebar course slots")}
 					className="sidebar-course-slots-panel"
 				>
-					{ courseDetails && <PanelRow>
+					{/* { courseDetails && <PanelRow>
 						<SelectControl
 							id="first-course-slot"
 							label={__('Sidebar course 1')}
@@ -385,7 +362,7 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 							options={courseOptions}
 							onChange={ (newValue) => handleCourseChange(newValue, 'second-course-slot') }
 						/>
-					</PanelRow> }
+					</PanelRow> } */}
 				</PluginDocumentSettingPanel>
 				<PluginDocumentSettingPanel
 					name="song-difficulty-attributes"
@@ -393,11 +370,11 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 					className="song-difficulty-panel"
 				>
 					<PanelRow>
-						<TextControl
+						{postMeta && <TextControl
 							label={__('Enter a number from 1 to 50')}
 							value={ postMeta.song_difficulty }
 							onChange={ (newValue) => editPost({meta: { song_difficulty: newValue }}) }
-						/>
+						/>}
 					</PanelRow>
 				</PluginDocumentSettingPanel>
 				<PluginDocumentSettingPanel
@@ -406,11 +383,11 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 					className="contains-only-one-barre-chord-panel"
 				>
 					<PanelRow>
-						<ToggleControl
+						{postMeta && <ToggleControl
 							label={__('One barre chord song')}
 							checked={ postMeta.contains_one_barre }
 							onChange={ (newValue) => editPost({meta: { contains_one_barre: newValue }}) }
-						/>
+						/>}
 					</PanelRow>
 				</PluginDocumentSettingPanel>
 				<section className="video-details">
@@ -443,8 +420,8 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 						<div className="youtube-post-video-area">
 							{ ( videoURL ) && <iframe width="560" height="715" src={videoURL} className={sidebarCourseSlotOne > 0 ? 'iframe-two-third-width' : 'iframe-full-width'} title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> }
 							{ ( sidebarCourseSlotOne > 0 || sidebarCourseSlotTwo > 0 ) && <div className="course-sidebar">
-								{ ( sidebarCourseSlotOne > 0 && has(courseDetails, courseID) ) && <SidebarCourseArea courseID={sidebarCourseSlotOne} />}
-								{ ( sidebarCourseSlotTwo > 0 && has(courseDetails, courseID) ) && <SidebarCourseArea courseID={sidebarCourseSlotTwo} />}
+								{/* { ( sidebarCourseSlotOne > 0 && has(courseDetails, courseID) ) && <SidebarCourseArea courseID={sidebarCourseSlotOne} />} */}
+								{/* { ( sidebarCourseSlotTwo > 0 && has(courseDetails, courseID) ) && <SidebarCourseArea courseID={sidebarCourseSlotTwo} />} */}
 							</div> }
 						</div>
 						<div className="post-content-video-description">

@@ -28,8 +28,8 @@ export const getCtaDataFromPosts = (ctaPosts) => {
 			title: ctaPost.title.raw,
 			description: ctaAtts.description,
 			url: ctaAtts.url,
-			mediaId: ctaAtts.imageId,
-			mediaUrl: ctaAtts.imageUrl
+			imageId: ctaAtts.imageId,
+			imageUrl: ctaAtts.imageUrl
 		}
 	})
 }

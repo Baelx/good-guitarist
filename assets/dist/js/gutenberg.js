@@ -798,6 +798,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ "./node_modules/@babel/runtime/helpers/esm/slicedToArray.js");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils */ "./assets/src/scripts/utils.js");
+
 
 
 
@@ -893,8 +895,6 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
         setErrorMessage = _useState2[1];
 
     useEffect(function () {
-      console.log('lol', gutenbergVars.youtube_api_key);
-
       if (!gutenbergVars.youtube_api_key) {
         setErrorMessage({
           "class": 'fetch-message-fail',
@@ -903,63 +903,72 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
       }
     }, []);
 
-    var _useSelect = useSelect(function (select) {
-      var courses = select('core').getEntityRecords('postType', 'course');
+    var createCourseDropdownOptions = function createCourseDropdownOptions() {
       var courseDetails = {};
       var courseOptions = [{
         label: 'None',
         value: -1
       }];
-      var courseOptionsWithAuto = [{
-        label: 'Autodetect',
-        value: 0
-      }].concat(courseOptions);
+    };
 
-      if (courses) {
-        courses.forEach(function (course) {
-          var parsedBlocks = parse(course.content.raw);
-          /**
-           * There may be multiple blocks in the course post.
-           *
-           * Find the course template block(which should be the first)
-           * and get its attributes.
-           */
+    var _useSelect = useSelect(function (select) {
+      var ctaPosts = select('core').getEntityRecords('postType', 'cta');
 
-          var courseTemplateBlock = parsedBlocks.find(function (block) {
-            return 'gutenberg-good-guitarist/course-template' === block.blockName;
-          });
-          var courseAtts = courseTemplateBlock.attrs;
-          courseOptions.push({
-            label: course.title.raw,
-            value: parseInt(course.id)
-          });
-          courseOptionsWithAuto.push({
-            label: course.title.raw,
-            value: parseInt(course.id)
-          }); // Keep separate courseDetail objects used to populate attributes.
+      if (ctaPosts) {
+        var ctaData = (0,_utils__WEBPACK_IMPORTED_MODULE_3__.getCtaDataFromPosts)(ctaPosts); // Create dropdown options.
 
-          courseDetails[course.id] = {
-            title: course.title.raw,
-            description: courseAtts.courseDescription,
-            url: courseAtts.courseUrl,
-            imageId: courseAtts.imageId,
-            imageUrl: courseAtts.imageUrl
+        return ctaData.map(function (cta) {
+          return {
+            title: cta.title,
+            onClick: function onClick() {
+              return setAttributes({
+                description: cta.description,
+                url: cta.url,
+                imageId: cta.imageId,
+                imageUrl: cta.imageUrl
+              });
+            }
           };
         });
-      }
+      } // if (courses) {
+      // 	courses.forEach((course) => {
+      // 		const parsedBlocks = parse(course.content.raw);
+      // 		/**
+      // 		 * There may be multiple blocks in the course post.
+      // 		 *
+      // 		 * Find the course template block(which should be the first)
+      // 		 * and get its attributes.
+      // 		 */
+      // 		const courseTemplateBlock = parsedBlocks.find(block => 'gutenberg-good-guitarist/course-template' === block.blockName);
+      // 		const courseAtts = courseTemplateBlock.attrs;
+      // 		courseOptions.push({
+      // 			label: course.title.raw,
+      // 			value: parseInt(course.id),
+      // 		});
+      // 		// Keep separate courseDetail objects used to populate attributes.
+      // 		courseDetails[course.id] = {
+      // 			title: course.title.raw,
+      // 			description: courseAtts.courseDescription,
+      // 			url: courseAtts.courseUrl,
+      // 			imageId: courseAtts.imageId,
+      // 			imageUrl: courseAtts.imageUrl
+      // 		}
+      // 	})
+      // }
+
 
       return {
-        postMeta: select('core/editor').getEditedPostAttribute('meta'),
-        courseDetails: courseDetails,
-        courseOptions: courseOptions
+        postMeta: select('core/editor').getEditedPostAttribute('meta') // courseDetails: courseDetails,
+        // courseOptions: courseOptions,
+
       };
     }),
-        postMeta = _useSelect.postMeta,
-        courseDetails = _useSelect.courseDetails,
-        courseOptions = _useSelect.courseOptions;
+        postMeta = _useSelect.postMeta;
 
-    var _useDispatch = useDispatch('core/editor', [postMeta.difficulty]),
-        editPost = _useDispatch.editPost;
+    if (postMeta) {
+      var _useDispatch = useDispatch('core/editor', [postMeta.difficulty]),
+          _editPost = _useDispatch.editPost;
+    }
     /**
      * Check if string has http:// or https:// in it.
      *
@@ -976,23 +985,6 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
       }
 
       return matchedLink;
-    };
-    /**
-     * Checks if a string begins with an arrow character.
-     *
-     * @param {String} stringtoCheck
-     * @returns
-     */
-
-
-    var stringContainsArrow = function stringContainsArrow(stringToCheck) {
-      var containsArrow = false;
-
-      if ('string' === typeof stringToCheck && stringToCheck.search(/^►([^&]*)/) >= 0) {
-        containsArrow = true;
-      }
-
-      return containsArrow;
     };
     /**
      * Parse the youtube video ID from the URL.
@@ -1049,30 +1041,6 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
       }, 3000);
     };
     /**
-     * If individual paragraphs of the youtube post description are found
-     * to include an arrow character, a link, or both, output a type
-     * accordingly.
-     *
-     * @param {String} element
-     */
-
-
-    var postBodyElementType = function postBodyElementType(element) {
-      var elementType = "text";
-
-      if (stringContainsLink(element)) {
-        if (stringContainsArrow(element)) {
-          elementType = "courseLinkAndDescription";
-        } else {
-          elementType = "courseLink";
-        }
-      } else if (stringContainsArrow(element)) {
-        elementType = "courseDescription";
-      }
-
-      return elementType;
-    };
-    /**
      * Create a gutenberg block for each paragraph of the fetched
      * youtube description.
      *
@@ -1095,7 +1063,7 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
         if (matchedLink) {
           blockType = 'gutenberg-good-guitarist/small-cta';
           blockAtts = {
-            link: matchedLink,
+            url: matchedLink,
             description: description
           };
         }
@@ -1210,26 +1178,20 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
      * @param {*} param0
      * @returns
      */
+    // const SidebarCourseArea = ({courseID}) => {
+    // 	console.log('course?', courseID, courseDetails)
+    // 	const course = courseDetails[props.courseID];
+    // 	return (
+    // 		<div className="sidebar-course-card">
+    // 			<img src={course.imageUrl} alt="" />
+    // 			<div className="course-card-body">
+    // 				<p className="body-text">{course.description}</p>
+    // 				<a className="course-url-button" href={course.courseUrl}>{'Get it now!'}</a>
+    // 			</div>
+    // 		</div>
+    // 	)
+    // }
 
-
-    var SidebarCourseArea = function SidebarCourseArea(_ref2) {
-      var courseID = _ref2.courseID;
-      console.log('course?', courseID, courseDetails);
-      var course = courseDetails[props.courseID];
-      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("div", {
-        className: "sidebar-course-card"
-      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("img", {
-        src: course.imageUrl,
-        alt: ""
-      }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("div", {
-        className: "course-card-body"
-      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("p", {
-        className: "body-text"
-      }, course.description), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("a", {
-        className: "course-url-button",
-        href: course.courseUrl
-      }, 'Get it now!')));
-    };
 
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("div", (0,_babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__.default)({}, blockProps, {
       className: className
@@ -1237,27 +1199,11 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
       name: "sidebar-course-slots",
       title: __("Video sidebar course slots"),
       className: "sidebar-course-slots-panel"
-    }, courseDetails && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(PanelRow, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(SelectControl, {
-      id: "first-course-slot",
-      label: __('Sidebar course 1'),
-      value: sidebarCourseSlotOne,
-      options: courseOptions,
-      onChange: function onChange(newValue) {
-        return handleCourseChange(newValue, 'first-course-slot');
-      }
-    })), courseDetails && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(PanelRow, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(SelectControl, {
-      id: "second-course-slot",
-      label: __('Sidebar course 2'),
-      value: sidebarCourseSlotTwo,
-      options: courseOptions,
-      onChange: function onChange(newValue) {
-        return handleCourseChange(newValue, 'second-course-slot');
-      }
-    }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(PluginDocumentSettingPanel, {
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(PluginDocumentSettingPanel, {
       name: "song-difficulty-attributes",
       title: __('Song difficulty'),
       className: "song-difficulty-panel"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(PanelRow, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(TextControl, {
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(PanelRow, null, postMeta && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(TextControl, {
       label: __('Enter a number from 1 to 50'),
       value: postMeta.song_difficulty,
       onChange: function onChange(newValue) {
@@ -1271,7 +1217,7 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
       name: "contains-only-one-barre-chord",
       title: __('Contains only one barre chord'),
       className: "contains-only-one-barre-chord-panel"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(PanelRow, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(ToggleControl, {
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(PanelRow, null, postMeta && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(ToggleControl, {
       label: __('One barre chord song'),
       checked: postMeta.contains_one_barre,
       onChange: function onChange(newValue) {
@@ -1342,19 +1288,15 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
       allowfullscreen: true
     }), (sidebarCourseSlotOne > 0 || sidebarCourseSlotTwo > 0) && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("div", {
       className: "course-sidebar"
-    }, sidebarCourseSlotOne > 0 && has(courseDetails, courseID) && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(SidebarCourseArea, {
-      courseID: sidebarCourseSlotOne
-    }), sidebarCourseSlotTwo > 0 && has(courseDetails, courseID) && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(SidebarCourseArea, {
-      courseID: sidebarCourseSlotTwo
-    }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("div", {
+    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("div", {
       className: "post-content-video-description"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(InnerBlocks, null))) : (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("span", {
       className: "empty-post-body-msg"
     }, __('Submit URL to populate post body.'))));
   },
-  save: function save(_ref3) {
-    var attributes = _ref3.attributes,
-        className = _ref3.className;
+  save: function save(_ref2) {
+    var attributes = _ref2.attributes,
+        className = _ref2.className;
     var videoURL = attributes.videoURL,
         videoDescription = attributes.videoDescription;
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)("div", {
@@ -1446,8 +1388,8 @@ var getCtaDataFromPosts = function getCtaDataFromPosts(ctaPosts) {
       title: ctaPost.title.raw,
       description: ctaAtts.description,
       url: ctaAtts.url,
-      mediaId: ctaAtts.imageId,
-      mediaUrl: ctaAtts.imageUrl
+      imageId: ctaAtts.imageId,
+      imageUrl: ctaAtts.imageUrl
     };
   });
 };
