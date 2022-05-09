@@ -3,13 +3,24 @@
 	border: 1px solid $grey;
 	border-radius: 3px;
 	display: flex;
+	flex-direction: column;
+	margin-top: 28px;
+	margin-bottom: 28px;
+
+	@media screen and (min-width: 800px) {
+		flex-direction: row;
+	}
 
 	.image-container {
-		max-width: 30%;
+		max-width: 100%;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
+
+		@media screen and (min-width: 800px) {
+			max-width: 35%;
+		}
 
 		button {
 			background: none;
@@ -22,6 +33,13 @@
 	.details-container {
 		margin-left: 1rem;
 		flex-grow: 1;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+
+		p {
+			margin-bottom: 5%;
+		}
 
 		.button-text-input {
 			max-width: 50%;
@@ -29,7 +47,13 @@
 
 		// Appears on frontend.
 		.cta-button {
+			cursor: pointer;
 			align-self: center;
+			padding: 0.75rem 1rem;
+			border: none;
+			border-radius: 2px;
+			color: $white;
+			background: $gg-blue;
 		}
 	}
 }

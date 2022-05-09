@@ -8,14 +8,13 @@ class Setup
      * register default hooks and actions for WordPress
      * @return
      */
-    public function register()
-    {
-        add_action( 'after_setup_theme', array( $this, 'setup' ) );
-        add_action( 'after_setup_theme', array( $this, 'content_width' ), 0);
+    public function register() {
+        add_action( 'after_setup_theme', [ $this, 'setup' ] );
+        add_action( 'after_setup_theme', [ $this, 'content_width' ], 0);
+		add_filter( 'wp_headers', [ $this, 'wp_headers' ], 10 );
     }
 
-    public function setup()
-    {
+    public function setup() {
         /*
          * You can activate this if you're planning to build a multilingual theme
          */
@@ -66,8 +65,40 @@ class Setup
     /*
         Define a max content width to allow WordPress to properly resize your images
     */
-    public function content_width()
-    {
+    public function content_width() {
         $GLOBALS[ 'content_width' ] = apply_filters( 'content_width', 1440 );
     }
+
+	/**
+	 * Security headers settings in wordpress.
+	 * For example, allows for certain sources within iframes.
+	 *
+	 * @param	array	$headers	Existing security headers passed from the wp_headers hook.
+	 * @return	array
+	 */
+	public function wp_headers( array $headers ): array {
+        $csp         = '';
+        $csp_initial = [
+            'upgrade-insecure-requests',
+            'frame-ancestors' => "'self'",
+            'default-src'     => "'self' *.twitter.com *.twimg.com",
+            'font-src'        => "'self' 'unsafe-inline' data:",
+            'media-src'       => "'self' 'unsafe-inline'",
+            'style-src'       => "'self' 'unsafe-inline' *.twitter.com *.twimg.com",
+            'connect-src'     => "'self'",
+            'frame-src'       => "'self' *.twitter.com youtube.com *.youtube.com youtu.be",
+            'script-src'      => "'self' 'unsafe-inline' 'unsafe-eval' *.twimg.com *.twitter.com",
+            'img-src'         => "'self' data: *.twimg.com *.twitter.com",
+        ];
+        foreach ( $csp_initial as $directive => $rule ) {
+            $csp .= sprintf(
+                ' %s %s; ',
+                is_string( $directive ) ? $directive : '',
+                $rule
+            );
+        }
+        $headers['Content-Security-Policy']   = trim( $csp );
+        $headers['Strict-Transport-Security'] = 'max-age=10886400; preload';
+        return $headers;
+	}
 }

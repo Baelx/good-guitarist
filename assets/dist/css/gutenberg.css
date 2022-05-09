@@ -148,13 +148,26 @@
   border: 1px solid #818181;
   border-radius: 3px;
   display: flex;
+  flex-direction: column;
+  margin-top: 28px;
+  margin-bottom: 28px;
+}
+@media screen and (min-width: 800px) {
+  .small-cta, .wp-block-gutenberg-good-guitarist-small-cta {
+    flex-direction: row;
+  }
 }
 .small-cta .image-container, .wp-block-gutenberg-good-guitarist-small-cta .image-container {
-  max-width: 30%;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+@media screen and (min-width: 800px) {
+  .small-cta .image-container, .wp-block-gutenberg-good-guitarist-small-cta .image-container {
+    max-width: 35%;
+  }
 }
 .small-cta .image-container button, .wp-block-gutenberg-good-guitarist-small-cta .image-container button {
   background: none;
@@ -165,12 +178,24 @@
 .small-cta .details-container, .wp-block-gutenberg-good-guitarist-small-cta .details-container {
   margin-left: 1rem;
   flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.small-cta .details-container p, .wp-block-gutenberg-good-guitarist-small-cta .details-container p {
+  margin-bottom: 5%;
 }
 .small-cta .details-container .button-text-input, .wp-block-gutenberg-good-guitarist-small-cta .details-container .button-text-input {
   max-width: 50%;
 }
 .small-cta .details-container .cta-button, .wp-block-gutenberg-good-guitarist-small-cta .details-container .cta-button {
+  cursor: pointer;
   align-self: center;
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 2px;
+  color: #fff;
+  background: #0872bb;
 }
 
 *[data-type="gutenberg-good-guitarist/large-course-card"] {
