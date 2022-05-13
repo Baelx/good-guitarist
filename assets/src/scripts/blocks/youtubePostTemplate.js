@@ -233,7 +233,7 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 		 */
 		const handleFetchResponse = (response) => {
 			try {
-				dispatch('core/editor').insertBlocks([], 0, clientId);
+				dispatch('core/editor').replaceBlock(clientId, []);
 
 				const fetchedTitle = response.result.items[0].snippet.title;
 				const fetchedDescription = response.result.items[0].snippet.description;

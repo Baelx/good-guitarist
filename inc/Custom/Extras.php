@@ -30,13 +30,4 @@ class Extras
 
 		return $classes;
 	}
-
-	/**
-	 * Will this work in the backend? I think it needs to be a different hook.
-	 *
-	 */
-	public function additional_headers( $headers ) {
-		$headers['X-Frame-Options'] = 'ALLOW-FROM https://youtube.com';
-		return $headers;
-	}
 }

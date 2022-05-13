@@ -16,6 +16,7 @@ class PostTypes {
 		add_action( 'init', [ $this, 'custom_post_type' ], 10 , 4 );
 		add_action( 'after_switch_theme', [ $this, 'rewrite_flush' ] );
         add_filter( 'register_post_type_args', [ $this, 'register_post_type_args' ], 10, 2 );
+		add_filter( 'the_content', [ $this, 'youtube_post_content' ] );
 	}
 
   /**
@@ -234,6 +235,51 @@ class PostTypes {
 			}
 		}
 		return $post_terms;
+	}
+
+	/**
+	 * Add the term pills markup to the beginning of the youtube post content
+	 * and append related posts markup on the end of it.
+	 *
+	 * @param	string	$content	The post content.
+	 * @return	string
+	 */
+	public function youtube_post_content( string $content ): string {
+		if ( 'youtube-post' === get_post_type() ) {
+			$term_pills_markup = $this->get_term_pills_markup();
+			$related_posts_markup = $this->get_related_posts_markup();
+
+			return sprintf( '%s%s%s', $term_pills_markup, $content, $related_posts_markup );
+		} else {
+			return $content;
+		}
+	}
+
+	/**
+	 * Get the term pills markup.
+	 *
+	 * @return	string
+	 */
+	public function get_term_pills_markup(): string {
+		$taxonomies = self::get_single_youtube_post_terms_and_meta( get_the_ID() );
+		ob_start();
+		include get_template_directory() . '/views/partials/ypt-pills.php';
+		return ob_get_clean();
+	}
+
+	/**
+	 * Get related posts markup.
+	 *
+	 * @return	string
+	 */
+	public function get_related_posts_markup(): string {
+		$related_posts = self::get_related_posts( get_the_ID(), 'genre', 5 );
+		foreach($related_posts as $post) {
+			$post->atts = self::get_block_attributes_from_post_content( $post->post_content, 'gutenberg-good-guitarist/ypt' );
+		}
+		ob_start();
+		include get_template_directory() . '/views/partials/related-posts.php';
+		return ob_get_clean();
 	}
 
 	/**

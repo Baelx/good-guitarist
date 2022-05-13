@@ -88,7 +88,7 @@ class Setup
             'connect-src'     => "'self'",
             'frame-src'       => "'self' *.twitter.com youtube.com *.youtube.com youtu.be",
             'script-src'      => "'self' 'unsafe-inline' 'unsafe-eval' *.twimg.com *.twitter.com",
-            'img-src'         => "'self' data: *.twimg.com *.twitter.com",
+            'img-src'         => "*",
         ];
         foreach ( $csp_initial as $directive => $rule ) {
             $csp .= sprintf(

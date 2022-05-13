@@ -1080,7 +1080,7 @@ registerBlockType('gutenberg-good-guitarist/ypt', {
 
     var handleFetchResponse = function handleFetchResponse(response) {
       try {
-        dispatch('core/editor').insertBlocks([], 0, clientId);
+        dispatch('core/editor').replaceBlock(clientId, []);
         var fetchedTitle = response.result.items[0].snippet.title;
         var fetchedDescription = response.result.items[0].snippet.description;
         var fetchedThumbnail = response.result.items[0].snippet.thumbnails.medium.url;

@@ -1,16 +1,6 @@
 <?php
 use GoodGuitarist\Custom\PostTypes;
 
-$upper_slot_courses = [];
-if ( $atts['courseSlotOne'] ?? false ) {
-	$upper_slot_courses[] = PostTypes::get_course_details( $atts['courseSlotOne'] );
-}
-if ( $atts['courseSlotTwo'] ?? false ) {
-	$upper_slot_courses[] = PostTypes::get_course_details( $atts['courseSlotTwo'] );
-}
-$youtube_iframe_class = empty( $upper_slot_courses ) ? "no-upper-courses" : "";
-$taxonomies = PostTypes::get_single_youtube_post_terms_and_meta( get_the_ID() );
-$related_posts = PostTypes::get_related_posts( get_the_ID(), 'genre', 5 );
 var_dump($atts);
 foreach($related_posts as $post) {
 	$post->atts = PostTypes::get_block_attributes_from_post_content( $post->post_content, 'gutenberg-good-guitarist/ypt' );
