@@ -1,3 +1,4 @@
 node_modules/
 vendor/
 youtube-api-config.js
+package-lock.json

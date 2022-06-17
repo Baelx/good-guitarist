@@ -45,8 +45,7 @@ class Customizer
 	 *
 	 * @param WP_Customize_Manager $wp_customize Theme Customizer object.
 	 */
-	public function setup( $wp_customize )
-	{
+	public function setup( $wp_customize ) {
 		foreach ( $this->get_classes() as $class ) {
 			$service = new $class;
 			if ( method_exists( $class, 'register') ) {

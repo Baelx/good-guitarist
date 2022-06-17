@@ -2,7 +2,7 @@
 	"name": "baelx/good-guitarist",
 	"description": "Good Guitarist Theme",
 	"license": "GPL-3.0",
-	"version": "4.0.0",
+	"version": "1.0.0",
 	"authors": [
 		{
 			"name": "Alexander Wintschel",
@@ -27,5 +27,10 @@
 		"test": ["@phpcs", "@parallel-lint"],
 		"phpcs": "phpcs",
 		"parallel-lint": "parallel-lint --blame --exclude vendor/ ."
+	},
+	"config": {
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		}
 	}
 }

@@ -133,7 +133,7 @@ class PostTypes {
 
 		if ( 'course' === $post_type ) {
 			$args['template'] = [
-				[ 'gutenberg-good-guitarist/course-template', [] ]
+				[ 'gutenberg-good-guitarist/cta-template', [] ]
 			];
 		}
 
