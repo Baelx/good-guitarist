@@ -13,7 +13,6 @@ class Extras
      */
 	public function register() {
 		add_filter( 'body_class', array( $this, 'body_class' ) );
-		add_filter( 'wp_headers', array( $this, 'additional_headers' ) );
 	}
 
 	public function body_class( $classes )

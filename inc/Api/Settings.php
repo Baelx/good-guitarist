@@ -83,7 +83,7 @@ class Settings {
 				[
 				'page_title' => __( 'Good Guitarist Settings' ),
 				'menu_title' => __( 'GG Settings' ),
-				'capability' => 'admin',
+				'capability' => 'manage_options',
 				'menu_slug' => 'good_guitarist_settings',
 				'callback' => [ $this, 'admin_page_render' ],
 				'icon_url' => 'dashicons-admin-generic',
@@ -334,7 +334,7 @@ class Settings {
 		foreach( $this->settings as $setting ) {
 			register_setting( $setting["option_group"], $setting["option_name"], ( isset( $setting["callback"] ) ? $setting["callback"] : '' ) );
 		}
-
+		
 		foreach( $this->sections as $section ) {
 			add_settings_section( $section["id"], $section["title"], ( isset( $section["callback"] ) ? $section["callback"] : '' ), $section["page"] );
 		}
