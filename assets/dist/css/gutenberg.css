@@ -1,6 +1,5 @@
 @charset "UTF-8";
-/** Variables, mixins, etc. **/
-/*-------------------------
+/** Variables, mixins, etc. **/ /*-------------------------
 *  Grid
 *--------------------------*/
 /*-------------------------
@@ -220,7 +219,8 @@
 .large-course-card .lcc-image {
   max-height: 250px;
   width: auto;
-  object-fit: cover;
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 .large-course-card .lcc-body {
   font-size: 1rem;
@@ -341,7 +341,7 @@
 }
 [data-type="gutenberg-good-guitarist/ypt"] form .youtube-video-url .components-base-control__field input.block-editor-url-input__input {
   width: 100%;
-  border: 1px solid #88cce2;
+  border: 1px solid rgb(136, 204, 226);
   border-radius: 2px;
 }
 [data-type="gutenberg-good-guitarist/ypt"] form .yt-submit-button {
@@ -378,12 +378,12 @@
   transition: opacity 1s;
 }
 [data-type="gutenberg-good-guitarist/ypt"] .fetch-message-success {
-  color: #009100;
+  color: rgb(0, 145, 0);
   opacity: 100;
   transition: opacity 0.25s;
 }
 [data-type="gutenberg-good-guitarist/ypt"] .fetch-message-fail {
-  color: #b30000;
+  color: rgb(179, 0, 0);
   opacity: 100;
   transition: opacity 0.25s;
 }
@@ -415,7 +415,8 @@
 }
 [data-type="gutenberg-good-guitarist/ypt"] .post-body .youtube-post-video-area .course-sidebar .sidebar-course-card img {
   max-width: 50%;
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 [data-type="gutenberg-good-guitarist/ypt"] .post-body .youtube-post-video-area .course-sidebar .sidebar-course-card .course-card-body {
   padding-left: 1rem;
