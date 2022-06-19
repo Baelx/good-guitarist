@@ -4,7 +4,7 @@ const { parse } = wp.blockSerializationDefaultParser;
  * Parse 'gutenberg-good-guitarist/cta-template' block from a post.
  *
  * @param {array} ctaPost
- * @returns
+ * @returns {array}
  */
 const getCtaTemplateBlockFromPost = (ctaPost) => {
 	const parsedBlocks = parse(ctaPost.content.raw);
@@ -15,7 +15,7 @@ const getCtaTemplateBlockFromPost = (ctaPost) => {
  *  Format CTA data from a CTA post.
  *
  * @param {array} ctaPosts
- * @returns
+ * @returns {array}
  */
 export const getCtaDataFromPosts = (ctaPosts) => {
 	const validCtaPosts = ctaPosts.filter(ctaPost => {
@@ -25,9 +25,11 @@ export const getCtaDataFromPosts = (ctaPosts) => {
 	return validCtaPosts.map(ctaPost => {
 		const ctaAtts = getCtaTemplateBlockFromPost(ctaPost).attrs;
 		return {
+			id: ctaPost.id,
 			title: ctaPost.title.raw,
 			description: ctaAtts.description,
 			url: ctaAtts.url,
+			buttonText: ctaAtts.buttonText,
 			imageId: ctaAtts.imageId,
 			imageUrl: ctaAtts.imageUrl
 		}

@@ -1,12 +1,12 @@
 import { getCtaDataFromPosts } from '../utils';
+import { SidebarCta } from '../components/SidebarCta';
 const { registerBlockType, createBlock } = wp.blocks;
 const { TextControl, PanelRow, SelectControl, ToggleControl } = wp.components;
-const { RichText, useBlockProps, InnerBlocks } = wp.blockEditor;
+const { useBlockProps, InnerBlocks } = wp.blockEditor;
 const { PluginDocumentSettingPanel } = wp.editPost;
-const { useSelect, dispatch, useDispatch } = wp.data;
+const { select, useSelect, dispatch, useDispatch } = wp.data;
 const { useRef, useState, useEffect } = wp.element;
 const { __ } = wp.i18n;
-const { parse } = wp.blockSerializationDefaultParser;
 
 registerBlockType( 'gutenberg-good-guitarist/ypt', {
 	apiVersion: 2,
@@ -39,11 +39,11 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 			type: 'string',
 			default: ''
 		},
-		sidebarCourseSlotOne: {
+		sidebarCtaSlotOne: {
 			type: 'integer',
 			default: -1
 		},
-		sidebarCourseSlotTwo: {
+		sidebarCtaSlotTwo: {
 			type: 'integer',
 			default: -1
 		},
@@ -61,8 +61,8 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 			videoTitle,
 			videoThumbnail,
 			songTitle,
-			sidebarCourseSlotOne,
-			sidebarCourseSlotTwo
+			sidebarCtaSlotOne,
+			sidebarCtaSlotTwo
 		} = attributes;
 
 		const blockProps = useBlockProps();
@@ -76,70 +76,36 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 			if (!gutenbergVars.youtube_api_key) {
 				setErrorMessage({
 					class: 'fetch-message-fail',
-					message: 'Youtube API key not detected. Please ensure you have entered a valid API key in the "GG Settings" section.'
+					message: __('Youtube API key not detected. Please ensure you have entered a valid API key in the "GG Settings" section.')
 				});
 			}
 		}, []);
 
-		const createCourseDropdownOptions = () => {
-			const courseDetails = {};
-			const courseOptions = [{
+		const { postMeta, ctaData, ctaSelectOptions } = useSelect( ( select ) => {
+			const ctaPosts = select( 'core' ).getEntityRecords( 'postType', 'cta' );
+			let ctaData;
+			let ctaSelectOptions = [{
 				label: 'None',
 				value: -1
 			}];
-		}
-
-		const { postMeta } = useSelect( ( select ) => {
-			const ctaPosts = select( 'core' ).getEntityRecords( 'postType', 'cta' );
 			if (ctaPosts) {
-				const ctaData = getCtaDataFromPosts(ctaPosts);
-
+				ctaData = getCtaDataFromPosts(ctaPosts);
 				// Create dropdown options.
-				return ctaData.map((cta) => {
-					return {
-						title: cta.title,
-						onClick: () => setAttributes({
-							description: cta.description,
-							url: cta.url,
-							imageId: cta.imageId,
-							imageUrl: cta.imageUrl
-						})
-					}
+				ctaData.forEach((cta) => {
+					ctaSelectOptions.push({
+						label: cta.title,
+						value: cta.id,
+					});
 				});
 			}
-			// if (courses) {
-			// 	courses.forEach((course) => {
-			// 		const parsedBlocks = parse(course.content.raw);
-			// 		/**
-			// 		 * There may be multiple blocks in the course post.
-			// 		 *
-			// 		 * Find the course template block(which should be the first)
-			// 		 * and get its attributes.
-			// 		 */
-			// 		const courseTemplateBlock = parsedBlocks.find(block => 'gutenberg-good-guitarist/course-template' === block.blockName);
-			// 		const courseAtts = courseTemplateBlock.attrs;
-
-			// 		courseOptions.push({
-			// 			label: course.title.raw,
-			// 			value: parseInt(course.id),
-			// 		});
-			// 		// Keep separate courseDetail objects used to populate attributes.
-			// 		courseDetails[course.id] = {
-			// 			title: course.title.raw,
-			// 			description: courseAtts.courseDescription,
-			// 			url: courseAtts.courseUrl,
-			// 			imageId: courseAtts.imageId,
-			// 			imageUrl: courseAtts.imageUrl
-			// 		}
-			// 	})
-			// }
 
 			return {
 				postMeta: select( 'core/editor' ).getEditedPostAttribute( 'meta' ),
-				// courseDetails: courseDetails,
-				// courseOptions: courseOptions,
+				ctaData: ctaData,
+				ctaSelectOptions: ctaSelectOptions,
 			};
 		} );
+
 		if (postMeta) {
 			const { editPost } = useDispatch( 'core/editor', [ postMeta.difficulty ] );
 		}
@@ -233,7 +199,11 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 		 */
 		const handleFetchResponse = (response) => {
 			try {
-				dispatch('core/editor').replaceBlock(clientId, []);
+				// Remove old innerBlocks in post body.
+				const currentBlock = select( 'core/block-editor' ).getBlocksByClientId( clientId )[ 0 ];
+				const childBlocks = currentBlock.innerBlocks;
+				const childBlockIds = childBlocks.map( block => block.clientId );
+				dispatch( 'core/block-editor' ).removeBlocks( childBlockIds );
 
 				const fetchedTitle = response.result.items[0].snippet.title;
 				const fetchedDescription = response.result.items[0].snippet.description;
@@ -244,8 +214,8 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 				// Update the post title.
 				dispatch('core/editor').editPost({ title: fetchedTitle });
 
-				// Update post body.
-				dispatch('core/editor').insertBlocks(postBodyBlocks, 0, clientId);
+				// Update innerBlocks in post body.
+				dispatch('core/block-editor').insertBlocks(postBodyBlocks, 0, clientId);
 
 				// Set attributes from fetched video info.
 				setAttributes({
@@ -296,73 +266,29 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 			})
 		}
 
-		/**
-		 *
-		 * @param {*} newValue
-		 * @param {*} id
-		 */
-		const handleCourseChange = (newValue, id) => {
-			if ('first-course-slot' === id) {
-				console.log('it is set', newValue)
-				if ('None' !== newValue ) {
-					setAttributes({ sidebarCourseSlotOne: newValue })
-				} else {
-					setAttributes({ sidebarCourseSlotOne: 0})
-				}
-			}
-			if ('second-course-slot' === id) {
-				if ('None' !== newValue ) {
-					setAttributes({ sidebarCourseSlotTwo: newValue })
-				} else {
-					setAttributes({ sidebarCourseSlotTwo: 0})
-				}
-			}
-		}
-
-		/**
-		 *
-		 * @param {*} param0
-		 * @returns
-		 */
-		// const SidebarCourseArea = ({courseID}) => {
-		// 	console.log('course?', courseID, courseDetails)
-		// 	const course = courseDetails[props.courseID];
-		// 	return (
-		// 		<div className="sidebar-course-card">
-		// 			<img src={course.imageUrl} alt="" />
-		// 			<div className="course-card-body">
-		// 				<p className="body-text">{course.description}</p>
-		// 				<a className="course-url-button" href={course.courseUrl}>{'Get it now!'}</a>
-		// 			</div>
-		// 		</div>
-		// 	)
-		// }
-
 		return (
 			<div { ...blockProps } className={ className }>
 				<PluginDocumentSettingPanel
 					name="sidebar-course-slots"
-					title={__("Video sidebar course slots")}
+					title={__("Video sidebar CTA slots")}
 					className="sidebar-course-slots-panel"
 				>
-					{/* { courseDetails && <PanelRow>
-						<SelectControl
-							id="first-course-slot"
-							label={__('Sidebar course 1')}
-							value={sidebarCourseSlotOne}
-							options={courseOptions}
-							onChange={ (newValue) => handleCourseChange(newValue, 'first-course-slot') }
+					{ctaSelectOptions && <PanelRow>
+						 <SelectControl
+							label={__('Sidebar CTA slot 1')}
+							value={sidebarCtaSlotOne}
+							options={ctaSelectOptions}
+							onChange={(newValue) => setAttributes({ sidebarCtaSlotOne: Number(newValue) })}
 						/>
-					</PanelRow> }
-					{ courseDetails && <PanelRow>
-						<SelectControl
-							id="second-course-slot"
-							label={__('Sidebar course 2')}
-							value={sidebarCourseSlotTwo}
-							options={courseOptions}
-							onChange={ (newValue) => handleCourseChange(newValue, 'second-course-slot') }
+					</PanelRow>}
+					{ctaSelectOptions && <PanelRow>
+						 <SelectControl
+							label={__('Sidebar CTA slot 2')}
+							value={sidebarCtaSlotTwo}
+							options={ctaSelectOptions}
+							onChange={(newValue) => setAttributes({ sidebarCtaSlotTwo: Number(newValue) })}
 						/>
-					</PanelRow> } */}
+					</PanelRow>}
 				</PluginDocumentSettingPanel>
 				<PluginDocumentSettingPanel
 					name="song-difficulty-attributes"
@@ -418,10 +344,17 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 					<h2>{__('Post Body')}</h2>
 					{ videoID ? <>
 						<div className="youtube-post-video-area">
-							{ ( videoURL ) && <iframe width="560" height="715" src={videoURL} className={sidebarCourseSlotOne > 0 ? 'iframe-two-third-width' : 'iframe-full-width'} title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> }
-							{ ( sidebarCourseSlotOne > 0 || sidebarCourseSlotTwo > 0 ) && <div className="course-sidebar">
-								{/* { ( sidebarCourseSlotOne > 0 && has(courseDetails, courseID) ) && <SidebarCourseArea courseID={sidebarCourseSlotOne} />} */}
-								{/* { ( sidebarCourseSlotTwo > 0 && has(courseDetails, courseID) ) && <SidebarCourseArea courseID={sidebarCourseSlotTwo} />} */}
+							{ videoURL && <iframe width="560"
+													  height="715"
+													  src={videoURL}
+													  className={(sidebarCtaSlotOne > 0 || sidebarCtaSlotTwo > 0) ? 'iframe-two-third-width' : 'iframe-full-width'}
+													  title="YouTube video player"
+													  frameborder="0"
+													  allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+													  allowfullscreen></iframe> }
+							{ ( sidebarCtaSlotOne > 0 || sidebarCtaSlotTwo > 0 ) && <div className="course-sidebar">
+								{ ( sidebarCtaSlotOne > 0 && ctaData ) && <SidebarCta ctaId={sidebarCtaSlotOne} ctaData={ctaData} />}
+								{ ( sidebarCtaSlotTwo > 0 && ctaData ) && <SidebarCta ctaId={sidebarCtaSlotTwo} ctaData={ctaData} />}
 							</div> }
 						</div>
 						<div className="post-content-video-description">

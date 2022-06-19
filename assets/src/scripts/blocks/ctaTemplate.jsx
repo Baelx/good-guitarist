@@ -18,6 +18,10 @@ registerBlockType( 'gutenberg-good-guitarist/cta-template', {
 			type: 'string',
 			default: ''
 		},
+		buttonText: {
+			type: 'string',
+			default: ''
+		},
 		imageId: {
 			type: 'integer',
 			default: 0
@@ -28,7 +32,7 @@ registerBlockType( 'gutenberg-good-guitarist/cta-template', {
 		}
 	},
     edit({attributes, setAttributes}) {
-		const {url, description, imageId, imageUrl} = attributes;
+		const {url, description, buttonText, imageId, imageUrl} = attributes;
         const blockProps = useBlockProps();
 
 		const onSelectMedia = (newImage) => {
@@ -57,8 +61,13 @@ registerBlockType( 'gutenberg-good-guitarist/cta-template', {
                     value={url}
                     onChange={(newValue) => setAttributes({url: newValue})}
                 />
+				<TextControl
+                    label={__('Button text (if nothing is entered, button text will be "Click here")')}
+                    value={buttonText}
+                    onChange={(newValue) => setAttributes({buttonText: newValue})}
+                />
 				<div className="media-upload-component">
-					<label className="image-label">{__('Course Thumbnail')}</label>
+					<label className="image-label">{__('Call to action thumbnail (if no image is chosen, a default image will be used)')}</label>
 					{ imageUrl && <img className="course-image" src={imageUrl} /> }
 					<MediaUploadCheck>
 						<MediaUpload

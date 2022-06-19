@@ -1,3 +1,4 @@
+const { __ } = wp.i18n;
 const { registerBlockType } = wp.blocks;
 
 registerBlockType( 'gutenberg-good-guitarist/ypt-search', {
@@ -7,7 +8,10 @@ registerBlockType( 'gutenberg-good-guitarist/ypt-search', {
 	className: 'youtube-post-type-search',
 	attributes: {},
 	edit: () => (
-		<div>This is the search box for looking at.</div>
+		<>
+			<div>{__('A full page song search area will be rendered here.')}</div>
+			<small>{__("It's recommended that you only place one of these on your site on a page called 'Search'")}</small>
+		</>
 	),
 	save: () => null
 })

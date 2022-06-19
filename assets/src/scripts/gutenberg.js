@@ -1,11 +1,11 @@
 /**
  * Import your Gutenberg custom blocks here
  */
-require( './blocks/smallCta.js' );
-require( './blocks/largeCta.js' );
-require( './blocks/cover.js' );
-require( './blocks/ctaTemplate.js' );
-require( './blocks/group.js' );
-require( './blocks/latestLessons.js' );
-require( './blocks/youtubePostTemplate.js' );
-require( './blocks/yptSearch.js' );
+require( './blocks/smallCta.jsx' );
+require( './blocks/largeCta.jsx' );
+require( './blocks/cover.jsx' );
+require( './blocks/ctaTemplate.jsx' );
+require( './blocks/group.jsx' );
+require( './blocks/latestLessons.jsx' );
+require( './blocks/youtubePostTemplate.jsx' );
+require( './blocks/yptSearch.jsx' );
