@@ -1,5 +1,6 @@
 const { __ } = wp.i18n;
 const { registerBlockType } = wp.blocks;
+import { BlockEdit } from './BlockEdit';
 
 registerBlockType( 'gutenberg-good-guitarist/ypt-search', {
 	title: 'Youtube Post Search Box',
@@ -7,11 +8,6 @@ registerBlockType( 'gutenberg-good-guitarist/ypt-search', {
 	category: 'layout',
 	className: 'youtube-post-type-search',
 	attributes: {},
-	edit: () => (
-		<>
-			<div>{__('A full page song search area will be rendered here.')}</div>
-			<small>{__("It's recommended that you only place one of these on your site on a page called 'Search'")}</small>
-		</>
-	),
+	edit: BlockEdit,
 	save: () => null
 })

@@ -1,4 +1,5 @@
 const { parse } = wp.blockSerializationDefaultParser;
+const { createBlock } = wp.blocks;
 
 /**
  * Parse 'gutenberg-good-guitarist/cta-template' block from a post.
@@ -34,4 +35,39 @@ export const getCtaDataFromPosts = (ctaPosts) => {
 			imageUrl: ctaAtts.imageUrl
 		}
 	})
+}
+
+/**
+ * Check if string has http:// or https:// in it.
+ *
+ * @param {string} stringToCheck
+ */
+export const stringContainsLink = (stringToCheck) => {
+	const linkRegex = /(http:\/\/|https:\/\/).*/g;
+	let matchedLink = '';
+	if ( 'string' === typeof stringToCheck && stringToCheck?.search(linkRegex) >= 0 ) {
+		matchedLink = stringToCheck.match(linkRegex);
+	}
+	return matchedLink;
+}
+
+/**
+ * Create a gutenberg block for each paragraph of the fetched
+ * youtube description.
+ *
+ * @param {array} descriptionArray
+ * @returns
+ */
+export const createBlocksFromDescription = (descriptionArray) => {
+	const descriptionWithoutEmpties = descriptionArray.filter(description => description.length);
+	return descriptionWithoutEmpties.map(description => {
+		let matchedLink = stringContainsLink(description);
+		let blockType = 'core/paragraph';
+		let blockAtts = { content: description };
+		if (matchedLink) {
+			blockType = 'gutenberg-good-guitarist/small-cta';
+			blockAtts = { url: matchedLink, description: description }
+		}
+		return createBlock(blockType, blockAtts);
+	});
 }
