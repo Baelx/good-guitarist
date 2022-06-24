@@ -1,11 +1,11 @@
 .small-cta, .wp-block-gutenberg-good-guitarist-small-cta {
 	padding: 1rem;
-	border: 1px solid $grey;
 	border-radius: 3px;
 	display: flex;
 	flex-direction: column;
 	margin-top: 28px;
 	margin-bottom: 28px;
+	box-shadow: 1px 1px 3px $grey;
 
 	@media screen and (min-width: 800px) {
 		flex-direction: row;
@@ -47,6 +47,7 @@
 
 		// Appears on frontend.
 		.cta-button {
+            text-decoration: none;
 			cursor: pointer;
 			align-self: center;
 			padding: 0.75rem 1rem;

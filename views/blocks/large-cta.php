@@ -1,6 +1,6 @@
 <?php
 use GoodGuitarist\Custom\PostTypes;
-$course = PostTypes::get_course_details( $atts['selectedCourseId'] );
+$course = PostTypes::get_cta_details( $atts['selectedCourseId'] );
 
 // $course_img_src = ! empty( $atts['selectedCourseImageUrl'] ) ? $atts['selectedCourseImageUrl'] : '';
 ?>

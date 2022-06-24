@@ -66,6 +66,11 @@ export const BlockEdit = ({ clientId, attributes, className, setAttributes }) =>
         const { editPost } = useDispatch( 'core/editor', [ postMeta.difficulty ] );
     }
 
+    const handleSidebarToggle = (newValue) => {
+        const { description, imageUrl, url, buttonText } = ctaData.find(cta => cta.id === ctaId);
+        
+    }
+
     /**
      * Parse the youtube video ID from the URL.
      * Set the video URL and ID attributes.
@@ -210,7 +215,7 @@ export const BlockEdit = ({ clientId, attributes, className, setAttributes }) =>
                         label={__('Sidebar CTA slot 2')}
                         value={sidebarCtaSlotTwo}
                         options={ctaSelectOptions}
-                        onChange={(newValue) => setAttributes({ sidebarCtaSlotTwo: Number(newValue) })}
+                        onChange={handleSidebarToggle()}
                     />
                 </PanelRow>}
             </PluginDocumentSettingPanel>

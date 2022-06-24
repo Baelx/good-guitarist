@@ -1,3 +1,700 @@
-@charset "UTF-8";.checkbox{cursor:pointer;display:block;font-size:16px;margin-bottom:12px;padding-left:31px;position:relative;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.checkbox input{cursor:pointer;height:0;opacity:0;position:absolute;width:0}.checkmark{height:16px;left:3px;outline:2px solid #000;position:absolute;top:5px;width:16px}.checkbox input:checked~.checkmark{background-color:#000}.checkmark:after{color:#fff;content:"✓";display:none;left:50%;position:absolute;top:50%;transform:translate(-50%,-50%)}.checkbox input:checked~.checkmark:after,.radio{display:block}.radio{cursor:pointer;font-size:18px;margin-bottom:12px;padding-left:30px;position:relative;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.radio input{cursor:pointer;height:0;opacity:0;position:absolute;width:0}.dot{border:2px solid #000;border-radius:50%;height:18px;left:0;position:absolute;top:1px;width:18px}.radio input:checked~.dot{background-color:#fff}.radio input:focus~.dot{outline:4px solid #3b99fc;outline-offset:1px}.dot:after{background:#000;border-radius:50%;content:"";display:none;height:12px;left:50%;position:absolute;top:50%;transform:translate(-50%,-50%);width:12px}.radio input:checked~.dot:after{display:block}.wp-block{max-width:none}.dynamic-block-h2{color:#818181;font-style:italic}.small-cta,.wp-block-gutenberg-good-guitarist-small-cta{border:1px solid #818181;border-radius:3px;display:flex;flex-direction:column;margin-bottom:28px;margin-top:28px;padding:1rem}@media screen and (min-width:800px){.small-cta,.wp-block-gutenberg-good-guitarist-small-cta{flex-direction:row}}.small-cta .image-container,.wp-block-gutenberg-good-guitarist-small-cta .image-container{align-items:center;display:flex;flex-direction:column;justify-content:center;max-width:100%}@media screen and (min-width:800px){.small-cta .image-container,.wp-block-gutenberg-good-guitarist-small-cta .image-container{max-width:35%}}.small-cta .image-container button,.wp-block-gutenberg-good-guitarist-small-cta .image-container button{background:none;border:none;color:#0872bb;cursor:pointer}.small-cta .details-container,.wp-block-gutenberg-good-guitarist-small-cta .details-container{display:flex;flex-direction:column;flex-grow:1;justify-content:center;margin-left:1rem}.small-cta .details-container p,.wp-block-gutenberg-good-guitarist-small-cta .details-container p{margin-bottom:5%}.small-cta .details-container .button-text-input,.wp-block-gutenberg-good-guitarist-small-cta .details-container .button-text-input{max-width:50%}.small-cta .details-container .cta-button,.wp-block-gutenberg-good-guitarist-small-cta .details-container .cta-button{align-self:center;background:#0872bb;border:none;border-radius:2px;color:#fff;cursor:pointer;padding:.75rem 1rem}[data-type="gutenberg-good-guitarist/large-course-card"]{margin-left:0;max-width:400px}[data-type="gutenberg-good-guitarist/large-course-card"] .wp-block-gutenberg-good-guitarist-large-course-card{border:1px solid #717171;border-radius:4px;padding:2rem}.large-course-card{border-radius:3px;box-shadow:2px 2px 4px 1px #d2d2d2;display:flex;flex-direction:column;justify-content:space-between;min-height:500px;padding:10%}.large-course-card .lcc-image{max-height:250px;-o-object-fit:cover;object-fit:cover;width:auto}.large-course-card .lcc-body{font-size:1rem;min-height:80px}.large-course-card .lcc-button{align-self:center;background:#0872bb;border-radius:3px;color:#fff;display:inline-block;font-weight:700;padding:1rem}[data-type="gutenberg-good-guitarist/latest-lessons"]:first-of-type{border:1px solid #818181;border-radius:4px;text-align:center}.latest-lessons-block{display:flex;justify-content:center;padding:0 5%}.latest-lessons-block .lessons-carousel{overflow-x:hidden}.latest-lessons-block .lessons-carousel .lessons-container{white-space:nowrap}.latest-lessons-block .lessons-carousel .lessons-container .lesson-link{display:inline-block;margin:0 .5%;text-align:center;text-decoration:none;width:19%}.latest-lessons-block .lessons-carousel .lessons-container .lesson-link .lesson-thumbnail{width:100px}.latest-lessons-block .lessons-carousel .lessons-container .lesson-link .lesson-title{font-size:1rem}[data-type="core/cover"]{margin:0;padding:0 20%}.wp-block-cover{padding:0 20%}.wp-block-columns{flex-direction:column;margin-bottom:0}@media screen and (min-width:1000px){.wp-block-columns{flex-direction:row;margin-bottom:0}}.wp-block-columns .wp-block-column{margin-bottom:3rem;margin-left:0}@media screen and (min-width:1000px){.wp-block-columns .wp-block-column{margin-bottom:0}}.wp-block-group{padding:0 10%}.media-upload-component .image-label{display:block;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif;font-size:13px}.media-upload-component .course-image{display:block;height:auto;max-width:50%}.media-upload-component .select-image-button{background-color:#f0f0f0;border:2px dashed #818181;margin:.5rem 0;max-width:50%}.media-upload-component .button-hidden{display:none}[data-type="gutenberg-good-guitarist/ypt"]{border:1px solid #717171;border-radius:4px}[data-type="gutenberg-good-guitarist/ypt"] section{margin:0 1rem;padding:1rem 2rem}[data-type="gutenberg-good-guitarist/ypt"] section:first-of-type{border-bottom:2px solid #e6e6e6}[data-type="gutenberg-good-guitarist/ypt"] form{display:grid;grid-template-columns:auto 20%;margin-bottom:1rem}[data-type="gutenberg-good-guitarist/ypt"] form .youtube-video-url{width:100%}[data-type="gutenberg-good-guitarist/ypt"] form .youtube-video-url .components-base-control__field input.block-editor-url-input__input{border:1px solid #88cce2;border-radius:2px;width:100%}[data-type="gutenberg-good-guitarist/ypt"] form .yt-submit-button{background-color:#0872bb;border:none;border-radius:3px;color:#fff;cursor:pointer;margin-left:.5rem;padding:.5rem 1rem}[data-type="gutenberg-good-guitarist/ypt"] .youtube-post-label{display:block;font-size:13px;margin:8px 0}[data-type="gutenberg-good-guitarist/ypt"] input[type=text]{display:block;width:100%}[data-type="gutenberg-good-guitarist/ypt"] .components-base-control>div{display:flex;flex-wrap:wrap}[data-type="gutenberg-good-guitarist/ypt"] .components-base-control>div label{width:100%}[data-type="gutenberg-good-guitarist/ypt"] .fetch-message{display:block;height:35px}[data-type="gutenberg-good-guitarist/ypt"] .fetch-message-hidden{opacity:0;transition:opacity 1s}[data-type="gutenberg-good-guitarist/ypt"] .fetch-message-success{color:#009100;opacity:1;transition:opacity .25s}[data-type="gutenberg-good-guitarist/ypt"] .fetch-message-fail{color:#b30000;opacity:1;transition:opacity .25s}[data-type="gutenberg-good-guitarist/ypt"] .post-body .youtube-post-video-area{display:flex}[data-type="gutenberg-good-guitarist/ypt"] .post-body .youtube-post-video-area iframe{width:70%}[data-type="gutenberg-good-guitarist/ypt"] .post-body .youtube-post-video-area .iframe-full-width{width:100%}[data-type="gutenberg-good-guitarist/ypt"] .post-body .youtube-post-video-area .iframe-two-third-width{width:70%}[data-type="gutenberg-good-guitarist/ypt"] .post-body .youtube-post-video-area .course-sidebar{margin-left:1.5rem;width:30%}[data-type="gutenberg-good-guitarist/ypt"] .post-body .youtube-post-video-area .course-sidebar .sidebar-course-card{background-color:#f0f0f0;border-radius:3px;display:flex;height:40%;padding:3%}[data-type="gutenberg-good-guitarist/ypt"] .post-body .youtube-post-video-area .course-sidebar .sidebar-course-card:first-of-type{margin-bottom:7%}[data-type="gutenberg-good-guitarist/ypt"] .post-body .youtube-post-video-area .course-sidebar .sidebar-course-card img{max-width:50%;-o-object-fit:contain;object-fit:contain}[data-type="gutenberg-good-guitarist/ypt"] .post-body .youtube-post-video-area .course-sidebar .sidebar-course-card .course-card-body{display:flex;flex-direction:column;padding-left:1rem;width:100%}[data-type="gutenberg-good-guitarist/ypt"] .post-body .youtube-post-video-area .course-sidebar .sidebar-course-card .course-card-body .body-text{font-size:.9rem}[data-type="gutenberg-good-guitarist/ypt"] .post-body .youtube-post-video-area .course-sidebar .sidebar-course-card .course-card-body .course-url-button{align-self:center;background-color:#0872bb;border-radius:3px;color:#fff;padding:.5rem 1rem}[data-type="gutenberg-good-guitarist/ypt"] .post-body .post-content-video-description .post-body-course-area{margin:.75rem 0}[data-type="gutenberg-good-guitarist/ypt"] .post-body .post-content-video-description .post-body-course-area p{margin:0}[data-type="gutenberg-good-guitarist/ypt"] .post-body .post-content-video-description .post-body-course-area.no-course{background-color:#edf7fb;border:2px dashed #0872bb;padding:.5rem}[data-type="gutenberg-good-guitarist/ypt"] .post-body .post-content-video-description .post-body-course-area.course{border:1px solid #000}[data-type="gutenberg-good-guitarist/ypt"] .empty-post-body-msg{color:#818181;font-style:italic}.wp-block-gutenberg-good-guitarist-ypt .post-content-video-description{white-space:pre-wrap}#ypt-ajax-filter-search{display:flex;flex-direction:column;margin:1rem}@media (min-width:901px){#ypt-ajax-filter-search{flex-direction:row;height:90vh;min-height:700px}}#ypt-ajax-filter-search form{background-color:#e1f3f9;border-radius:6px;display:block;min-width:25%;width:100%;z-index:1}@media (min-width:901px){#ypt-ajax-filter-search form{max-height:100%;width:25%}}#ypt-ajax-filter-search form .search-text-section{display:flex;flex-direction:column;padding-top:1rem}@media (min-width:901px){#ypt-ajax-filter-search form .search-text-section{display:inherit;padding-bottom:2rem}}#ypt-ajax-filter-search form .search-text-section label{margin-left:1rem}#ypt-ajax-filter-search form .search-text-section #songSearchText{align-self:center;border:2px solid #000;border-radius:3px;display:block;padding:.5rem .5rem .5rem 1rem;width:80%}@media (min-width:901px){#ypt-ajax-filter-search form .search-text-section #songSearchText{margin-left:1rem;margin-top:1rem;width:85%}}#ypt-ajax-filter-search form .search-text-section .filters-expand-button{background:none;border:none;cursor:pointer;display:block;font-size:1.2rem;font-weight:700;margin:auto;padding-bottom:.75rem;padding-top:1.5rem;text-decoration:underline}@media (min-width:901px){#ypt-ajax-filter-search form .search-text-section .filters-expand-button{display:none}}#ypt-ajax-filter-search form .search-text-section .filters-expand-button span{font-size:1.5rem;height:inherit;text-decoration:none;transition:transform .5s ease-in-out;width:inherit}#ypt-ajax-filter-search form .search-label{color:#000;font-size:1.2rem;font-weight:700;padding:1rem 0}#ypt-ajax-filter-search form .search-filters-section{background-color:#edf7fb;display:block;height:0;max-height:300px;overflow-y:auto;transition:height .75s ease-in-out}@media (min-width:901px){#ypt-ajax-filter-search form .search-filters-section{height:inherit;max-height:65%}}#ypt-ajax-filter-search form .search-filters-section .search-filter{border:none;margin-left:1rem;padding:0 0 .75rem}#ypt-ajax-filter-search form .search-filters-section .search-filter label{font-size:1.1rem;margin-left:.1rem}#ypt-ajax-filter-search form .search-filters-section .search-filter .chord-filter-type-container{margin-bottom:1rem}#ypt-ajax-filter-search form .search-filters-section .search-filter .chord-filter-type-container label{display:inline}#ypt-ajax-filter-search form .search-filters-section .single-button-filters-container{margin-left:1rem;margin-top:1rem;padding:1rem 0}#ypt-ajax-filter-search form .search-filters-section .single-button-filters-container .single-button-filter-label{color:#000;font-size:1.2rem;font-weight:700}#ypt-ajax-filter-search form .search-button-area{background-color:#e1f3f9;display:flex;flex-direction:column}@media (min-width:901px){#ypt-ajax-filter-search form .search-button-area{display:inherit}}#ypt-ajax-filter-search form .search-button-area .search-btn{align-self:center;background-color:#fff;border:2px solid #000;margin:1rem;width:70%}#ypt-ajax-filter-search .song-search-results{display:flex;flex-direction:column;justify-content:space-around}#ypt-ajax-filter-search .song-search-results .search-results-count{display:flex;font-size:1.2rem;font-weight:700;justify-content:center;margin:1rem 0;padding-bottom:.5rem}@media (min-width:901px){#ypt-ajax-filter-search .song-search-results .search-results-count{border-bottom:2px solid #b3ecff;margin:0 33rem}}#ypt-ajax-filter-search .song-search-results .search-results-count .count{padding:0 .25rem}#ypt-ajax-filter-search .song-search-results .search-results-controls{display:flex;justify-content:space-between}#ypt-ajax-filter-search .song-search-results .search-results-controls button{background:none;border:none;border-bottom:2px solid #b3ecff;cursor:pointer;font-size:1.2rem;font-weight:700;margin:0 1rem}#ypt-ajax-filter-search .song-search-results .search-results-controls .search-results-page-count .current-page,#ypt-ajax-filter-search .song-search-results .search-results-controls .search-results-page-count .last-page{font-weight:700;padding:0 .25rem}#ypt-ajax-filter-search .song-search-results #ypt-ajax-search-results{display:grid;grid-template-columns:1fr;height:100%;list-style-type:none;margin-top:0;padding-left:0;padding-top:1rem}@media (min-width:601px){#ypt-ajax-filter-search .song-search-results #ypt-ajax-search-results{grid-template-columns:1fr 1fr}}@media (min-width:901px){#ypt-ajax-filter-search .song-search-results #ypt-ajax-search-results{grid-template-columns:1fr 1fr 1fr;grid-template-rows:1fr 1fr;padding-left:2rem;padding-top:0}}#ypt-ajax-filter-search .song-search-results #ypt-ajax-search-results .ypt-result{margin:1rem}#ypt-ajax-filter-search .song-search-results #ypt-ajax-search-results .ypt-result a{color:#000}#ypt-ajax-filter-search .song-search-results #ypt-ajax-search-results .ypt-result a img{max-width:inherit;width:100%}#ypt-ajax-filter-search .song-search-results #ypt-ajax-search-results .ypt-result a h3{font-size:1.1rem;line-height:1.3}
+@charset "UTF-8";
+/** Variables, mixins, etc. **/ /*-------------------------
+*  Grid
+*--------------------------*/
+/*-------------------------
+*  Spacing
+*--------------------------*/
+/*-------------------------
+*  Media Queries
+*--------------------------*/
+/*-------------------------
+*  Colours
+*--------------------------*/
+/*-------------------------
+*  Typography
+*--------------------------*/
+/*-------------------------
+*  Animations
+*--------------------------*/
+/** Adapted from the bcgov design system checkbox styles **/
+.checkbox {
+  display: block;
+  position: relative;
+  padding-left: 31px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 16px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
 
-/*# sourceMappingURL=gutenberg.css.map*/
+/* Hide the browser's default checkbox */
+.checkbox input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 5px;
+  left: 3px;
+  height: 16px;
+  width: 16px;
+  outline: 2px solid #000;
+}
+
+.checkbox input:checked ~ .checkmark {
+  background-color: #000;
+}
+
+.checkmark:after {
+  content: "✓";
+  color: #fff;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
+}
+
+.checkbox input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Customize the label (the container) */
+.radio {
+  display: block;
+  position: relative;
+  padding-left: 30px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 18px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default radio button */
+.radio input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom radio button */
+.dot {
+  position: absolute;
+  top: 1px;
+  left: 0;
+  height: 18px;
+  width: 18px;
+  border-radius: 50%;
+  border: 2px solid #000;
+}
+
+/* When the radio button is checked, add a blue background */
+.radio input:checked ~ .dot {
+  background-color: #ffffff;
+}
+
+/* Custom checkbox has blue outline when in focus */
+.radio input:focus ~ .dot {
+  outline: 4px solid #3B99FC;
+  outline-offset: 1px;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.dot:after {
+  content: "";
+  position: absolute;
+  display: none;
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #000;
+  transform: translate(-50%, -50%);
+}
+
+/* Show the indicator (dot/circle) when checked */
+.radio input:checked ~ .dot:after {
+  display: block;
+}
+
+/** All blocks **/
+.wp-block {
+  max-width: none;
+}
+
+.dynamic-block-h2 {
+  color: #818181;
+  font-style: italic;
+}
+
+.small-cta, .wp-block-gutenberg-good-guitarist-small-cta {
+  padding: 1rem;
+  border-radius: 3px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 28px;
+  margin-bottom: 28px;
+  box-shadow: 1px 1px 3px #818181;
+}
+@media screen and (min-width: 800px) {
+  .small-cta, .wp-block-gutenberg-good-guitarist-small-cta {
+    flex-direction: row;
+  }
+}
+.small-cta .image-container, .wp-block-gutenberg-good-guitarist-small-cta .image-container {
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+@media screen and (min-width: 800px) {
+  .small-cta .image-container, .wp-block-gutenberg-good-guitarist-small-cta .image-container {
+    max-width: 35%;
+  }
+}
+.small-cta .image-container button, .wp-block-gutenberg-good-guitarist-small-cta .image-container button {
+  background: none;
+  border: none;
+  color: #0872bb;
+  cursor: pointer;
+}
+.small-cta .details-container, .wp-block-gutenberg-good-guitarist-small-cta .details-container {
+  margin-left: 1rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.small-cta .details-container p, .wp-block-gutenberg-good-guitarist-small-cta .details-container p {
+  margin-bottom: 5%;
+}
+.small-cta .details-container .button-text-input, .wp-block-gutenberg-good-guitarist-small-cta .details-container .button-text-input {
+  max-width: 50%;
+}
+.small-cta .details-container .cta-button, .wp-block-gutenberg-good-guitarist-small-cta .details-container .cta-button {
+  text-decoration: none;
+  cursor: pointer;
+  align-self: center;
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 2px;
+  color: #fff;
+  background: #0872bb;
+}
+
+*[data-type="gutenberg-good-guitarist/large-course-card"] {
+  max-width: 400px;
+  margin-left: initial;
+}
+*[data-type="gutenberg-good-guitarist/large-course-card"] .wp-block-gutenberg-good-guitarist-large-course-card {
+  border: 1px solid #717171;
+  border-radius: 4px;
+  padding: 2rem 2rem;
+}
+
+.large-course-card {
+  border-radius: 3px;
+  padding: 10%;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 2px 4px 1px #d2d2d2;
+  min-height: 500px;
+  justify-content: space-between;
+}
+.large-course-card .lcc-image {
+  max-height: 250px;
+  width: auto;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.large-course-card .lcc-body {
+  font-size: 1rem;
+  min-height: 80px;
+}
+.large-course-card .lcc-button {
+  background: #0872bb;
+  color: white;
+  padding: 1rem;
+  display: inline-block;
+  align-self: center;
+  font-weight: bold;
+  border-radius: 3px;
+}
+
+*[data-type="gutenberg-good-guitarist/latest-lessons"]:first-of-type {
+  border: 1px solid #818181;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.latest-lessons-block {
+  display: flex;
+  justify-content: center;
+  padding: 0 5%;
+}
+.latest-lessons-block .lessons-carousel {
+  overflow-x: hidden;
+}
+.latest-lessons-block .lessons-carousel .lessons-container {
+  white-space: nowrap;
+}
+.latest-lessons-block .lessons-carousel .lessons-container .lesson-link {
+  width: 19%;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  margin: 0 0.5%;
+}
+.latest-lessons-block .lessons-carousel .lessons-container .lesson-link .lesson-thumbnail {
+  width: 100px;
+}
+.latest-lessons-block .lessons-carousel .lessons-container .lesson-link .lesson-title {
+  font-size: 1rem;
+}
+
+[data-type="core/cover"] {
+  margin: 0;
+  padding: 0 20%;
+}
+
+.wp-block-cover {
+  padding: 0 20%;
+}
+
+.wp-block-columns {
+  margin-bottom: 0;
+  flex-direction: column;
+}
+@media screen and (min-width: 1000px) {
+  .wp-block-columns {
+    margin-bottom: 0;
+    flex-direction: row;
+  }
+}
+.wp-block-columns .wp-block-column {
+  margin-bottom: 3rem;
+  margin-left: 0;
+}
+@media screen and (min-width: 1000px) {
+  .wp-block-columns .wp-block-column {
+    margin-bottom: 0;
+  }
+}
+
+.wp-block-group {
+  padding: 0 10%;
+}
+
+.media-upload-component .image-label {
+  display: block;
+  font-size: 13px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
+.media-upload-component .course-image {
+  max-width: 50%;
+  height: auto;
+  display: block;
+}
+.media-upload-component .select-image-button {
+  margin: 0.5rem 0;
+  max-width: 50%;
+  background-color: #f0f0f0;
+  border: 2px dashed #818181;
+}
+.media-upload-component .button-hidden {
+  display: none;
+}
+
+[data-type="gutenberg-good-guitarist/ypt"] {
+  border: 1px solid #717171;
+  border-radius: 4px;
+}
+[data-type="gutenberg-good-guitarist/ypt"] section {
+  margin: 0 1rem;
+  padding: 1rem 2rem;
+}
+[data-type="gutenberg-good-guitarist/ypt"] section:first-of-type {
+  border-bottom: 2px solid #e6e6e6;
+}
+[data-type="gutenberg-good-guitarist/ypt"] form {
+  display: grid;
+  grid-template-columns: auto 20%;
+  margin-bottom: 1rem;
+}
+[data-type="gutenberg-good-guitarist/ypt"] form .youtube-video-url {
+  width: 100%;
+}
+[data-type="gutenberg-good-guitarist/ypt"] form .youtube-video-url .components-base-control__field input.block-editor-url-input__input {
+  width: 100%;
+  border: 1px solid rgb(136, 204, 226);
+  border-radius: 2px;
+}
+[data-type="gutenberg-good-guitarist/ypt"] form .yt-submit-button {
+  cursor: pointer;
+  background-color: #0872bb;
+  border: none;
+  border-radius: 3px;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  margin-left: 0.5rem;
+}
+[data-type="gutenberg-good-guitarist/ypt"] .youtube-post-label {
+  display: block;
+  margin: 8px 0;
+  font-size: 13px;
+}
+[data-type="gutenberg-good-guitarist/ypt"] input[type=text] {
+  display: block;
+  width: 100%;
+}
+[data-type="gutenberg-good-guitarist/ypt"] .components-base-control > div {
+  display: flex;
+  flex-wrap: wrap;
+}
+[data-type="gutenberg-good-guitarist/ypt"] .components-base-control > div label {
+  width: 100%;
+}
+[data-type="gutenberg-good-guitarist/ypt"] .fetch-message {
+  height: 35px;
+  display: block;
+}
+[data-type="gutenberg-good-guitarist/ypt"] .fetch-message-hidden {
+  opacity: 0;
+  transition: opacity 1s;
+}
+[data-type="gutenberg-good-guitarist/ypt"] .fetch-message-success {
+  color: rgb(0, 145, 0);
+  opacity: 100;
+  transition: opacity 0.25s;
+}
+[data-type="gutenberg-good-guitarist/ypt"] .fetch-message-fail {
+  color: rgb(179, 0, 0);
+  opacity: 100;
+  transition: opacity 0.25s;
+}
+[data-type="gutenberg-good-guitarist/ypt"] .post-body .youtube-post-video-area {
+  display: flex;
+}
+[data-type="gutenberg-good-guitarist/ypt"] .post-body .youtube-post-video-area iframe {
+  width: 70%;
+}
+[data-type="gutenberg-good-guitarist/ypt"] .post-body .youtube-post-video-area .iframe-full-width {
+  width: 100%;
+}
+[data-type="gutenberg-good-guitarist/ypt"] .post-body .youtube-post-video-area .iframe-two-third-width {
+  width: 70%;
+}
+[data-type="gutenberg-good-guitarist/ypt"] .post-body .youtube-post-video-area .course-sidebar {
+  width: 30%;
+  margin-left: 1.5rem;
+}
+[data-type="gutenberg-good-guitarist/ypt"] .post-body .youtube-post-video-area .course-sidebar .sidebar-course-card {
+  display: flex;
+  padding: 3%;
+  background-color: #f0f0f0;
+  border-radius: 3px;
+  height: 40%;
+}
+[data-type="gutenberg-good-guitarist/ypt"] .post-body .youtube-post-video-area .course-sidebar .sidebar-course-card:first-of-type {
+  margin-bottom: 7%;
+}
+[data-type="gutenberg-good-guitarist/ypt"] .post-body .youtube-post-video-area .course-sidebar .sidebar-course-card img {
+  max-width: 50%;
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+[data-type="gutenberg-good-guitarist/ypt"] .post-body .youtube-post-video-area .course-sidebar .sidebar-course-card .course-card-body {
+  padding-left: 1rem;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+[data-type="gutenberg-good-guitarist/ypt"] .post-body .youtube-post-video-area .course-sidebar .sidebar-course-card .course-card-body .body-text {
+  font-size: 0.9rem;
+}
+[data-type="gutenberg-good-guitarist/ypt"] .post-body .youtube-post-video-area .course-sidebar .sidebar-course-card .course-card-body .course-url-button {
+  background-color: #0872bb;
+  border-radius: 3px;
+  color: white;
+  padding: 0.5rem 1rem;
+  align-self: center;
+}
+[data-type="gutenberg-good-guitarist/ypt"] .post-body .post-content-video-description .post-body-course-area {
+  margin: 0.75rem 0;
+}
+[data-type="gutenberg-good-guitarist/ypt"] .post-body .post-content-video-description .post-body-course-area p {
+  margin: 0;
+}
+[data-type="gutenberg-good-guitarist/ypt"] .post-body .post-content-video-description .post-body-course-area.no-course {
+  padding: 0.5rem;
+  border: 2px dashed #0872bb;
+  background-color: #edf7fb;
+}
+[data-type="gutenberg-good-guitarist/ypt"] .post-body .post-content-video-description .post-body-course-area.course {
+  border: 1px solid black;
+}
+[data-type="gutenberg-good-guitarist/ypt"] .empty-post-body-msg {
+  color: #818181;
+  font-style: italic;
+}
+
+.wp-block-gutenberg-good-guitarist-ypt .post-content-video-description {
+  white-space: pre-wrap;
+}
+
+#ypt-ajax-filter-search {
+  display: flex;
+  margin: 1rem;
+  flex-direction: column;
+}
+@media (min-width: 901px) {
+  #ypt-ajax-filter-search {
+    flex-direction: row;
+    min-height: 700px;
+    height: 90vh;
+  }
+}
+#ypt-ajax-filter-search form {
+  width: 100%;
+  min-width: 25%;
+  display: block;
+  background-color: #e1f3f9;
+  border-radius: 6px;
+  z-index: 1;
+}
+@media (min-width: 901px) {
+  #ypt-ajax-filter-search form {
+    width: 25%;
+    max-height: 100%;
+  }
+}
+#ypt-ajax-filter-search form .search-text-section {
+  display: flex;
+  flex-direction: column;
+  padding-top: 1rem;
+}
+@media (min-width: 901px) {
+  #ypt-ajax-filter-search form .search-text-section {
+    display: inherit;
+    padding-bottom: 2rem;
+  }
+}
+#ypt-ajax-filter-search form .search-text-section label {
+  margin-left: 1rem;
+}
+#ypt-ajax-filter-search form .search-text-section #songSearchText {
+  border: 2px solid #000;
+  border-radius: 3px;
+  padding: 0.5rem;
+  padding-left: 1rem;
+  display: block;
+  width: 80%;
+  align-self: center;
+}
+@media (min-width: 901px) {
+  #ypt-ajax-filter-search form .search-text-section #songSearchText {
+    margin-top: 1rem;
+    margin-left: 1rem;
+    width: 85%;
+  }
+}
+#ypt-ajax-filter-search form .search-text-section .filters-expand-button {
+  background: none;
+  border: none;
+  text-decoration: underline;
+  padding-top: 1.5rem;
+  padding-bottom: 0.75rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  display: block;
+  margin: auto;
+}
+@media (min-width: 901px) {
+  #ypt-ajax-filter-search form .search-text-section .filters-expand-button {
+    display: none;
+  }
+}
+#ypt-ajax-filter-search form .search-text-section .filters-expand-button span {
+  width: inherit;
+  height: inherit;
+  text-decoration: none;
+  font-size: 1.5rem;
+  transition: transform 0.5s ease-in-out;
+}
+#ypt-ajax-filter-search form .search-label {
+  font-weight: bold;
+  font-size: 1.2rem;
+  padding: 1rem 0;
+  color: #000;
+}
+#ypt-ajax-filter-search form .search-filters-section {
+  max-height: 300px;
+  display: block;
+  overflow-y: auto;
+  background-color: #edf7fb;
+  height: 0px;
+  transition: height 0.75s ease-in-out;
+}
+@media (min-width: 901px) {
+  #ypt-ajax-filter-search form .search-filters-section {
+    height: inherit;
+    max-height: 65%;
+  }
+}
+#ypt-ajax-filter-search form .search-filters-section .search-filter {
+  margin-left: 1rem;
+}
+#ypt-ajax-filter-search form .search-filters-section .search-filter {
+  border: none;
+  padding: 0;
+  padding-bottom: 0.75rem;
+}
+#ypt-ajax-filter-search form .search-filters-section .search-filter label {
+  font-size: 1.1rem;
+  margin-left: 0.1rem;
+}
+#ypt-ajax-filter-search form .search-filters-section .search-filter .chord-filter-type-container {
+  margin-bottom: 1rem;
+}
+#ypt-ajax-filter-search form .search-filters-section .search-filter .chord-filter-type-container label {
+  display: inline;
+}
+#ypt-ajax-filter-search form .search-filters-section .single-button-filters-container {
+  padding: 1rem 0;
+  margin-top: 1rem;
+  margin-left: 1rem;
+}
+#ypt-ajax-filter-search form .search-filters-section .single-button-filters-container .single-button-filter-label {
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: #000;
+}
+#ypt-ajax-filter-search form .search-button-area {
+  display: flex;
+  flex-direction: column;
+  background-color: #e1f3f9;
+}
+@media (min-width: 901px) {
+  #ypt-ajax-filter-search form .search-button-area {
+    display: inherit;
+  }
+}
+#ypt-ajax-filter-search form .search-button-area .search-btn {
+  width: 70%;
+  align-self: center;
+  margin: 1rem;
+  background-color: #fff;
+  border: 2px solid #000;
+}
+#ypt-ajax-filter-search .song-search-results {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+#ypt-ajax-filter-search .song-search-results .search-results-count {
+  display: flex;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 1rem 0;
+  padding-bottom: 0.5rem;
+}
+@media (min-width: 901px) {
+  #ypt-ajax-filter-search .song-search-results .search-results-count {
+    border-bottom: 2px solid #b3ecff;
+    margin: 0px 33rem;
+  }
+}
+#ypt-ajax-filter-search .song-search-results .search-results-count .count {
+  padding: 0 0.25rem;
+}
+#ypt-ajax-filter-search .song-search-results .search-results-controls {
+  display: flex;
+  justify-content: space-between;
+}
+#ypt-ajax-filter-search .song-search-results .search-results-controls button {
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-bottom: 2px solid #b3ecff;
+  margin: 0 1rem;
+}
+#ypt-ajax-filter-search .song-search-results .search-results-controls .search-results-page-count .current-page, #ypt-ajax-filter-search .song-search-results .search-results-controls .search-results-page-count .last-page {
+  font-weight: bold;
+  padding: 0 0.25rem;
+}
+#ypt-ajax-filter-search .song-search-results #ypt-ajax-search-results {
+  height: 100%;
+  margin-top: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  list-style-type: none;
+  padding-left: 0;
+  padding-top: 1rem;
+}
+@media (min-width: 601px) {
+  #ypt-ajax-filter-search .song-search-results #ypt-ajax-search-results {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (min-width: 901px) {
+  #ypt-ajax-filter-search .song-search-results #ypt-ajax-search-results {
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
+    padding-left: 2rem;
+    padding-top: 0;
+  }
+}
+#ypt-ajax-filter-search .song-search-results #ypt-ajax-search-results .ypt-result {
+  margin: 1rem;
+}
+#ypt-ajax-filter-search .song-search-results #ypt-ajax-search-results .ypt-result a {
+  color: black;
+}
+#ypt-ajax-filter-search .song-search-results #ypt-ajax-search-results .ypt-result a img {
+  width: 100%;
+  max-width: inherit;
+}
+#ypt-ajax-filter-search .song-search-results #ypt-ajax-search-results .ypt-result a h3 {
+  font-size: 1.1rem;
+  line-height: 1.3;
+}
+
+/** Components **/
+.sidebar-cta-card {
+  padding: 1rem;
+  box-shadow: 1px 1px 3px #818181;
+}
+.sidebar-cta-card .cta-card-body {
+  display: flex;
+  flex-direction: column;
+}
+.sidebar-cta-card .cta-card-body .cta-url-button {
+  text-decoration: none;
+  cursor: pointer;
+  align-self: center;
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 2px;
+  color: #fff;
+  background: #0872bb;
+}

@@ -1,14 +1,14 @@
 <?php
 use GoodGuitarist\Custom\PostTypes;
 
-var_dump($atts);
+// var_dump($atts);
 foreach($related_posts as $post) {
 	$post->atts = PostTypes::get_block_attributes_from_post_content( $post->post_content, 'gutenberg-good-guitarist/ypt' );
 }
 ?>
 <div className="youtube-post">
 	<h3 class="song-and-artist">
-		<span><?php esc_html_e( $taxonomies['artist'] ?? '' ); ?></span>
+		<span><?php esc_html_e( '' ); ?></span>
 		<?php if ( ( $taxonomies['artist'] ?? false ) && ( $atts['songtitle'] ?? false ) ): ?>
 			<span>-</span>
 		<?php endif; ?>

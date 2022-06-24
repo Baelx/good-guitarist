@@ -8,7 +8,7 @@ export const BlockSave = ({ attributes }) => {
             </div>
             <div className="details-container">
                 <p>{description}</p>
-                <button className="cta-button" href={url}>{buttonText}</button>
+                <a className="cta-button" href={url}>{buttonText}</a>
             </div>
         </div>
     )

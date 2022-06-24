@@ -141,12 +141,12 @@ class PostTypes {
 	}
 
 	/**
-	 * Get details for course post type by ID.
+	 * Get details for cta post type by ID.
 	 *
 	 * @param	array	$course_id	The ID of the course details to fetch.
 	 * @return	array
 	 */
-	public static function get_course_details( int $course_id ) {
+	public static function get_cta_details( int $course_id ) {
 		$course_details = [];
 		$course = get_post( $course_id );
 		if ($course) {
@@ -246,13 +246,29 @@ class PostTypes {
 	 */
 	public function youtube_post_content( string $content ): string {
 		if ( 'youtube-post' === get_post_type() ) {
+			$song_and_artist = $this->get_song_and_artist();
 			$term_pills_markup = $this->get_term_pills_markup();
 			$related_posts_markup = $this->get_related_posts_markup();
 
-			return sprintf( '%s%s%s', $term_pills_markup, $content, $related_posts_markup );
+			return sprintf( '%s%s%s%s', $song_and_artist, $term_pills_markup, $content, $related_posts_markup );
 		} else {
 			return $content;
 		}
+	}
+
+	/**
+	 * Get the song and artist for the youtube post.
+	 * 
+	 * @return	string
+	 */
+	public function get_song_and_artist(): string {
+		$taxonomies = self::get_single_youtube_post_terms_and_meta( get_the_ID() );
+		$artist = $taxonomies['artist'][0];
+		$ypt_post = get_post( get_the_ID() );
+		$atts = self::get_block_attributes_from_post_content( $ypt_post->post_content, 'gutenberg-good-guitarist/ypt' );
+		ob_start();
+		include get_template_directory() . '/views/partials/song-and-artist.php';
+		return ob_get_clean();
 	}
 
 	/**
