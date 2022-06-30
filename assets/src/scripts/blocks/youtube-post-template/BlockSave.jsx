@@ -1,4 +1,5 @@
 const { InnerBlocks } = wp.blockEditor;
+import { SidebarCta } from '../../components/SidebarCta';
 
 export const BlockSave = ({ attributes, className }) => {
     const {
@@ -14,14 +15,14 @@ export const BlockSave = ({ attributes, className }) => {
                 { videoInfoFetched && <iframe width="560"
                                             height="715"
                                             src={videoUrlEmbed}
-                                            className={(sidebarCtaSlotOne > 0 || sidebarCtaSlotTwo > 0) ? 'iframe-two-third-width' : 'iframe-full-width'}
+                                            className={(sidebarCtaSlotOne.id > 0 || sidebarCtaSlotTwo.id > 0) ? 'iframe-two-third-width' : 'iframe-full-width'}
                                             title="YouTube video player"
                                             frameborder="0"
                                             allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                             allowfullscreen></iframe> }
-                { ( sidebarCtaSlotOne > 0 || sidebarCtaSlotTwo > 0 ) && <div className="course-sidebar">
-                    { ( sidebarCtaSlotOne > 0 && ctaData ) && <SidebarCta ctaId={sidebarCtaSlotOne} ctaData={ctaData} />}
-                    { ( sidebarCtaSlotTwo > 0 && ctaData ) && <SidebarCta ctaId={sidebarCtaSlotTwo} ctaData={ctaData} />}
+                { ( sidebarCtaSlotOne.id > 0 || sidebarCtaSlotTwo.id > 0 ) && <div className="cta-sidebar">
+                    { sidebarCtaSlotOne.id > 0 && <SidebarCta cta={sidebarCtaSlotOne} />}
+                    { sidebarCtaSlotTwo.id > 0 && <SidebarCta cta={sidebarCtaSlotTwo} />}
                 </div> }
             </div>
             <div class={`youtube-post-type-video-description`}>

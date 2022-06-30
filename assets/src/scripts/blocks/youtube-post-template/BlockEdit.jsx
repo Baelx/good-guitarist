@@ -62,12 +62,15 @@ export const BlockEdit = ({ clientId, attributes, className, setAttributes }) =>
         };
     } );
 
-    if (postMeta) {
-        const { editPost } = useDispatch( 'core/editor', [ postMeta.difficulty ] );
-    }
-
-    const handleSidebarToggle = (newValue) => {
-        const { description, imageUrl, url, buttonText } = ctaData.find(cta => cta.id === ctaId);
+    const handleSidebarToggle = (sidebarSlot, ctaId) => {
+        if (ctaData) {
+            const numId = Number(ctaId);
+            const cta = ctaData.find(cta => cta.id === numId);
+            setAttributes({ [sidebarSlot]: {
+                id: numId,
+                ...cta
+            }});
+        }
         
     }
 
@@ -198,24 +201,24 @@ export const BlockEdit = ({ clientId, attributes, className, setAttributes }) =>
     return (
         <div { ...blockProps } className={ className }>
             <PluginDocumentSettingPanel
-                name="sidebar-course-slots"
+                name="sidebar-cta-slots"
                 title={__("Video sidebar CTA slots")}
-                className="sidebar-course-slots-panel"
+                className="sidebar-cta-slots-panel"
             >
                 {ctaSelectOptions && <PanelRow>
                      <SelectControl
                         label={__('Sidebar CTA slot 1')}
-                        value={sidebarCtaSlotOne}
+                        value={sidebarCtaSlotOne.id}
                         options={ctaSelectOptions}
-                        onChange={(newValue) => setAttributes({ sidebarCtaSlotOne: Number(newValue) })}
+                        onChange={(newValue) => handleSidebarToggle("sidebarCtaSlotOne", newValue)}
                     />
                 </PanelRow>}
                 {ctaSelectOptions && <PanelRow>
                      <SelectControl
                         label={__('Sidebar CTA slot 2')}
-                        value={sidebarCtaSlotTwo}
+                        value={sidebarCtaSlotTwo.id}
                         options={ctaSelectOptions}
-                        onChange={handleSidebarToggle()}
+                        onChange={(newValue) => handleSidebarToggle("sidebarCtaSlotTwo", newValue)}
                     />
                 </PanelRow>}
             </PluginDocumentSettingPanel>
@@ -228,7 +231,7 @@ export const BlockEdit = ({ clientId, attributes, className, setAttributes }) =>
                     {postMeta && <TextControl
                         label={__('Enter a number from 1 to 50')}
                         value={ postMeta.song_difficulty }
-                        onChange={ (newValue) => editPost({meta: { song_difficulty: newValue }}) }
+                        onChange={ (newValue) => dispatch('core/editor').editPost({meta: { song_difficulty: newValue }})}
                     />}
                 </PanelRow>
             </PluginDocumentSettingPanel>
@@ -241,7 +244,7 @@ export const BlockEdit = ({ clientId, attributes, className, setAttributes }) =>
                     {postMeta && <ToggleControl
                         label={__('One barre chord song')}
                         checked={ postMeta.contains_one_barre }
-                        onChange={ (newValue) => editPost({meta: { contains_one_barre: newValue }}) }
+                        onChange={ (newValue) => dispatch('core/editor').editPost({meta: { contains_one_barre: newValue }}) }
                     />}
                 </PanelRow>
             </PluginDocumentSettingPanel>
@@ -276,14 +279,14 @@ export const BlockEdit = ({ clientId, attributes, className, setAttributes }) =>
                         { videoInfoFetched && <iframe width="560"
                                                   height="715"
                                                   src={videoUrlEmbed}
-                                                  className={(sidebarCtaSlotOne > 0 || sidebarCtaSlotTwo > 0) ? 'iframe-two-third-width' : 'iframe-full-width'}
+                                                  className={(sidebarCtaSlotOne.id > 0 || sidebarCtaSlotTwo.id > 0) ? 'iframe-two-third-width' : 'iframe-full-width'}
                                                   title="YouTube video player"
                                                   frameborder="0"
                                                   allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                                   allowfullscreen></iframe> }
-                        { ( sidebarCtaSlotOne > 0 || sidebarCtaSlotTwo > 0 ) && <div className="course-sidebar">
-                            { ( sidebarCtaSlotOne > 0 && ctaData ) && <SidebarCta ctaId={sidebarCtaSlotOne} ctaData={ctaData} />}
-                            { ( sidebarCtaSlotTwo > 0 && ctaData ) && <SidebarCta ctaId={sidebarCtaSlotTwo} ctaData={ctaData} />}
+                        { ( sidebarCtaSlotOne.id > 0 || sidebarCtaSlotTwo.id > 0 ) && <div className="cta-sidebar">
+                            { sidebarCtaSlotOne.id > 0 && <SidebarCta cta={sidebarCtaSlotOne} />}
+                            { sidebarCtaSlotTwo.id > 0 && <SidebarCta cta={sidebarCtaSlotTwo} />}
                         </div> }
                     </div>
                     <div className="post-content-video-description">

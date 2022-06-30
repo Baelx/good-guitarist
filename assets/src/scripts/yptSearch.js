@@ -223,6 +223,7 @@ const searchFiltersMobile = () => {
 	const yptSearchBlock = $("#ypt-ajax-filter-search");
 	const yptSearchFiltersForm = yptSearchBlock.find("form");
 	const yptSearchResultsElement = yptSearchBlock.find("#ypt-ajax-search-results");
+	console.log('hello')
 
 	yptSearchFiltersForm.on('submit',(e) => {
 		const searchFormData = verifyAndReturnSearchFormData(yptSearchFiltersForm, songFilterCheckboxes);

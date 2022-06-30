@@ -98,48 +98,7 @@
 			}
 
 			.iframe-two-third-width {
-				width: 70%;
-			}
-
-			.course-sidebar {
-				width: 30%;
-				margin-left: 1.5rem;
-
-				.sidebar-course-card {
-					display: flex;
-					padding: 3%;
-					background-color: $light-grey;
-					border-radius: 3px;
-					height: 40%;
-
-					&:first-of-type {
-						margin-bottom: 7%;
-					}
-
-					img {
-						max-width: 50%;
-						object-fit: contain;
-					}
-
-					.course-card-body {
-						padding-left: 1rem;
-						display: flex;
-						flex-direction: column;
-						width: 100%;
-
-						.body-text {
-							font-size: 0.9rem;
-						}
-
-						.course-url-button {
-							background-color: $gg-blue;
-							border-radius: 3px;
-							color: white;
-							padding: 0.5rem 1rem;
-							align-self: center;
-						}
-					}
-				}
+				width: 75%;
 			}
 		}
 
@@ -176,7 +135,14 @@
 .wp-block-gutenberg-good-guitarist-ypt {
 	.post-content-video-description {
 		white-space: pre-wrap;
-
-
 	}
+
+}
+
+.cta-sidebar {
+	width: 25%;
+	margin-left: 1.5rem;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
 }

@@ -5,7 +5,8 @@ const { __ } = wp.i18n;
  * @param {*}
  * @returns {JSX}
  */
-export const SidebarCta = ({ctaId, ctaData}) => {
+export const SidebarCta = ({cta}) => {
+    const { description, imageUrl, url, buttonText } = cta;
     return (
         <div className="sidebar-cta-card">
             <img src={imageUrl || gutenbergVars.image_dir + '/good-guitarist-preview-img.png'} alt="" />

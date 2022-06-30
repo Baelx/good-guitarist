@@ -1,14 +1,29 @@
 .sidebar-cta-card {
     padding: 1rem;
 	box-shadow: 1px 1px 3px $grey;
+    display: flex;
+    flex-direction: column;
+
+    img {
+        max-height: 150px;
+        width: auto;
+        align-self: center;
+    }
 
     .cta-card-body {
         display: flex;
         flex-direction: column;
 
+        .body-text {
+            overflow: hidden;
+            max-height: 150px;
+            line-height: 1.2;
+            font-size: 1rem;
+        }
+
         .cta-url-button {
-            text-decoration: none;
             cursor: pointer;
+            text-decoration: none;
             align-self: center;
             padding: 0.75rem 1rem;
             border: none;

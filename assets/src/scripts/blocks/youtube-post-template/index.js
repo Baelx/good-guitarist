@@ -39,12 +39,12 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 			default: ''
 		},
 		sidebarCtaSlotOne: {
-			type: 'integer',
-			default: -1
+			type: 'object',
+			default: {},
 		},
 		sidebarCtaSlotTwo: {
-			type: 'integer',
-			default: -1
+			type: 'object',
+			default: {}
 		},
 		postBodyElements: {
 			type: 'array',
