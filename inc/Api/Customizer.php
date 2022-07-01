@@ -22,9 +22,9 @@ class Customizer
 	 */
 	public function register()
 	{
-		add_action( 'wp_head', array($this , 'output') );
-
-		add_action( 'customize_register', array( $this, 'setup' ) );
+		add_action( 'wp_head', [ $this , 'output' ] );
+		add_action( 'customize_register', [ $this, 'setup' ] );
+		add_action( 'after_setup_theme', [ $this, 'gg_custom_logo_setup' ] );
 	}
 
 	/**
@@ -90,7 +90,7 @@ class Customizer
 	}
 
 	/**
-	 * This will generate text for use inin selective refresh. If the setting
+	 * This will generate text for use in selective refresh. If the setting
 	 * ($mod_name) has no defined value, the text will not be output.
 	 *
 	 * @uses get_theme_mod()
@@ -105,5 +105,23 @@ class Customizer
 		if ( ! empty( $theme_mod ) ) {
 			return $theme_mod;
 		}
+	}
+
+	/**
+	 * Enable site logo support.
+	 * 
+	 * @return	void
+	 */
+	public function gg_custom_logo_setup() {
+		$defaults = array(
+			'height'               => 100,
+			'width'                => 400,
+			'flex-height'          => true,
+			'flex-width'           => true,
+			'header-text'          => [ 'good-guitarist', '' ],
+			'unlink-homepage-logo' => true, 
+		);
+	 
+		add_theme_support( 'custom-logo', $defaults );
 	}
 }

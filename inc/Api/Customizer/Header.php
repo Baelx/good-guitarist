@@ -8,6 +8,7 @@
 namespace GoodGuitarist\Api\Customizer;
 
 use WP_Customize_Color_Control;
+use WP_Customize_Media_Control;
 use GoodGuitarist\Api\Customizer;
 
 /**

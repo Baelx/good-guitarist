@@ -9,7 +9,7 @@
 
 get_header(); ?>
 
-<div class="search-results">
+<div class="search-results gutter-10">
 	<div id="primary" class="content-area">
 		<header>
 			<h1 class="page-title">

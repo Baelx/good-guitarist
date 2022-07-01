@@ -11,6 +11,7 @@
 
 $header_classes = 'site-header';
 $post = get_post();
+$custom_logo = wp_get_attachment_image_url( get_theme_mod( 'custom_logo', 0 ) );
 
 if ( has_blocks( $post->post_content ) ) {
     $blocks = parse_blocks( $post->post_content );
@@ -44,7 +45,7 @@ if ( has_blocks( $post->post_content ) ) {
 						<div class="site-branding">
 							<h1 class="site-title">
 								<a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home">
-									<img src="http://localhost:8000/wp-content/uploads/2021/04/gg-logo-retina.png">
+									<img src="<?php echo esc_url( $custom_logo ); ?>">
 								</a>
 							</h1>
 						</div><!-- .site-branding -->

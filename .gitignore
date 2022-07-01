@@ -1,5 +1,4 @@
-node_modules/
-vendor/
-youtube-api-config.js
+node_modules
 package-lock.json
+yarn.lock
 .vscode

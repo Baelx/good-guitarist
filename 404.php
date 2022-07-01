@@ -9,7 +9,7 @@
 
 get_header(); ?>
 
-<div class="container">
+<div class="container gutter-10">
 
 	<div class="row">
 
@@ -28,11 +28,6 @@ get_header(); ?>
 			</div><!-- #primary -->
 
 		</div><!-- .col- -->
-
-		<div class="col-sm-4">
-			<?php get_sidebar(); ?>
-		</div><!-- .col- -->
-
 	</div><!-- .row -->
 
 </div><!-- .container -->

@@ -14,7 +14,7 @@
 
 get_header(); ?>
 
-<div class="container">
+<div class="container gutter-10">
 
 	<div class="row">
 

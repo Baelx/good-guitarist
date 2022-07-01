@@ -1,3 +1,8 @@
+### July 1, 2022
+- Add custom logo support
+- Partial fix of homepage styling
+- Include vendor folder in project for easy deployment
+
 ### June 29, 2022
 - Fix sidebar cta styling and logic
 - Restore YPT search logic

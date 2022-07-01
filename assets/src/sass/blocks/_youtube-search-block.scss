@@ -34,6 +34,7 @@
 
 			label {
 				margin-left: 1rem;
+				display: inline-block;
 			}
 
 			#songSearchText {
@@ -48,7 +49,8 @@
 				@include atTablet {
 					margin-top: 1rem;
 					margin-left: 1rem;
-					width: 85%;
+					max-width: 85%;
+					width: inherit;
 				}
 			}
 
@@ -81,8 +83,13 @@
 		.search-label {
 			font-weight: bold;
 			font-size: 1.2rem;
-			padding: 1rem 0;
+			padding-top: 0.5rem;
 			color: $black;
+			align-self: center;
+
+			@include atTablet {
+				align-self: inherit;
+			}
 		}
 
 		.search-filters-section {
@@ -138,10 +145,6 @@
 			display: flex;
 			flex-direction: column;
 			background-color: $ypt-search-form-bg;
-
-			@include atTablet {
-				display: inherit;
-			}
 
 			.search-btn {
 				width: 70%;
@@ -206,6 +209,7 @@
 			list-style-type: none;
 			padding-left: 0;
 			padding-top: 1rem;
+			overflow: hidden;
 
 			@include atMobile {
 				grid-template-columns: 1fr 1fr;

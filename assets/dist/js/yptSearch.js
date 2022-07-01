@@ -1,2 +1,292 @@
-(()=>{"use strict";var e,t,r,n,a,o,s,i,c,l,u={567:e=>{e.exports=window.jQuery}},d={};function p(e){var t=d[e];if(void 0!==t)return t.exports;var r=d[e]={exports:{}};return u[e](r,r.exports,p),r.exports}e=p(567),t=p(567),r=lodash.chunk,n=function(e,t){var r={action:"ypt_ajax_filter_search",songSearchText:0!==e.find("#songSearchText").val().length?e.find("#songSearchText").val():null};return t&&t.forEach((function(e){r[e]=a(e)})),r},a=function(e){var t=[],r=document.querySelectorAll('#ypt-ajax-filter-search input[name="'.concat(e,'"]:checked'));return Array.prototype.forEach.call(r,(function(e){console.log("the element",e.id),"radio"===e.type?t=e.value:"checkbox"===e.type&&"contains-one-barre-chord"!==e.id?t.push(e.value):"contains-one-barre-chord"===e.id&&(t=e.checked)})),t},o=function(t,r){var n=e(".search-results-count .count");t&&e.ajax({url:YPTSEARCHAJAX.ajax_url,data:r,success:function(r){console.log(" the response is",r),t.empty(),n.each((function(){e(this).text(r.data.length)})),i(r.data,t)}})},s=function(e,t){e.forEach((function(e){var r="<li class='ypt-result' id='ypt-"+e.id+"'>";r+="  <a href='"+e.permalink+"' title='"+e.title+"'>",r+="\t   <img src='"+e.content[0].attrs.videoThumbnail+"' />",r+="      <div class='ypt-info'>",r+="          <h3>"+e.title+"</h3>",r+="      </div>",r+="  </a>",r+="</li>",t.append(r)}))},i=function(t,n,a){var o=e(".search-results-controls .previous-page"),i=e(".search-results-controls .next-page"),l=e(".search-results-page-count");if(o.prop("disabled",!1).css("cursor","pointer"),i.prop("disabled",!1).css("cursor","pointer"),l.find(".current-page").text("1"),l.find(".last-page").text("1"),n.empty(),t.length>=6){var u=r(t,6);l.find(".current-page").text("1"),l.find(".last-page").text(u.length),s(u[0],n),o.on("click",(function(e){var t=c(e.target,!1,u.length,l);n.empty(),s(u[t],n)})),i.on("click",(function(e){var t=c(e.target,!0,u.length,l);n.empty(),s(u[t],n)}))}else s(t,n),o.prop("disabled",!0).css("cursor","not-allowed"),i.prop("disabled",!0).css("cursor","not-allowed"),l.find(".current-page").text("1"),l.find(".last-page").text("1")},c=function(t,r,n,a){var o=e(t).parent().first().find(".search-results-page-count .current-page").first(),s=Number(o.data("page")),i=s+1;return r?s<n-1&&(a.find(".current-page").text(i+1),o.data("page",s+1)):s>0&&(a.find(".current-page").text(i-1),o.data("page",s-1)),o.data("page")},l=function(e){window.innerWidth<901?e.setAttribute("aria-expanded","false"):e.setAttribute("aria-expanded","true")},function(e){var t,r,a,s=["songDecade","songChords","songChordsFilterType","songGenre","songBeginner","songDifficulty","songContainsOneBarre"],i=e("#ypt-ajax-filter-search"),c=i.find("form"),u=i.find("#ypt-ajax-search-results");console.log("hello"),c.on("submit",(function(e){var t=n(c,s);console.log("form data",t),e.preventDefault(),o(u,t)})),t=document.querySelector(".filters-expand-button"),r=t.querySelector("span"),a=document.querySelector(".search-filters-section"),window.addEventListener("resize",(function(){l(),window.innerWidth<901?a.style.height="0px":a.style.height="450px"})),l(t),t.addEventListener("click",(function(e){e.preventDefault(),"true"===t.getAttribute("aria-expanded")?(a.style.height="0px",t.setAttribute("aria-expanded","false"),r.style.transform="rotate(0deg)"):"false"===t.getAttribute("aria-expanded")&&(a.style.height="450px",t.setAttribute("aria-expanded","true"),r.style.transform="rotate(180deg)")}));var d=n(c,null);o(u,d)}(t)})();
-//# sourceMappingURL=yptSearch.js.map
+/******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "jquery":
+/*!*************************!*\
+  !*** external "jQuery" ***!
+  \*************************/
+/***/ ((module) => {
+
+module.exports = window["jQuery"];
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+(() => {
+/*!*****************************************!*\
+  !*** ./assets/src/scripts/yptSearch.js ***!
+  \*****************************************/
+/* provided dependency */ var $ = __webpack_require__(/*! jquery */ "jquery");
+/* provided dependency */ var jQuery = __webpack_require__(/*! jquery */ "jquery");
+
+
+var _lodash = lodash,
+    chunk = _lodash.chunk;
+/**
+ * Add search action and verify the form checkboxes. Return their data.
+ *
+ * @param {HTMLElement} form
+ * @param {Array|null} songFilterCheckboxes
+ * @returns {array}
+ */
+
+var verifyAndReturnSearchFormData = function verifyAndReturnSearchFormData(form, songFilterCheckboxes) {
+  var formData = {
+    action: "ypt_ajax_filter_search",
+    songSearchText: 0 !== form.find("#songSearchText").val().length ? form.find("#songSearchText").val() : null
+  };
+
+  if (songFilterCheckboxes) {
+    songFilterCheckboxes.forEach(function (val) {
+      formData[val] = getCheckedSongFilters(val);
+    });
+  }
+
+  return formData;
+};
+/**
+ * Find all the checked song filters and return the selections.
+ *
+ * @param {string} inputName The name of the checkbox fieldset to get data from.
+ * @returns {Array}
+ */
+
+
+var getCheckedSongFilters = function getCheckedSongFilters(inputName) {
+  var value = [];
+  var inputs = document.querySelectorAll("#ypt-ajax-filter-search input[name=\"".concat(inputName, "\"]:checked"));
+  Array.prototype.forEach.call(inputs, function (element) {
+    console.log('the element', element.id);
+
+    if ('radio' === element.type) {
+      value = element.value;
+    } else if ('checkbox' === element.type && "contains-one-barre-chord" !== element.id) {
+      value.push(element.value);
+    } else if ("contains-one-barre-chord" === element.id) {
+      value = element.checked;
+    }
+  });
+  return value;
+};
+/**
+ * Send the AJAX request to the server. Check if the search results element
+ * can be found before making the request.
+ *
+ * @param {HTMLElement} yptSearchResultsElement
+ * @param {Object} searchFormData
+ * @returns {undefined}
+ */
+
+
+var sendAjaxRequest = function sendAjaxRequest(yptSearchResultsElement, searchFormData) {
+  var yptSearchResultsCountElement = $('.search-results-count .count');
+
+  if (yptSearchResultsElement) {
+    $.ajax({
+      // Global variable YPTSEARCHAJAX created by wp_inline_script().
+      url: YPTSEARCHAJAX.ajax_url,
+      data: searchFormData,
+      success: function success(response) {
+        console.log(" the response is", response);
+        yptSearchResultsElement.empty();
+        yptSearchResultsCountElement.each(function () {
+          $(this).text(response.data.length);
+        });
+        paginateSearchResults(response.data, yptSearchResultsElement);
+      }
+    });
+  }
+};
+/**
+ *
+ * @param {*} results
+ * @param {*} yptSearchResultsElement
+ */
+
+
+var populateSearchResults = function populateSearchResults(results, yptSearchResultsElement) {
+  results.forEach(function (post) {
+    var html = "<li class='ypt-result' id='ypt-" + post.id + "'>";
+    html += "  <a href='" + post.permalink + "' title='" + post.title + "'>";
+    html += "	   <img src='" + post.content[0].attrs.videoThumbnail + "' />";
+    html += "      <div class='ypt-info'>";
+    html += "          <h3>" + post.title + "</h3>";
+    html += "      </div>";
+    html += "  </a>";
+    html += "</li>";
+    yptSearchResultsElement.append(html);
+  });
+};
+/**
+ *
+ * @param {*} results
+ * @param {*} yptSearchResultsElement
+ */
+
+
+var paginateSearchResults = function paginateSearchResults(results, yptSearchResultsElement, yptSearchResultsCountElement) {
+  var resultsPerPage = 6;
+  var yptSearchPreviousPageButton = $('.search-results-controls .previous-page');
+  var yptSearchNextPageButton = $('.search-results-controls .next-page');
+  var yptSearchResultsPageCountElement = $('.search-results-page-count');
+  yptSearchPreviousPageButton.prop("disabled", false).css("cursor", "pointer");
+  yptSearchNextPageButton.prop("disabled", false).css("cursor", "pointer");
+  yptSearchResultsPageCountElement.find('.current-page').text('1');
+  yptSearchResultsPageCountElement.find('.last-page').text('1');
+  yptSearchResultsElement.empty();
+
+  if (results.length >= resultsPerPage) {
+    var chunkedResults = chunk(results, resultsPerPage);
+    yptSearchResultsPageCountElement.find('.current-page').text('1');
+    yptSearchResultsPageCountElement.find('.last-page').text(chunkedResults.length);
+    populateSearchResults(chunkedResults[0], yptSearchResultsElement, yptSearchResultsCountElement); // Event listeners for previous and next page buttons.
+
+    yptSearchPreviousPageButton.on('click', function (e) {
+      var newPageCount = updatePageCount(e.target, false, chunkedResults.length, yptSearchResultsPageCountElement);
+      yptSearchResultsElement.empty();
+      populateSearchResults(chunkedResults[newPageCount], yptSearchResultsElement, yptSearchResultsCountElement);
+    });
+    yptSearchNextPageButton.on('click', function (e) {
+      var newPageCount = updatePageCount(e.target, true, chunkedResults.length, yptSearchResultsPageCountElement);
+      yptSearchResultsElement.empty();
+      populateSearchResults(chunkedResults[newPageCount], yptSearchResultsElement, yptSearchResultsCountElement);
+    });
+  } else {
+    populateSearchResults(results, yptSearchResultsElement, yptSearchResultsCountElement);
+    yptSearchPreviousPageButton.prop("disabled", true).css("cursor", "not-allowed");
+    yptSearchNextPageButton.prop("disabled", true).css("cursor", "not-allowed");
+    yptSearchResultsPageCountElement.find('.current-page').text('1');
+    yptSearchResultsPageCountElement.find('.last-page').text('1');
+  }
+};
+/**
+ *
+ * @param {*} changePageButton
+ * @param {*} increasePage
+ * @param {*} pageCount
+ * @param {*} yptSearchResultsPageCountElement
+ * @returns
+ */
+
+
+var updatePageCount = function updatePageCount(changePageButton, increasePage, pageCount, yptSearchResultsPageCountElement) {
+  var $pageCountElement = $(changePageButton).parent().first().find('.search-results-page-count .current-page').first();
+  var currentPage = Number($pageCountElement.data('page'));
+  var humanCurrentPage = currentPage + 1;
+
+  if (increasePage) {
+    if (currentPage < pageCount - 1) {
+      yptSearchResultsPageCountElement.find('.current-page').text(humanCurrentPage + 1);
+      $pageCountElement.data('page', currentPage + 1);
+    }
+  } else if (currentPage > 0) {
+    yptSearchResultsPageCountElement.find('.current-page').text(humanCurrentPage - 1);
+    $pageCountElement.data('page', currentPage - 1);
+  }
+
+  return $pageCountElement.data('page');
+};
+/**
+ * Set aria-expanded attributes for mobile devices(less than 901px wide).
+ *
+ * @param {HTMLElement} buttonElement
+ */
+
+
+var setSearchFiltersAriaExpandedIfMobile = function setSearchFiltersAriaExpandedIfMobile(buttonElement) {
+  if (window.innerWidth < 901) {
+    buttonElement.setAttribute('aria-expanded', "false");
+  } else {
+    buttonElement.setAttribute('aria-expanded', "true");
+  }
+};
+/**
+ * Allow search filters to collapse and expand on mobile(less than 901px wide).
+ */
+
+
+var searchFiltersMobile = function searchFiltersMobile() {
+  var searchFiltersButtonElement = document.querySelector('.filters-expand-button');
+  var searchFiltersButtonArrowElement = searchFiltersButtonElement.querySelector('span');
+  var searchFiltersElement = document.querySelector('.search-filters-section');
+  window.addEventListener("resize", function () {
+    setSearchFiltersAriaExpandedIfMobile();
+
+    if (window.innerWidth < 901) {
+      searchFiltersElement.style.height = "0px";
+    } else {
+      searchFiltersElement.style.height = "450px";
+    }
+  });
+  setSearchFiltersAriaExpandedIfMobile(searchFiltersButtonElement);
+  searchFiltersButtonElement.addEventListener("click", function (e) {
+    e.preventDefault();
+
+    if ("true" === searchFiltersButtonElement.getAttribute("aria-expanded")) {
+      searchFiltersElement.style.height = "0px";
+      searchFiltersButtonElement.setAttribute('aria-expanded', "false");
+      searchFiltersButtonArrowElement.style.transform = "rotate(0deg)";
+    } else if ("false" === searchFiltersButtonElement.getAttribute("aria-expanded")) {
+      searchFiltersElement.style.height = "450px";
+      searchFiltersButtonElement.setAttribute('aria-expanded', "true");
+      searchFiltersButtonArrowElement.style.transform = "rotate(180deg)";
+    }
+  });
+};
+/**
+ * IIFE.
+ *
+ *
+ */
+
+
+(function ($) {
+  var songFilterCheckboxes = ['songDecade', 'songChords', 'songChordsFilterType', 'songGenre', 'songBeginner', 'songDifficulty', 'songContainsOneBarre'];
+  var yptSearchBlock = $("#ypt-ajax-filter-search");
+  var yptSearchFiltersForm = yptSearchBlock.find("form");
+  var yptSearchResultsElement = yptSearchBlock.find("#ypt-ajax-search-results");
+  console.log('hello');
+  yptSearchFiltersForm.on('submit', function (e) {
+    var searchFormData = verifyAndReturnSearchFormData(yptSearchFiltersForm, songFilterCheckboxes);
+    console.log('form data', searchFormData);
+    e.preventDefault();
+    sendAjaxRequest(yptSearchResultsElement, searchFormData);
+  });
+  searchFiltersMobile(); // Run request on page load for initial results.
+
+  var searchFormData = verifyAndReturnSearchFormData(yptSearchFiltersForm, null);
+  sendAjaxRequest(yptSearchResultsElement, searchFormData);
+})(jQuery);
+})();
+
+/******/ })()
+;
