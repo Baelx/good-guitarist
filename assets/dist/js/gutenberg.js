@@ -239,24 +239,24 @@ var BlockEdit = function BlockEdit(_ref) {
   var attributes = _ref.attributes,
       className = _ref.className,
       setAttributes = _ref.setAttributes;
-  var selectedCourseId = attributes.selectedCourseId;
-  var courseData = useSelect(function (select) {
-    return select('core').getEntityRecords('postType', 'course');
+  var selectedCtaId = attributes.selectedCtaId;
+  var ctaData = useSelect(function (select) {
+    return select('core').getEntityRecords('postType', 'cta');
   });
   var isLoading = useSelect(function (select) {
-    return select('core/data').isResolving('core', 'getEntityRecords', ['postType', 'course']);
+    return select('core/data').isResolving('core', 'getEntityRecords', ['postType', 'cta']);
   });
-  var courseOptions = [{
+  var ctaOptions = [{
     label: 'Select a call to action',
     value: null,
     "default": true
   }];
-  var courseDetails = {};
+  var ctaDetails = {};
 
-  if (courseData) {
-    courseData.forEach(function (course) {
-      if (course.id) {
-        var parsedBlocks = parse(course.content.raw);
+  if (ctaData) {
+    ctaData.forEach(function (cta) {
+      if (cta.id) {
+        var parsedBlocks = parse(cta.content.raw);
         /**
          * There may be multiple blocks in the course post.
          *
@@ -267,47 +267,50 @@ var BlockEdit = function BlockEdit(_ref) {
         var courseTemplateBlock = parsedBlocks.find(function (block) {
           return 'gutenberg-good-guitarist/course-template' === block.blockName;
         });
-        var courseAtts = courseTemplateBlock.attrs;
+        var ctaAtts = courseTemplateBlock.attrs;
 
-        if (courseAtts) {
+        if (ctaAtts) {
           // Create options for SelectControl.
           courseOptions.push({
             label: course.title.raw,
-            value: course.id
+            value: cta.id
           }); // Keep separate courseDetail objects used to populate attributes.
 
-          courseDetails[course.id] = {
-            title: course.title.raw,
-            description: courseAtts.courseDescription,
-            url: courseAtts.courseUrl,
-            imageId: courseAtts.imageId,
-            imageUrl: courseAtts.imageUrl
+          ctaDetails[cta.id] = {
+            title: cta.title.raw,
+            description: ctaAtts.courseDescription,
+            url: ctaAtts.courseUrl,
+            imageId: ctaAtts.imageId,
+            imageUrl: ctaAtts.imageUrl
           };
         }
       }
     });
   }
+  /**
+   * 
+   * @param {*} selectedCta
+   */
 
-  var handleCourseSelect = function handleCourseSelect(selectedCourse) {
-    console.log(courseDetails[selectedCourse].imageUrl);
 
-    if (selectedCourse in courseDetails) {
+  var handleCtaSelect = function handleCtaSelect(selectedCta) {
+    if (selectedCta in ctaDetails) {
       setAttributes({
-        selectedCourseId: parseInt(selectedCourse),
-        selectedCourseTitle: courseDetails[selectedCourse].title,
-        selectedCourseDesc: courseDetails[selectedCourse].description,
-        selectedCourseImageID: courseDetails[selectedCourse].image,
-        selectedCourseLink: courseDetails[selectedCourse].url,
-        selectedCourseImageUrl: courseDetails[selectedCourse].imageUrl
+        selectedCtaId: parseInt(selectedCta),
+        selectedCtaTitle: ctaDetails[selectedCta].title,
+        selectedCtaDesc: ctaDetails[selectedCta].description,
+        selectedCtaImageID: ctaDetails[selectedCta].image,
+        selectedCtaLink: ctaDetails[selectedCta].url,
+        selectedCtaImageUrl: ctaDetails[selectedCta].imageUrl
       });
     } else {
       setAttributes({
-        selectedCourseId: selectedCourse,
-        selectedCourseTitle: '',
-        selectedCourseDesc: '',
-        selectedCourseImageID: '',
-        selectedCourseLink: '',
-        selectedCourseImageUrl: ''
+        selectedCtaId: selectedCta,
+        selectedCtaTitle: '',
+        selectedCtaDesc: '',
+        selectedCtaImageID: '',
+        selectedCtaLink: '',
+        selectedCtaImageUrl: ''
       });
     }
   };
@@ -316,11 +319,11 @@ var BlockEdit = function BlockEdit(_ref) {
     className: className
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", {
     className: "dynamic-block-h2"
-  }, __('Large Course Card')), isLoading && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, __('Loading...')), courseOptions && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(SelectControl, {
-    label: "Select course",
-    value: selectedCourseId,
-    options: courseOptions,
-    onChange: handleCourseSelect
+  }, __('Large Cta Card')), isLoading && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, __('Loading...')), ctaOptions && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(SelectControl, {
+    label: "Select call to action",
+    value: selectedCtaId,
+    options: ctaOptions,
+    onChange: handleCtaSelect
   }));
 };
 
@@ -899,7 +902,6 @@ var BlockEdit = function BlockEdit(_ref) {
       message: ''
     });
     gapi.load('client', function () {
-      console.log('the vid id', videoID);
       gapi.client.setApiKey(gutenbergVars.youtube_api_key);
       gapi.client.load('youtube', 'v3', function () {
         gapi.client.youtube.videos.list({

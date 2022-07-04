@@ -2,10 +2,8 @@
 # Import Modules
 --------------------------------------------------------------*/
 @import '~normalize-scss/sass/normalize/import-now';
-// @import "~slick-carousel/slick/slick";
-// @import "~slick-carousel/slick/slick-theme";
-@import "slick-carousel/slick/slick-theme.css";
-@import "slick-carousel/slick/slick.css";
+// @import "slick-carousel/slick/slick-theme.css";
+// @import "slick-carousel/slick/slick.css";
 
 /*--------------------------------------------------------------
 # Base
@@ -36,9 +34,9 @@
 /*--------------------------------------------------------------
 # Page Regions
 --------------------------------------------------------------*/
-@import 'page-regions/header';
-@import 'page-regions/sidebar';
-@import 'page-regions/footer';
+@import 'pageregions/header';
+@import 'pageregions/sidebar';
+@import 'pageregions/footer';
 
 /*--------------------------------------------------------------
 # Pages

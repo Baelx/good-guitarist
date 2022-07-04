@@ -1,14 +1,7 @@
-<?php
-use GoodGuitarist\Custom\PostTypes;
-
-// var_dump($atts);
-foreach($related_posts as $post) {
-	$post->atts = PostTypes::get_block_attributes_from_post_content( $post->post_content, 'gutenberg-good-guitarist/ypt' );
-}
-?>
+<?php use GoodGuitarist\Custom\PostTypes; ?>
 <div className="youtube-post">
 	<h3 class="song-and-artist">
-		<span><?php esc_html_e( '' ); ?></span>
+		<span><?php esc_html_e( $taxonomies['artist'] ?? '' ); ?></span>
 		<?php if ( ( $taxonomies['artist'] ?? false ) && ( $atts['songtitle'] ?? false ) ): ?>
 			<span>-</span>
 		<?php endif; ?>
@@ -59,17 +52,7 @@ foreach($related_posts as $post) {
 	<?php esc_html_e( $atts['videoDescription'] ); ?>
 	</section>
 	<section class="post-footer">
-		<h2 class="related-posts-heading"><?php esc_html_e( 'Related Posts' ); ?></h2>
-		<ul class="related-youtube-posts">
-			<?php foreach( $related_posts as $post ): ?>
-				<li>
-					<a href="<?php the_permalink( $post->ID ); ?>">
-						<img src="<?php esc_attr_e( $post->atts['videoThumbnail'] ); ?>"/>
-						<h3><?php esc_html_e( $post->post_title ); ?></h3>
-					</a>
-				</li>
-			<?php endforeach; ?>
-		</ul>
+		<?php echo PostTypes::get_related_posts_markup(); ?>
 	</section>
 </div>
 

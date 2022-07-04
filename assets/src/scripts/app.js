@@ -1,6 +1,6 @@
-import Carousel from './modules/carousel';
+// import Carousel from './modules/carousel';
 
-const carousel = new Carousel();
+// const carousel = new Carousel();
 
 const $siteNav = $('#site-navigation');
 const $headerSearchButton = $('.header-search-submit');
@@ -57,4 +57,4 @@ $headerSearchButton.on('click', (e) => {
 // 	}
 // }
 
-// setSearchFiltersAriaExpandedIfMobile();
+  

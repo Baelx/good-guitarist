@@ -179,7 +179,6 @@ export const BlockEdit = ({ clientId, attributes, className, setAttributes }) =>
             message: ''
         });
         gapi.load('client', () => {
-            console.log('the vid id', videoID)
             gapi.client.setApiKey(gutenbergVars.youtube_api_key);
             gapi.client.load('youtube', 'v3', () => {
                 gapi.client.youtube.videos.list({

@@ -2,7 +2,6 @@
 
 namespace GoodGuitarist\Custom;
 
-
 /**
  * Custom
  * use it to write your custom functions.
@@ -290,7 +289,7 @@ class PostTypes {
 	 */
 	public function get_related_posts_markup(): string {
 		$related_posts = self::get_related_posts( get_the_ID(), 'genre', 5 );
-		foreach($related_posts as $post) {
+		foreach( $related_posts as $post ) {
 			$post->atts = self::get_block_attributes_from_post_content( $post->post_content, 'gutenberg-good-guitarist/ypt' );
 		}
 		ob_start();
@@ -312,6 +311,7 @@ class PostTypes {
 	public static function get_related_posts( int $post_id, string $taxonomy_slug, $num_posts = null ): array {
 		$related_posts = [];
 		$genres = get_the_terms( $post_id, $taxonomy_slug );
+
 		if ( $genres ) {
 			$genres = array_map( function( $term_object ) {
 				$term_array = (array) $term_object;

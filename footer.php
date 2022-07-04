@@ -23,28 +23,28 @@
 	];
 	?>
 
-	<footer id="colophon" class="site-footer container-fluid" role="contentinfo" style="<?php esc_attr_e( 'background-color: ' . get_theme_mod( 'gg_footer_background_color', '#fff' ) ); ?>">
+	<footer id="colophon" class="site-footer container-fluid" role="contentinfo" style="<?php echo esc_attr( 'background-color: ' . get_theme_mod( 'gg_footer_background_color', '#fff' ) ); ?>">
 		<h2 style="<?php esc_attr_e( 'color: ' . $footer_font_color ) ?>">
-			<?php esc_html_e( get_theme_mod( 'gg_footer_header_text', '' ) ); ?>
+			<?php echo esc_html( get_theme_mod( 'gg_footer_header_text', '' ) ); ?>
 		</h2>
 		<section class="social-links-footer-section">
 			<a style="<?php esc_attr_e( 'filter: ' . $footer_font_color_filter_map[$footer_font_color] ) ?>"
-				href="<?php esc_attr_e( get_theme_mod( 'gg_youtube_url', '#' ) ); ?>"
+				href="<?php echo esc_url( get_theme_mod( 'gg_youtube_url', '#' ) ); ?>"
 				class="">
 				<img src="<?php echo get_template_directory_uri() . '/assets/dist/images/youtube-icon.png' ?>" />
 			</a>
 			<a style="<?php esc_attr_e( 'filter: ' . $footer_font_color_filter_map[$footer_font_color] ) ?>"
-				href="<?php esc_attr_e( get_theme_mod( 'gg_instagram_url', '#' ) ); ?>"
+				href="<?php echo esc_url( get_theme_mod( 'gg_instagram_url', '#' ) ); ?>"
 				class="">
 				<img src="<?php echo get_template_directory_uri() . '/assets/dist/images/instagram-icon.png' ?>" />
 			</a>
 			<a style="<?php esc_attr_e( 'filter: ' . $footer_font_color_filter_map[$footer_font_color] ) ?>"
-				href="<?php esc_attr_e( get_theme_mod( 'gg_facebook_url', '#' ) ); ?>"
+				href="<?php echo esc_url( get_theme_mod( 'gg_facebook_url', '#' ) ); ?>"
 				class="">
 				<img src="<?php echo get_template_directory_uri() . '/assets/dist/images/facebook-icon.png' ?>" />
 			</a>
 			<a style="<?php esc_attr_e( 'filter: ' . $footer_font_color_filter_map[$footer_font_color] ) ?>"
-				href="<?php esc_attr_e( get_theme_mod( 'gg_patreon_url', '#' ) ); ?>"
+				href="<?php echo esc_url( get_theme_mod( 'gg_patreon_url', '#' ) ); ?>"
 				class="">
 				<img src="<?php echo get_template_directory_uri() . '/assets/dist/images/patreon-icon.png' ?>" />
 			</a>
@@ -63,6 +63,6 @@
 </div><!-- #page -->
 
 <?php wp_footer(); ?>
-
+	<script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
 </body>
 </html>

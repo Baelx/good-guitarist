@@ -1,3 +1,8 @@
+### July 3, 2022
+- Restore navbar styles
+- Verify related posts work on youtube post type
+- Start to look into search bar bug
+
 ### July 1, 2022
 - Add custom logo support
 - Partial fix of homepage styling

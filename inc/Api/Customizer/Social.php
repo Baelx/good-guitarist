@@ -28,22 +28,22 @@ class Social {
         ) );
 
         $wp_customize->add_setting( 'gg_youtube_url' , array(
-            'default' => 'https://youtube.com',
+            'default' => '',
             'transport' => 'postMessage',
         ) );
 
         $wp_customize->add_setting( 'gg_facebook_url' , array(
-            'default' => 'https://facebook.com',
+            'default' => '',
             'transport' => 'postMessage',
         ) );
 
         $wp_customize->add_setting( 'gg_instagram_url' , array(
-            'default' => 'https://instagram.com',
+            'default' => '',
             'transport' => 'postMessage',
         ) );
 
         $wp_customize->add_setting( 'gg_patreon_url' , array(
-            'default' => 'https://patreon.com',
+            'default' => '',
             'transport' => 'postMessage',
         ) );
 

@@ -39,17 +39,11 @@
     "theme",
     "starter"
   ],
-  "author": "Alessandro Castellani <me@alecaddd.com> (https://alecaddd.com)",
   "license": "GPL-3.0",
-  "bugs": {
-    "url": "https://github.com/Alecaddd/awps/issues"
-  },
-  "homepage": "https://github.com/Alecaddd/awps#readme",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.4",
     "@wordpress/block-serialization-spec-parser": "^4.2.0",
     "@wordpress/scripts": "^13.0.3",
-    "googleapis": "^73.0.0",
-    "slick-carousel": "^1.8.1"
+    "googleapis": "^73.0.0"
   }
 }

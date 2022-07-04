@@ -15,26 +15,26 @@ const { parse } = wp.blockSerializationDefaultParser;
 const { __ } = wp.i18n;
 
 export const BlockEdit = ({ attributes, className, setAttributes }) => {
-    const { selectedCourseId  } = attributes;
+    const { selectedCtaId  } = attributes;
 
-    const courseData = useSelect((select) => {
-        return select('core').getEntityRecords('postType', 'course');
+    const ctaData = useSelect((select) => {
+        return select('core').getEntityRecords('postType', 'cta');
     });
 
     const isLoading = useSelect((select) => {
         return select('core/data').isResolving('core', 'getEntityRecords', [
-            'postType', 'course'
+            'postType', 'cta'
         ]);
     });
 
-    const courseOptions = [
+    const ctaOptions = [
         { label: 'Select a call to action', value: null, default: true }
     ];
-    const courseDetails = {};
-    if ( courseData ) {
-        courseData.forEach((course) => {
-            if (course.id) {
-                const parsedBlocks = parse(course.content.raw);
+    const ctaDetails = {};
+    if ( ctaData ) {
+        ctaData.forEach((cta) => {
+            if (cta.id) {
+                const parsedBlocks = parse(cta.content.raw);
                 /**
                  * There may be multiple blocks in the course post.
                  *
@@ -42,56 +42,59 @@ export const BlockEdit = ({ attributes, className, setAttributes }) => {
                  * and get its attributes.
                  */
                 const courseTemplateBlock = parsedBlocks.find(block => 'gutenberg-good-guitarist/course-template' === block.blockName);
-                const courseAtts = courseTemplateBlock.attrs;
-                if (courseAtts) {
+                const ctaAtts = courseTemplateBlock.attrs;
+                if (ctaAtts) {
                     // Create options for SelectControl.
-                    courseOptions.push({label: course.title.raw, value: course.id});
+                    courseOptions.push({label: course.title.raw, value: cta.id});
                     // Keep separate courseDetail objects used to populate attributes.
-                    courseDetails[course.id] = {
-                        title: course.title.raw,
-                        description: courseAtts.courseDescription,
-                        url: courseAtts.courseUrl,
-                        imageId: courseAtts.imageId,
-                        imageUrl: courseAtts.imageUrl
+                    ctaDetails[cta.id] = {
+                        title: cta.title.raw,
+                        description: ctaAtts.courseDescription,
+                        url: ctaAtts.courseUrl,
+                        imageId: ctaAtts.imageId,
+                        imageUrl: ctaAtts.imageUrl
                     }
                 }
             }
         })
     }
 
-    const handleCourseSelect = (selectedCourse) => {
-        console.log(courseDetails[selectedCourse].imageUrl)
-        if (selectedCourse in courseDetails) {
+    /**
+     * 
+     * @param {*} selectedCta
+     */
+    const handleCtaSelect = (selectedCta) => {
+        if (selectedCta in ctaDetails) {
             setAttributes({
-                selectedCourseId: parseInt(selectedCourse),
-                selectedCourseTitle: courseDetails[selectedCourse].title,
-                selectedCourseDesc: courseDetails[selectedCourse].description,
-                selectedCourseImageID: courseDetails[selectedCourse].image,
-                selectedCourseLink: courseDetails[selectedCourse].url,
-                selectedCourseImageUrl: courseDetails[selectedCourse].imageUrl
+                selectedCtaId: parseInt(selectedCta),
+                selectedCtaTitle: ctaDetails[selectedCta].title,
+                selectedCtaDesc: ctaDetails[selectedCta].description,
+                selectedCtaImageID: ctaDetails[selectedCta].image,
+                selectedCtaLink: ctaDetails[selectedCta].url,
+                selectedCtaImageUrl: ctaDetails[selectedCta].imageUrl
             });
         } else {
             setAttributes({
-                selectedCourseId: selectedCourse,
-                selectedCourseTitle: '',
-                selectedCourseDesc: '',
-                selectedCourseImageID: '',
-                selectedCourseLink: '',
-                selectedCourseImageUrl: ''
+                selectedCtaId: selectedCta,
+                selectedCtaTitle: '',
+                selectedCtaDesc: '',
+                selectedCtaImageID: '',
+                selectedCtaLink: '',
+                selectedCtaImageUrl: ''
             });
         }
     }
 
     return (
         <div className={className}>
-            <h2 className="dynamic-block-h2">{__('Large Course Card')}</h2>
+            <h2 className="dynamic-block-h2">{__('Large Cta Card')}</h2>
             { isLoading && <span>{__('Loading...')}</span>}
-            { courseOptions &&
+            { ctaOptions &&
             <SelectControl
-                label="Select course"
-                value={ selectedCourseId }
-                options={ courseOptions }
-                onChange={ handleCourseSelect }
+                label="Select call to action"
+                value={ selectedCtaId }
+                options={ ctaOptions }
+                onChange={ handleCtaSelect }
             />
             }
         </div>
