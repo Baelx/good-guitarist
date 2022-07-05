@@ -1,102 +1,90 @@
-const { registerBlockType } = wp.blocks;
-const { Fragment, useState } = wp.element;
-const {
-	PlainText,
-	RichText,
-	MediaUpload,
-	BlockControls,
-	InspectorControls,
-	ColorPalette,
-	getColorClass
-} = wp.editor;
-const { IconButton, RangeControl, PanelBody, SelectControl } = wp.components;
-const { useSelect } = wp.data;
-const { parse } = wp.blockSerializationDefaultParser;
+import { getCtaDataFromPosts } from "../../utils";
 const { __ } = wp.i18n;
+const { MediaUpload } = wp.editor;
+const { useBlockProps, BlockControls } = wp.blockEditor;
+const { Toolbar, ToolbarDropdownMenu, TextControl, TextareaControl } = wp.components;
+const { useSelect } = wp.data;
 
 export const BlockEdit = ({ attributes, className, setAttributes }) => {
-    const { selectedCtaId  } = attributes;
+    const { url, buttonText, description, imageId, imageUrl } = attributes;
 
-    const ctaData = useSelect((select) => {
-        return select('core').getEntityRecords('postType', 'cta');
-    });
+    const ctaSelectOptions = useSelect(select => {
+        const ctaPosts = select('core').getEntityRecords('postType', 'cta');
+        if (ctaPosts) {
+            const ctaData = getCtaDataFromPosts(ctaPosts);
 
-    const isLoading = useSelect((select) => {
-        return select('core/data').isResolving('core', 'getEntityRecords', [
-            'postType', 'cta'
-        ]);
-    });
-
-    const ctaOptions = [
-        { label: 'Select a call to action', value: null, default: true }
-    ];
-    const ctaDetails = {};
-    if ( ctaData ) {
-        ctaData.forEach((cta) => {
-            if (cta.id) {
-                const parsedBlocks = parse(cta.content.raw);
-                /**
-                 * There may be multiple blocks in the course post.
-                 *
-                 * Find the course template block(which should be the first)
-                 * and get its attributes.
-                 */
-                const courseTemplateBlock = parsedBlocks.find(block => 'gutenberg-good-guitarist/course-template' === block.blockName);
-                const ctaAtts = courseTemplateBlock.attrs;
-                if (ctaAtts) {
-                    // Create options for SelectControl.
-                    courseOptions.push({label: course.title.raw, value: cta.id});
-                    // Keep separate courseDetail objects used to populate attributes.
-                    ctaDetails[cta.id] = {
-                        title: cta.title.raw,
-                        description: ctaAtts.courseDescription,
-                        url: ctaAtts.courseUrl,
-                        imageId: ctaAtts.imageId,
-                        imageUrl: ctaAtts.imageUrl
-                    }
+            // Create dropdown options.
+            return ctaData.map((cta) => {
+                return {
+                    title: cta.title,
+                    onClick: () => setAttributes({
+                        title: cta.title,
+                        description: cta.description,
+                        url: cta.url,
+                        imageId: cta.imageId,
+                        buttonText: cta.buttonText
+                    })
                 }
-            }
-        })
-    }
-
-    /**
-     * 
-     * @param {*} selectedCta
-     */
-    const handleCtaSelect = (selectedCta) => {
-        if (selectedCta in ctaDetails) {
-            setAttributes({
-                selectedCtaId: parseInt(selectedCta),
-                selectedCtaTitle: ctaDetails[selectedCta].title,
-                selectedCtaDesc: ctaDetails[selectedCta].description,
-                selectedCtaImageID: ctaDetails[selectedCta].image,
-                selectedCtaLink: ctaDetails[selectedCta].url,
-                selectedCtaImageUrl: ctaDetails[selectedCta].imageUrl
-            });
-        } else {
-            setAttributes({
-                selectedCtaId: selectedCta,
-                selectedCtaTitle: '',
-                selectedCtaDesc: '',
-                selectedCtaImageID: '',
-                selectedCtaLink: '',
-                selectedCtaImageUrl: ''
             });
         }
-    }
+    });
+
+    /**
+     * Event handler for When images is selected.
+     *
+     * @param   {object}  media  The media object, to set url, and id.
+     */
+    const onSelectImage = (media) => {
+        setAttributes({
+            imageUrl: media.url,
+            imageId: media.id,
+        });
+    };
 
     return (
         <div className={className}>
-            <h2 className="dynamic-block-h2">{__('Large Cta Card')}</h2>
-            { isLoading && <span>{__('Loading...')}</span>}
-            { ctaOptions &&
-            <SelectControl
-                label="Select call to action"
-                value={ selectedCtaId }
-                options={ ctaOptions }
-                onChange={ handleCtaSelect }
-            />
-            }
-        </div>
+            <BlockControls>
+                <Toolbar>
+                    {ctaSelectOptions && <ToolbarDropdownMenu
+                        icon="update"
+                        label={__("Use with an existing call to action")}
+                        controls={ctaSelectOptions}
+                    />}
+                </Toolbar>
+            </BlockControls>
+            <div className="image-container">
+                <img src={imageUrl} alt="" />
+                <MediaUpload
+                    onSelect={onSelectImage}
+                    allowedTypes="image"
+                    value={imageId}
+                    render={({ open }) => (
+                        <button
+                        type="text"
+                        className={"image-button change-image-button"}
+                        onClick={open}
+                        >{__("Change Image")}</button>
+                    )}
+                />
+            </div>
+            <div className="details-container">
+                <TextareaControl
+                    label="Description"
+                    value={description}
+                    onChange={value => setAttributes({ description: value })}
+                    />
+                <TextControl
+                    label="Link"
+                    value={url}
+                    onChange={value => setAttributes({ url: value })}
+                />
+                <TextControl
+                    className="button-text-input"
+                    label="Button text"
+                    value={buttonText}
+                    onChange={value => setAttributes({ buttonText: value })}
+                />
+            </div>
+        </div> 
     );
 }

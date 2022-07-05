@@ -2,8 +2,8 @@
 # Import Modules
 --------------------------------------------------------------*/
 @import '~normalize-scss/sass/normalize/import-now';
-// @import "slick-carousel/slick/slick-theme.css";
-// @import "slick-carousel/slick/slick.css";
+@import "~slick-carousel/slick/slick";
+@import "~slick-carousel/slick/slick-theme";
 
 /*--------------------------------------------------------------
 # Base
@@ -30,13 +30,14 @@
 @import 'partials/checkbox';
 @import 'partials/radio';
 @import 'partials/focus';
+@import 'partials/slick';
 
 /*--------------------------------------------------------------
 # Page Regions
 --------------------------------------------------------------*/
-@import 'pageregions/header';
-@import 'pageregions/sidebar';
-@import 'pageregions/footer';
+@import 'page-regions/header';
+@import 'page-regions/sidebar';
+@import 'page-regions/footer';
 
 /*--------------------------------------------------------------
 # Pages

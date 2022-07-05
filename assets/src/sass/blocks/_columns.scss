@@ -10,10 +10,11 @@
 	.wp-block-column {
 		margin-bottom: 3rem;
 		margin-left: 0;
+		display: flex;
+		justify-content: center;
 
 		@media screen and (min-width: $nav-breakpoint) {
 			margin-bottom: 0;
-
 		}
 	}
 }

@@ -1,17 +1,18 @@
 import $ from 'jquery';
-import 'slick-carousel';
+import 'slick-carousel/slick/slick';
 
-class Carousel {
+export class Carousel {
 	constructor() {
 		this.init();
 	}
 
 	init() {
-		console.log('sus',$('.lessons-carousel'))
 		$('.lessons-carousel').slick({
 			infinite: false,
-			slidesToShow: 5,
+			slidesToShow: 4,
 			slidesToScroll: 1,
+			autoplay: true,
+			autoplaySpeed: 3000,
 			responsive: [
 				{
 				  breakpoint: 1024,
@@ -19,7 +20,6 @@ class Carousel {
 					slidesToShow: 3,
 					slidesToScroll: 3,
 					infinite: true,
-					dots: true
 				  }
 				},
 				{
@@ -40,5 +40,3 @@ class Carousel {
 		});
 	}
 }
-
-export default Carousel;

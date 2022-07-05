@@ -137,6 +137,13 @@
 		white-space: pre-wrap;
 	}
 
+	.youtube-post-video-area {
+		flex-direction: column;
+
+		@media screen and (min-width: $md-lg) {
+			flex-direction: row;
+		}
+	}
 }
 
 .cta-sidebar {

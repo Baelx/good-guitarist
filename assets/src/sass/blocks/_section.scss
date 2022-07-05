@@ -1,0 +1,14 @@
+/** Admin styles **/
+.wp-admin {
+    *[data-type="gutenberg-good-guitarist/section"] {
+        .wp-block-gutenberg-good-guitarist-section {
+            border: 2px solid $light-grey;
+            background-color: $light-grey;
+        
+            .block-editor-inner-blocks {
+                margin-top: 0;
+                background-color: $white;
+            }
+        }
+    }
+}

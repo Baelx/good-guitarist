@@ -1,6 +1,4 @@
-// import Carousel from './modules/carousel';
-
-// const carousel = new Carousel();
+import { Carousel } from './modules/carousel';
 
 const $siteNav = $('#site-navigation');
 const $headerSearchButton = $('.header-search-submit');
@@ -13,7 +11,7 @@ $('.mobile-nav-button').on('click', () => {
 		// No scroll on body when nav menu is visible.
 		$('body').style('overflow-y', 'hidden');
 	}
-});
+})
 $('.close-nav-button').on('click', () => {
 	$siteNav.fadeOut();
 	$siteNav.attr('aria-expanded', 'false');
@@ -43,6 +41,9 @@ $headerSearchButton.on('click', (e) => {
 	});
 });
 
+(($) => {
+	const carousel = new Carousel();
+})(jQuery);
 
 /**
  * Set aria-expanded attributes for mobile devices(less than 901px wide).
@@ -57,4 +58,4 @@ $headerSearchButton.on('click', (e) => {
 // 	}
 // }
 
-  
+

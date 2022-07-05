@@ -1,32 +1,41 @@
-*[data-type="gutenberg-good-guitarist/large-course-card"] {
+*[data-type="gutenberg-good-guitarist/large-cta"] {
 	max-width: 400px;
 	margin-left: initial;
 
-	.wp-block-gutenberg-good-guitarist-large-course-card {
-		border: 1px solid $block-border-color;
+	.wp-block-gutenberg-good-guitarist-large-cta {
 		border-radius: 4px;
 		padding: 2rem 2rem;
+
+		.image-container {
+			display: flex;
+			flex-direction: column;
+
+			button {
+				cursor: pointer;
+				align-self: center;
+				border: none;
+				background: none;
+				color: $gg-blue;
+			}
+		}
 	}
 }
 
-.large-course-card {
+.wp-block-gutenberg-good-guitarist-large-cta {
 	border-radius: 3px;
-	padding: 10%;
+	padding: 1.5rem;
 	display: flex;
 	flex-direction: column;
 	box-shadow: 2px 2px 4px 1px $box-shadow-grey;
 	min-height: 500px;
 	justify-content: space-between;
+	max-width: 400px;
 
 	.lcc {
 		&-image {
 			max-height: 250px;
 			width: auto;
 			object-fit: cover;
-		}
-
-		&-heading {
-
 		}
 
 		&-body {

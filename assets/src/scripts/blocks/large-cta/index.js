@@ -1,37 +1,38 @@
+const { __ } = wp.i18n;
 import { BlockEdit } from "./BlockEdit";
+import { BlockSave } from "./BlockSave";
 const { registerBlockType } = wp.blocks;
 
 registerBlockType( 'gutenberg-good-guitarist/large-cta', {
-	title: 'Large Call to Action',
+	title: __('Large Call to Action'),
 	icon: 'megaphone',
 	category: 'layout',
 	className: 'large-cta',
 	attributes: {
-		selectedCourseId: {
-			type: 'integer',
-			default: 0
-		},
-		selectedCourseTitle: {
+		title: {
 			type: 'string',
 			default: ''
 		},
-		selectedCourseDesc: {
+		description: {
 			type: 'string',
 			default: ''
 		},
-		selectedCourseLink: {
+		url: {
 			type: 'string',
 			default: ''
 		},
-		selectedCourseImageID: {
-			type: 'integer',
-			default: 0
-		},
-		selectedCourseImageUrl: {
+		buttonText: {
 			type: 'string',
-			default: ''
-		}
+			default: 'Click here'
+		},
+		imageId: {
+			type: "number",
+		},
+		imageUrl: {
+			type: "string",
+			default: `${gutenbergVars.image_dir}/good-guitarist-preview-img.png`
+		},
 	},
 	edit: BlockEdit,
-	save: () => null
+	save: BlockSave
 });

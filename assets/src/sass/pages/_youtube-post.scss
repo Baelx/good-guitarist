@@ -6,6 +6,11 @@
 
 	.song-and-artist {
 		font-weight: 500;
+
+		a {
+			color: $black;
+			text-decoration: underline;
+		}
 	}
 
 	.youtube-post-term-pills {
@@ -79,6 +84,10 @@
 
 			}
 		}
+	}
+
+	.youtube-post-type-video-description {
+		margin: 7.5% 0;
 	}
 
 	.youtube-post-chords {

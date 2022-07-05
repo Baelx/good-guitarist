@@ -82,12 +82,12 @@ class Setup
             'upgrade-insecure-requests',
             'frame-ancestors' => "'self'",
             'default-src'     => "'self' *.twitter.com *.twimg.com",
-            'font-src'        => "'self' 'unsafe-inline' data:",
+            'font-src'        => "'self' 'unsafe-inline' data: fonts.gstatic.com",
             'media-src'       => "'self' 'unsafe-inline'",
-            'style-src'       => "'self' 'unsafe-inline' *.twitter.com *.twimg.com",
+            'style-src'       => "'self' 'unsafe-inline' *.twitter.com *.twimg.com fonts.googleapis.com",
             'connect-src'     => "'self'",
             'frame-src'       => "'self' *.twitter.com youtube.com *.youtube.com youtu.be",
-            'script-src'      => "'self' 'unsafe-inline' 'unsafe-eval' *.twimg.com *.twitter.com",
+            'script-src'      => "'self' 'unsafe-inline' 'unsafe-eval' *.twimg.com *.twitter.com apis.google.com cdn.jsdelivr.net",
             'img-src'         => "*",
         ];
         foreach ( $csp_initial as $directive => $rule ) {

@@ -119,7 +119,7 @@ class Customizer
 			'flex-height'          => true,
 			'flex-width'           => true,
 			'header-text'          => [ 'good-guitarist', '' ],
-			'unlink-homepage-logo' => true, 
+			'unlink-homepage-logo' => false, 
 		);
 	 
 		add_theme_support( 'custom-logo', $defaults );

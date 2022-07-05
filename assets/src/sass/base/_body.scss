@@ -2,14 +2,30 @@ body {
 	background-color: $white;
 	box-sizing: border-box;
 
-	.youtube-post {
+	.entry-title {
+		margin: 1rem 5%;
+	}
 
-		.entry-header, .entry-content {
-			padding: 1rem 3rem;
+	&.single {
+		.entry-title {
+			margin: inherit;
 		}
 	}
 
-	.gutter-10 {
-		// padding: 0 10%;
+	&.single-youtube-post {
+		.site-content {
+			margin-top: 5%;
+		}
+	}
+
+	.youtube-post {
+
+		.entry-header, .entry-content {
+			// padding: 1rem 3rem;
+
+			.entry-title {
+				margin: inherit;
+			}
+		}
 	}
 }

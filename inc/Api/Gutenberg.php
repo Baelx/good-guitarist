@@ -109,8 +109,7 @@ class Gutenberg {
 		]);
 
 		register_block_type( 'gutenberg-good-guitarist/large-cta', [
-			'editor_script' => 'gutenberg-good-guitarist',
-			'render_callback' => [ $this, 'large_cta_render' ]
+			'editor_script' => 'gutenberg-good-guitarist'
 		]);
 
 		register_block_type( 'gutenberg-good-guitarist/latest-lessons', [
@@ -123,6 +122,10 @@ class Gutenberg {
 		]);
 
 		register_block_type( 'gutenberg-good-guitarist/cta-template', [
+			'editor_script' => 'gutenberg-good-guitarist'
+		]);
+
+		register_block_type( 'gutenberg-good-guitarist/section', [
 			'editor_script' => 'gutenberg-good-guitarist'
 		]);
 

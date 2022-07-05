@@ -1,3 +1,10 @@
+### July 4, 2022
+- Get slick carousel working
+- Fix additional page region styles
+- Fix search page styles
+- Add documentation
+- Fix search page bug
+
 ### July 3, 2022
 - Restore navbar styles
 - Verify related posts work on youtube post type

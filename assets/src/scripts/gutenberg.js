@@ -8,3 +8,4 @@ require( './blocks/group' );
 require( './blocks/latest-lessons' );
 require( './blocks/youtube-post-template' );
 require( './blocks/ypt-search' );
+require( './blocks/section' );

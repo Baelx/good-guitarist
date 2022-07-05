@@ -15,7 +15,7 @@ $custom_logo = wp_get_attachment_image_url( get_theme_mod( 'custom_logo', 0 ) );
 
 if ( has_blocks( $post->post_content ) ) {
     $blocks = parse_blocks( $post->post_content );
-    if ( $blocks[0]['blockName'] === 'core/cover' ) {
+    if ( 'core/cover' === $blocks[0]['blockName'] ) {
 		$header_classes .= ' transparent-header';
     }
 }
@@ -27,14 +27,12 @@ if ( has_blocks( $post->post_content ) ) {
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="profile" href="http://gmpg.org/xfn/11">
 	<link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>">
-	<link rel="stylesheet" type="text/css" href="slick/slick.css"/>
-	<link rel="stylesheet" type="text/css" href="slick/slick-theme.css"/>
 	<?php wp_head(); ?>
 </head>
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
 	<div id="page" class="site" <?php echo ! is_customize_preview() ?: 'style="padding: 0 40px;"'; ?>>
-		<header id="masthead" class="<?php echo esc_attr( $header_classes ) ; ?>" role="banner">
+		<header id="masthead" class="<?php echo esc_attr( $header_classes ); ?>" role="banner">
 			<?php
 			if ( is_customize_preview() ) {
 				echo '<div id="awps-header-control"></div>';
@@ -42,28 +40,32 @@ if ( has_blocks( $post->post_content ) ) {
 			?>
 			<div class="container container-fluid">
 				<div class="row header-row">
-					<div class="col-sm-12 col-md-4">
+					<div class="site-branding-container">
 						<div class="site-branding">
 							<h1 class="site-title">
-								<a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home">
-									<img src="<?php echo esc_url( $custom_logo ); ?>">
-								</a>
+								<?php the_custom_logo(); ?>
 							</h1>
 						</div><!-- .site-branding -->
 					</div><!-- .col -->
-					<button class="dashicons dashicons-button dashicons-menu mobile-nav-button"></button>
-					<nav id="site-navigation" class="main-navigation" role="navigation" aria-expanded="false">
-						<?php
-						if ( has_nav_menu( 'primary' ) ) :
-							wp_nav_menu(
-								array(
-									'theme_location' => 'primary',
-									'menu_id'        => 'primary-menu',
-									'walker'         => new GoodGuitarist\Core\WalkerNav(),
-								)
-							);
-						endif;
-						?>
+					<div class="nav-elements-container">
+						<button class="dashicons dashicons-button dashicons-menu mobile-nav-button"></button>
+						<nav id="site-navigation" class="main-navigation" role="navigation" aria-expanded="false">
+							<?php
+							if ( has_nav_menu( 'primary' ) ) :
+								wp_nav_menu(
+									array(
+										'theme_location' => 'primary',
+										'menu_id'        => 'primary-menu',
+										'walker'         => new GoodGuitarist\Core\WalkerNav(),
+									)
+								);
+							endif;
+							?>
+							<button class="dashicons dashicons-button dashicons-no-alt close-nav-button"
+									aria-hidden="true"
+									tabindex="">
+							</button>
+						</nav>
 						<form role="search" method="get" class="search-form" action="<?php echo get_site_url(); ?>">
 							<label class="search-form-box">
 								<span class="screen-reader-text">Search for:</span>
@@ -71,11 +73,7 @@ if ( has_blocks( $post->post_content ) ) {
 							</label>
 							<button type="submit" aria-expanded="false" class="header-search-submit dashicons dashicons-search"></button>
 						</form>
-						<button class="dashicons dashicons-button dashicons-no-alt close-nav-button"
-								aria-hidden="true"
-								tabindex="">
-						</button>
-					</nav>
+					</div>
 			</div><!-- .row -->
 		</div><!-- .container-fluid -->
 	</header><!-- #masthead -->

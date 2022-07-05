@@ -23,9 +23,9 @@ registerBlockType( 'gutenberg-good-guitarist/cta-template', {
 			default: 0
 		},
 		imageUrl: {
-			type: 'string',
-			default: ''
-		}
+			type: "string",
+			default: `${gutenbergVars.image_dir}/good-guitarist-preview-img.png`
+		},
 	},
     edit: BlockEdit,
     save: () => null

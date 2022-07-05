@@ -44,6 +44,7 @@
     "@fortawesome/fontawesome-free": "^5.15.4",
     "@wordpress/block-serialization-spec-parser": "^4.2.0",
     "@wordpress/scripts": "^13.0.3",
-    "googleapis": "^73.0.0"
+    "googleapis": "^73.0.0",
+    "slick-carousel": "^1.8.1"
   }
 }

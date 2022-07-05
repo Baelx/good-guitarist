@@ -47,7 +47,7 @@ export const BlockEdit = ({ attributes, setAttributes }) => {
                 <Toolbar>
                     {ctaSelectOptions && <ToolbarDropdownMenu
                         icon="update"
-                        label="Use with an existing course"
+                        label="Use with an existing call to action"
                         controls={ctaSelectOptions}
                     />}
                 </Toolbar>
