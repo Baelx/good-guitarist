@@ -1,5 +1,6 @@
 ### July 5, 2022
 - Remove bootstrap "container" classes
+- Ensure h1 is hidden when cover block is used on page
 
 ### July 4, 2022
 - Get slick carousel working
