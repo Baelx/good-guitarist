@@ -14,7 +14,7 @@
 
 get_header(); ?>
 
-<div class="container">
+<div class="">
 
 	<div class="row align-stretch">
 

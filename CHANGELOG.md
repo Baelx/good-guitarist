@@ -1,3 +1,6 @@
+### July 5, 2022
+- Remove bootstrap "container" classes
+
 ### July 4, 2022
 - Get slick carousel working
 - Fix additional page region styles

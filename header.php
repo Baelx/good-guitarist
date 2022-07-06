@@ -38,7 +38,7 @@ if ( has_blocks( $post->post_content ) ) {
 				echo '<div id="awps-header-control"></div>';
 			}
 			?>
-			<div class="container container-fluid">
+			<div class="">
 				<div class="row header-row">
 					<div class="site-branding-container">
 						<div class="site-branding">

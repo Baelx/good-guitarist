@@ -8,7 +8,7 @@
  */
 
 get_header(); ?>
-<div class="container gutter-10">
+<div class="">
 	<div class="row">
 		<div class="col-sm-12 gutter-2">
 			<div id="primary" class="content-area">
