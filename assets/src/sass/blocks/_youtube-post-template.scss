@@ -91,15 +91,16 @@
 
 			iframe {
 				width: 70%;
+
+				&.iframe-full-width {
+					width: 100%;
+				}
+	
+				&.iframe-two-third-width {
+					width: 75%;
+				}
 			}
 
-			.iframe-full-width {
-				width: 100%;
-			}
-
-			.iframe-two-third-width {
-				width: 75%;
-			}
 		}
 
 		.post-content-video-description {

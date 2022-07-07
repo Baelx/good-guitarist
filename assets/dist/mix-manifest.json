@@ -1,13 +1,13 @@
 {
     "/js/app.js": "/js/app.js?id=5cd8645d4016b7ca96646176530a1428",
-    "/js/app.asset.php": "/js/app.asset.php?id=78ca91efbc80cab2a82d3d00f3fd07c7",
+    "/js/app.asset.php": "/js/app.asset.php?id=08acecae59a838cfe7689d8ff1ff998e",
     "/js/admin.js": "/js/admin.js?id=d41d8cd98f00b204e9800998ecf8427e",
     "/js/admin.asset.php": "/js/admin.asset.php?id=2120cbb961a701fdc88ed5debaa741b4",
     "/js/yptSearch.js": "/js/yptSearch.js?id=77e420b24f6f0083950c52e885f54bec",
     "/js/yptSearch.asset.php": "/js/yptSearch.asset.php?id=c4d49721e9de1434a3c24c5f294bcbb2",
-    "/js/gutenberg.js": "/js/gutenberg.js?id=cda522d330207aafa60975870247fc4d",
-    "/js/gutenberg.asset.php": "/js/gutenberg.asset.php?id=a7b35869174d4d70c3850fe559dfcd3e",
-    "/css/style.css": "/css/style.css?id=c9cd5bf31087e3aaa093015706412e09",
-    "/css/gutenberg.css": "/css/gutenberg.css?id=6087f5cc304632b263d5698474572b10",
+    "/js/gutenberg.js": "/js/gutenberg.js?id=0e3b62aa82b9e655ef3e6f23d4c52e5e",
+    "/js/gutenberg.asset.php": "/js/gutenberg.asset.php?id=e0a291dd1698e5c202aa7b9a6a8ef4a3",
+    "/css/style.css": "/css/style.css?id=22cd0f3c77e90db83e81a14b2190dc82",
+    "/css/gutenberg.css": "/css/gutenberg.css?id=719d60258ecf37acf0706f5fe5e814ff",
     "/css/admin.css": "/css/admin.css?id=dfb91a323dcc4998849edee1685d08d7"
 }

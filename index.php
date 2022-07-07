@@ -18,7 +18,7 @@ get_header(); ?>
 
 	<div class="row align-stretch">
 
-		<div class="col-sm-12">
+		<div class="">
 
 			<div id="primary" class="content-area">
 				<main id="main" class="site-main" role="main">

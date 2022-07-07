@@ -15,16 +15,17 @@ body {
 	&.single-youtube-post {
 		.site-content {
 			margin-top: 5%;
-		}
-	}
+			margin-left: 10%;
+			margin-right: 10%;
 
-	.youtube-post {
-
-		.entry-header, .entry-content {
-			// padding: 1rem 3rem;
-
-			.entry-title {
-				margin: inherit;
+			.entry-header, .entry-content {
+				.entry-title {
+					margin: inherit;
+				}
+	
+				.entry-meta {
+					display: none;
+				}
 			}
 		}
 	}

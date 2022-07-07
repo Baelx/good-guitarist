@@ -13,7 +13,7 @@ get_header(); ?>
 
 	<div class="row">
 
-		<div class="col-sm-12 gutter-2">
+		<div class="">
 
 			<div id="primary" class="content-area">
 				<main id="main" class="site-main" role="main">

@@ -1,3 +1,7 @@
+### July 6, 2022
+- Fix bug with small cta URL not saving
+- Remove column bootstrap declarations
+
 ### July 5, 2022
 - Remove bootstrap "container" classes
 - Ensure h1 is hidden when cover block is used on page

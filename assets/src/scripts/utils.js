@@ -42,13 +42,14 @@ export const getCtaDataFromPosts = (ctaPosts) => {
  *
  * @param {string} stringToCheck
  */
-export const stringContainsLink = (stringToCheck) => {
+export const getLinkFromString = (stringToCheck) => {
 	const linkRegex = /(http:\/\/|https:\/\/).*/g;
 	let matchedLink = '';
 	if ( 'string' === typeof stringToCheck && stringToCheck?.search(linkRegex) >= 0 ) {
 		matchedLink = stringToCheck.match(linkRegex);
 	}
-	return matchedLink;
+	// Return the first matched link.
+	return matchedLink[0];
 }
 
 /**
@@ -61,7 +62,7 @@ export const stringContainsLink = (stringToCheck) => {
 export const createBlocksFromDescription = (descriptionArray) => {
 	const descriptionWithoutEmpties = descriptionArray.filter(description => description.length);
 	return descriptionWithoutEmpties.map(description => {
-		let matchedLink = stringContainsLink(description);
+		let matchedLink = getLinkFromString(description);
 		let blockType = 'core/paragraph';
 		let blockAtts = { content: description };
 		if (matchedLink) {
