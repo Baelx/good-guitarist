@@ -276,7 +276,7 @@ export const BlockEdit = ({ clientId, attributes, className, setAttributes }) =>
                 { videoID ? <>
                     <div className="youtube-post-video-area">
                         { videoInfoFetched && <iframe width="560"
-                                                  height="715"
+                                                  height="615"
                                                   src={videoUrlEmbed}
                                                   className={(sidebarCtaSlotOne.id > 0 || sidebarCtaSlotTwo.id > 0) ? 'iframe-two-third-width' : 'iframe-full-width'}
                                                   title="YouTube video player"
