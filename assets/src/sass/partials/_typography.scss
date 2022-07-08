@@ -23,7 +23,8 @@ h1,
 h2,
 .h2 {
 	@include font-size(3rem, 32px, 0.36px);
-	font-weight: 500;
+	font-weight: 700;
+	line-height: 1;
 
 	@media (max-width: #{$sm}) {
 		@include font-size(20px, 24px, 0.36px);
@@ -33,6 +34,7 @@ h2,
 h3,
 .h3 {
 	@include font-size(22px, 27px, 0.3px);
+	line-height: 1;
 
 	@media (max-width: #{$sm}) {
 		@include font-size(18px, 22px, 0.3px);

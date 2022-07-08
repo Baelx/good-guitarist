@@ -1,3 +1,10 @@
+### July 8, 2022
+- Restore youtube search block's edit block to give some feedback to the user that it exists
+- Fix site wide post/page margin issue
+- Make Small CTA blocks smaller
+- Fix small CTA block buttonText population issue
+- Adjust weird line height for heading tags
+
 ### July 6, 2022
 - Fix bug with small cta URL not saving
 - Remove column bootstrap declarations

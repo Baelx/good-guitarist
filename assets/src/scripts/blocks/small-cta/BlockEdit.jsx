@@ -22,7 +22,8 @@ export const BlockEdit = ({ attributes, setAttributes }) => {
                         description: cta.description,
                         url: cta.url,
                         imageId: cta.imageId,
-                        imageUrl: cta.imageUrl
+                        imageUrl: cta.imageUrl,
+                        buttonText: cta.buttonText
                     })
                 }
             });

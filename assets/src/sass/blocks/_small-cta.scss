@@ -22,6 +22,10 @@
 			max-width: 35%;
 		}
 
+		img {
+			max-height: 150px;
+		}
+
 		button {
 			background: none;
 			border: none;
@@ -39,6 +43,7 @@
 
 		p {
 			margin-bottom: 5%;
+			align-self: center;
 		}
 
 		.button-text-input {

@@ -1,5 +1,5 @@
-// const { ServerSideRender } = wp.components;
+const { __ } = wp.i18n;
 
 export const BlockEdit = () => (
-    <div></div>
+    <h2>{__('A song/youtube post search box will appear here.')}</h2>
 )
