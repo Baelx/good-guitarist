@@ -4,6 +4,7 @@
 - Make Small CTA blocks smaller
 - Fix small CTA block buttonText population issue
 - Adjust weird line height for heading tags
+- Remove call to action posts from site search
 
 ### July 6, 2022
 - Fix bug with small cta URL not saving
