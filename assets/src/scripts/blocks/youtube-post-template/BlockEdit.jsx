@@ -38,7 +38,7 @@ export const BlockEdit = ({ clientId, attributes, className, setAttributes }) =>
     }, []);
 
     const { postMeta, ctaData, ctaSelectOptions } = useSelect( ( select ) => {
-        const ctaPosts = select( 'core' ).getEntityRecords( 'postType', 'cta' );
+        const ctaPosts = select( 'core' ).getEntityRecords( 'postType', 'cta', { per_page: -1 } );
         let ctaData;
         let ctaSelectOptions = [{
             label: 'None',
@@ -206,6 +206,7 @@ export const BlockEdit = ({ clientId, attributes, className, setAttributes }) =>
             >
                 {ctaSelectOptions && <PanelRow>
                      <SelectControl
+                        className="sidebar-cta-select-control"
                         label={__('Sidebar CTA slot 1')}
                         value={sidebarCtaSlotOne.id}
                         options={ctaSelectOptions}
@@ -214,6 +215,7 @@ export const BlockEdit = ({ clientId, attributes, className, setAttributes }) =>
                 </PanelRow>}
                 {ctaSelectOptions && <PanelRow>
                      <SelectControl
+                        className="sidebar-cta-select-control"
                         label={__('Sidebar CTA slot 2')}
                         value={sidebarCtaSlotTwo.id}
                         options={ctaSelectOptions}

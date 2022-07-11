@@ -1,0 +1,6 @@
+// Gutenberg built in popover slot.
+.popover-slot {
+    .components-popover__content > div {
+        max-height: 300px;
+    }
+}

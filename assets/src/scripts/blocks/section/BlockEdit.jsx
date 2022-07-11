@@ -14,8 +14,8 @@ export const BlockEdit = ({ className, attributes, setAttributes }) => {
     const { gutterWidth } = attributes;
 
     const gutterStyles = {
-            paddingLeft: `${gutterWidth}%`,
-            paddingRight: `${gutterWidth}%`
+        paddingLeft: `${gutterWidth}%`,
+        paddingRight: `${gutterWidth}%`
     };
 
     return (

@@ -9,7 +9,7 @@ export const BlockEdit = ({ attributes, className, setAttributes }) => {
     const { url, buttonText, description, imageId, imageUrl } = attributes;
 
     const ctaSelectOptions = useSelect(select => {
-        const ctaPosts = select('core').getEntityRecords('postType', 'cta');
+        const ctaPosts = select('core').getEntityRecords('postType', 'cta', { per_page: -1 });
         if (ctaPosts) {
             const ctaData = getCtaDataFromPosts(ctaPosts);
 
@@ -47,6 +47,7 @@ export const BlockEdit = ({ attributes, className, setAttributes }) => {
                 <Toolbar>
                     {ctaSelectOptions && <ToolbarDropdownMenu
                         icon="update"
+                        className="toolbar-toggle-cta"
                         label={__("Use with an existing call to action")}
                         controls={ctaSelectOptions}
                     />}

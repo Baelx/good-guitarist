@@ -4,5 +4,9 @@
 }
 
 .wp-block-cover {
-	padding: 0 20%;
+	padding: 0 5%;
+
+	@media screen and (min-width: $sm) {
+		padding: 0 10%;
+	}
 }

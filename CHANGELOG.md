@@ -1,3 +1,8 @@
+### July 11, 2022
+- Improve mobile styles/layout
+- Load more than 10 CTA posts in small CTA, large CTA, and sidebar CTAs
+- Max height for CTA select dropdowns(except sidebar CTA)
+
 ### July 8, 2022
 - Restore youtube search block's edit block to give some feedback to the user that it exists
 - Fix site wide post/page margin issue
