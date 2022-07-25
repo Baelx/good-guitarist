@@ -156,7 +156,6 @@
 
 				&.course {
 					border: 1px solid black;
-					// background-color:
 				}
 			}
 		}
@@ -183,15 +182,29 @@
 			flex-direction: row;
 		}
 
-		.iframe-full-width {
-			width: 100%;
-		}
+		iframe {
+			max-height:	300px;
+			margin-bottom: 1rem;
 
-		.iframe-two-third-width {
-			width: 100%;
+			@media screen and (min-width: $sm) {
+				max-height: 400px;
+			}
 
 			@media screen and (min-width: $md-lg) {
-				width: 70%;
+				max-height: inherit;
+				margin-bottom: inherit;
+			}
+
+			&.iframe-full-width {
+				width: 100%;
+			}
+	
+			&.iframe-two-third-width {
+				width: 100%;
+	
+				@media screen and (min-width: $md-lg) {
+					width: 70%;
+				}
 			}
 		}
 

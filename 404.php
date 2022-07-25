@@ -13,7 +13,7 @@ get_header(); ?>
 
 	<div class="row">
 
-		<div class="">
+		<div class="page-content-404">
 
 			<div id="primary" class="content-area">
 				<main id="main" class="site-main" role="main">

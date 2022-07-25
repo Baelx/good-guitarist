@@ -12,15 +12,15 @@
 	}
 
 	.image-container {
-		max-width: 100%;
+		width: 100%;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
 
-		@media screen and (min-width: 800px) {
-			max-width: 35%;
-		}
+		// @media screen and (min-width: 800px) {
+		// 	max-width: 35%;
+		// }
 
 		img {
 			max-height: 150px;
@@ -35,7 +35,7 @@
 	}
 
 	.details-container {
-		margin-left: 1rem;
+		margin-left: 5%;
 		flex-grow: 1;
 		display: flex;
 		flex-direction: column;

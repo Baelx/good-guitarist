@@ -3,31 +3,40 @@ body {
 	box-sizing: border-box;
 	
 	.site-content {
-		margin-top: 10%;
 		margin-left: 5%;
 		margin-right: 5%;
 
 		@media screen and (min-width: $sm) {
-			margin-top: 10%;
 			margin-left: 10%;
 			margin-right: 10%;
 		}
 		
 		.entry-title {
-			margin: 1rem 5%;
+			margin: 5%;
+			margin-left: inherit;
+			margin-right: inherit;
 		}
 
 		.entry-meta {
 			display: none;
 		}
-	}
 
-
-	&.single {
-		.entry-title {
-			margin: inherit;
+		.page-content-404 {
+			margin: 0 auto;
+			height: 300px;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
 		}
 	}
+
+
+	// &.single {
+	// 	.entry-title {
+	// 		margin: inherit;
+	// 		margin-bottom: 5%;
+	// 	}
+	// }
 
 	&.page {
 		.site-content {
@@ -35,14 +44,24 @@ body {
 			margin-left: 0%;
 			margin-right: 0%;
 		}
-	}
 
-	&.single-youtube-post {
-
-		.entry-header, .entry-content {
-			.entry-title {
-				margin: inherit;
+		.entry-title {
+			margin-top: 5%;
+			margin-left: 5%;
+			margin-right: 5%;
+	
+			@media screen and (min-width: $sm) {
+				margin-left: 10%;
+				margin-right: 10%;
 			}
 		}
 	}
+
+	// &.single-youtube-post {
+	// 	.entry-header, .entry-content {
+	// 		.entry-title {
+	// 			margin: inherit;
+	// 		}
+	// 	}
+	// }
 }

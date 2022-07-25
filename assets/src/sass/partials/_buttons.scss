@@ -13,10 +13,6 @@ button {
 		box-shadow: none;
 	}
 
-	&:focus {
-		outline: none;
-	}
-
 	&.btn-sm {
 		padding: ($gutter * 0.8) ($gutter * 1.8);
 

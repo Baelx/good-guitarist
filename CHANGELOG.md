@@ -1,3 +1,10 @@
+### July 25, 2022
+- Paragraph general line height
+- Get rid of post navigation at bottom
+- H1/H2 tags font sizes should be swapped
+- Move chords and genres down on the search box
+- Better design of the YouTube search box
+
 ### July 11, 2022
 - Improve mobile styles/layout
 - Load more than 10 CTA posts in small CTA, large CTA, and sidebar CTAs

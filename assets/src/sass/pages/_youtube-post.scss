@@ -1,9 +1,4 @@
 .youtube-post {
-	h1 {
-		font-weight: 500;
-		color: $gg-blue;
-	}
-
 	.song-and-artist {
 		font-weight: 500;
 
@@ -113,7 +108,15 @@
 		padding: 0;
 		display: grid;
 		grid-template-rows: 1fr;
-		grid-template-columns: 1fr 1fr 1fr 1fr;
+		grid-template-columns: 1fr;
+
+		@media screen and (min-width: $sm) {
+			grid-template-columns: 1fr 1fr;
+		}
+
+		@media screen and (min-width: $md) {
+			grid-template-columns: 1fr 1fr 1fr 1fr;
+		}
 
 		li {
 			margin: 0.5rem;

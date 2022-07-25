@@ -1,8 +1,9 @@
 const { __ } = wp.i18n;
 
 /**
- *
- * @param {*}
+ * Small call to action block that appears in Youtube post sidebars.
+ * 
+ * @param {object} cta The CTA info to display.
  * @returns {JSX}
  */
 export const SidebarCta = ({cta}) => {
