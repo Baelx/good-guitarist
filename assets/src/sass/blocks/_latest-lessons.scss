@@ -14,22 +14,34 @@
 	.lessons-carousel {
 		overflow-x: hidden;
 
-		.lessons-container {
-			white-space: nowrap;
+		.lesson-link {
+			width: 19%;
+			text-align: center;
+			text-decoration: none;
+			display: inline-block;
+			margin: 0 0.5%;
+			color: $black;
 
-			.lesson-link {
-				width: 19%;
-				text-align: center;
-				text-decoration: none;
-				display: inline-block;
-				margin: 0 0.5%;
+			.lesson-thumbnail {
+				width: 100%;
+			}
 
-				.lesson-thumbnail {
-					width: 100px;
+			.lesson-title {
+				margin-top: 1rem;
+				font-size: 1rem;
+
+				.lesson-song-title, .view-lesson {
+					font-weight: 700;
 				}
 
-				.lesson-title {
-					font-size: 1rem;
+				.lesson-artists {
+					line-height: 1.5;
+					display: flex;
+					justify-content: center;
+
+					.lesson-artist:last-of-type {
+						margin-left: 0.25rem;
+					}
 				}
 			}
 		}

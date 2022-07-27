@@ -1,3 +1,6 @@
+### July 27, 2022
+- Fix song title and artist not appearing on latest lessons carousel
+
 ### July 25, 2022
 - Paragraph general line height
 - Get rid of post navigation at bottom

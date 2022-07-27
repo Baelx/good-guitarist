@@ -6,6 +6,7 @@ $youtube_posts = get_posts( [
 ] );
 foreach( $youtube_posts as $post ) {
 	$post->parsed_post_atts = PostTypes::get_block_attributes_from_post_content( $post->post_content, 'gutenberg-good-guitarist/ypt' );
+	$post->artists = get_the_terms( $post, 'artist' );
 }
 ?>
 <div class="latest-lessons-block">
@@ -15,17 +16,23 @@ foreach( $youtube_posts as $post ) {
 				<?php $ypt_atts = $lesson->parsed_post_atts; ?>
 				<a class="lesson-link" aria-hidden="false" href=<?php esc_attr_e( get_permalink( $lesson->ID ) ); ?>>
 					<img class="lesson-thumbnail" src="<?php esc_attr_e( $ypt_atts['videoThumbnail'] ); ?>"></img>
-					<h3 class="lesson-title">
-						<?php if ( ( isset( $ypt_atts['artist'] ) && ! empty( $ypt_atts['artist'] ) ) &&
-								( isset( $ypt_atts['songTitle'] ) && ! empty( $ypt_atts['songTitle'] ) ) ): ?>
+					<div class="lesson-title">
+						<?php if ( isset( $ypt_atts['songTitle'] ) && ! empty( $ypt_atts['songTitle'] ) ): ?>
 						<div>
-							<span><?php esc_html_e( $ypt_atts['artist'] ); ?></span><br />
-							<span><?php esc_html_e( $ypt_atts['songTitle'] ); ?></span>
+							<span class="lesson-song-title"><?php esc_html_e( $ypt_atts['songTitle'] ); ?></span><br />
+							<div class="lesson-artists">
+								<?php foreach( $lesson->artists as $key => $value): ?>
+									<span class="lesson-artist"><?php esc_html_e( $value->name ); ?></span>
+									<?php if ( $key !== ( count( $lesson->artists ) - 1 ) ): ?>
+									<span>,</span>
+									<?php endif; ?>
+								<?php endforeach; ?>
+							</div>
 						</div>
 						<?php else: ?>
-						<span><?php __('View lessson'); ?></span>
+						<span class="view-lesson"><?php esc_html_e('View lessson'); ?></span>
 						<?php endif; ?>
-					</h3>
+					</div>
 				</a>
 			<?php endif; ?>
 		<?php endforeach; ?>
