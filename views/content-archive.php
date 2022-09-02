@@ -31,8 +31,5 @@ $ypt_atts = PostTypes::get_block_attributes_from_post_content( $the_post->post_c
 			);
 		?>
 	</div><!-- .entry-content -->
-	<footer class="entry-footer">
-		<?php GoodGuitarist\Core\Tags::entry_footer(); ?>
-	</footer><!-- .entry-footer -->
 	<?php endif; ?>
 </article><!-- #post-## -->

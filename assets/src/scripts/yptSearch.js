@@ -3,9 +3,9 @@ const { chunk } = lodash;
 /**
  * Add search action and verify the form checkboxes. Return their data.
  *
- * @param {HTMLElement} form
- * @param {Array|null} songFilterCheckboxes
- * @returns {array}
+ * @param {HTMLElement} form HTML search form.
+ * @param {Array|null} songFilterCheckboxes HTML checkboxes to get search data from.
+ * @returns {FormData}
  */
 const verifyAndReturnSearchFormData = ( form, songFilterCheckboxes ) => {
 	const formData = {
@@ -26,7 +26,7 @@ const verifyAndReturnSearchFormData = ( form, songFilterCheckboxes ) => {
  * Find all the checked song filters and return the selections.
  *
  * @param {string} inputName The name of the checkbox fieldset to get data from.
- * @returns {Array}
+ * @returns {array}
  */
 const getCheckedSongFilters = ( inputName ) => {
 	let value = [];
@@ -49,7 +49,7 @@ const getCheckedSongFilters = ( inputName ) => {
  *
  * @param {HTMLElement} yptSearchResultsElement
  * @param {Object} searchFormData
- * @returns {undefined}
+ * @returns {void}
  */
 const sendAjaxRequest = ( yptSearchResultsElement, searchFormData ) => {
 	const yptSearchResultsCountElement = $('.search-results-count .count');
@@ -70,9 +70,11 @@ const sendAjaxRequest = ( yptSearchResultsElement, searchFormData ) => {
 }
 
 /**
- *
- * @param {*} results
- * @param {*} yptSearchResultsElement
+ * Add HTML for each search result returned.
+ * 
+ * @param {*} results All search results.
+ * @param {*} yptSearchResultsElement HTML element to append results to.
+ * @return {void}
  */
 const populateSearchResults = (results, yptSearchResultsElement) => {
 	results.forEach((post) => {
@@ -90,9 +92,12 @@ const populateSearchResults = (results, yptSearchResultsElement) => {
 }
 
 /**
- *
- * @param {*} results
- * @param {*} yptSearchResultsElement
+ * Break up search results into pages to allow the user to scroll through them chunk by chunk.
+ * 
+ * @param {array} results Search results to break into sections(paginate).
+ * @param {*} yptSearchResultsElement The HTML element where the search results populate into.
+ * @param {*} yptSearchResultsCountElement The HTML element that displays the number of search results.
+ * @return {void}
  */
 const paginateSearchResults = (results, yptSearchResultsElement, yptSearchResultsCountElement) => {
 	const resultsPerPage = 6;
@@ -104,11 +109,13 @@ const paginateSearchResults = (results, yptSearchResultsElement, yptSearchResult
 	yptSearchResultsPageCountElement.find('.current-page').text('1');
 	yptSearchResultsPageCountElement.find('.last-page').text('1');
 	yptSearchResultsElement.empty();
+	
 	if (results.length >= resultsPerPage) {
 		const chunkedResults = chunk(results, resultsPerPage);
 		yptSearchResultsPageCountElement.find('.current-page').text('1');
 		yptSearchResultsPageCountElement.find('.last-page').text(chunkedResults.length);
 		populateSearchResults(chunkedResults[0], yptSearchResultsElement, yptSearchResultsCountElement);
+
 		// Event listeners for previous and next page buttons.
 		yptSearchPreviousPageButton.on('click', (e) => {
 			const newPageCount = updatePageCount(e.target, false, chunkedResults.length, yptSearchResultsPageCountElement);
@@ -120,6 +127,7 @@ const paginateSearchResults = (results, yptSearchResultsElement, yptSearchResult
 			yptSearchResultsElement.empty();
 			populateSearchResults(chunkedResults[newPageCount], yptSearchResultsElement, yptSearchResultsCountElement);
 		});
+
 	} else {
 		populateSearchResults(results, yptSearchResultsElement, yptSearchResultsCountElement);
 		yptSearchPreviousPageButton.prop("disabled", true).css("cursor", "not-allowed");
@@ -131,12 +139,13 @@ const paginateSearchResults = (results, yptSearchResultsElement, yptSearchResult
 }
 
 /**
- *
- * @param {*} changePageButton
+ * Handler for updating the page count of search results.
+ * 
+ * @param {*} changePageButton 
  * @param {*} increasePage
  * @param {*} pageCount
  * @param {*} yptSearchResultsPageCountElement
- * @returns
+ * @return {string}
  */
 const updatePageCount = (changePageButton, increasePage, pageCount, yptSearchResultsPageCountElement) => {
 	const $pageCountElement = $(changePageButton).parent().first().find('.search-results-page-count .current-page').first();
@@ -179,7 +188,7 @@ const searchFiltersMobile = () => {
 	const searchFiltersElement = document.querySelector('.search-filters-section');
 
 	window.addEventListener("resize", () => {
-		setSearchFiltersAriaExpandedIfMobile();
+		setSearchFiltersAriaExpandedIfMobile(searchFiltersButtonElement);
 		if ( window.innerWidth < 901) {
 			searchFiltersElement.style.height = "0px";
 		} else {
@@ -221,6 +230,7 @@ const searchFiltersMobile = () => {
 	const yptSearchFiltersForm = yptSearchBlock.find("form");
 	const yptSearchResultsElement = yptSearchBlock.find("#ypt-ajax-search-results");
 
+	yptSearchFiltersForm.trigger('reset');
 	yptSearchFiltersForm.on('submit',(e) => {
 		const searchFormData = verifyAndReturnSearchFormData(yptSearchFiltersForm, songFilterCheckboxes);
 		e.preventDefault();

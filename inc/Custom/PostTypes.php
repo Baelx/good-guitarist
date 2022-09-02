@@ -250,7 +250,11 @@ class PostTypes {
 			$term_pills_markup = $this->get_term_pills_markup();
 			$related_posts_markup = $this->get_related_posts_markup();
 
-			return sprintf( '%s%s%s%s', $song_and_artist, $term_pills_markup, $content, $related_posts_markup );
+			return sprintf( '%s%s%s%s',
+							$song_and_artist,
+							$term_pills_markup,
+							$content,
+							$related_posts_markup );
 		} else {
 			return $content;
 		}
@@ -282,6 +286,7 @@ class PostTypes {
 		include get_template_directory() . '/views/partials/ypt-pills.php';
 		return ob_get_clean();
 	}
+
 
 	/**
 	 * Get related posts markup.
@@ -322,6 +327,7 @@ class PostTypes {
 			$search_args = [
 				'post_type' => get_post_type( $post_id ) ?? 'post',
 				'posts_per_page' => is_null( $num_posts ) ? -1 : $num_posts,
+				'post_status' => 'publish'
 			];
 
 			$tax_args = [

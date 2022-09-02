@@ -27,9 +27,8 @@ class AjaxHandler {
 	}
 
 	/**
-     * Checks for a QF finder search happening and modifies the SQL query to
-     * allow for text search(by post name) as well as meta query searches of this
-     * same value.
+     * Modifies the SQL query to allow for text search(by post name) as well as
+	 * meta query searches of this same value.
      *
      * @link    https://wordpress.stackexchange.com/a/208939/121243
      * @param   array $sql    The SQL array object for the meta query.
@@ -111,7 +110,41 @@ class AjaxHandler {
 	}
 
 	/**
-	 * Handle an ajax request.
+	 * Filter search results by chord selection.
+	 * 
+	 * @param	array	$song_chords_filter		The chords filters. 
+	 * @return	bool
+	 */
+	public function post_matches_chord_selection( array $song_chords_filter ): bool {
+		$is_chord_match = true;
+		$the_post_chords = get_the_terms( get_the_ID(), 'chords' );
+		// Sort the chords search filter for easier comparison later.
+		sort( $song_chords_filter['chords'] );
+
+		// If the post has chords selected, get an array of those chord slugs.
+		if ( is_array( $the_post_chords ) && ! empty( $the_post_chords ) ) {
+			$the_post_chords = array_map( function ( $chord_obj ) {
+				return $chord_obj->slug;
+			}, $the_post_chords );
+
+			// Sort the individual post chords for individual comparison later.
+			sort( $the_post_chords );
+		}
+
+		if ( 'exact' === $song_chords_filter['filter-type'] ) {
+			$is_chord_match = $song_chords_filter['chords'] === $the_post_chords;
+		} else if ( 'include' === $song_chords_filter['filter-type'] ) {
+			$chord_difference = array_intersect( $song_chords_filter['chords'], $the_post_chords );
+			if ( $chord_difference !== $song_chords_filter['chords'] ) {
+				$is_chord_match = false;
+			}
+		}
+
+		return $is_chord_match;
+	}
+
+	/**
+	 * Handle a Youtube Post search ajax request. Builds WP_Query based on form search values.
 	 *
 	 * @return void
 	 */
@@ -153,6 +186,7 @@ class AjaxHandler {
 		$search_args = [
 			's' => sanitize_text_field( $_GET['songSearchText'] ),
 			'post_type' => 'youtube-post',
+			'post_status' => 'publish',
 			'posts_per_page' => -1,
 			'tax_query' => $tax_query,
 			'meta_query' => $meta_query,
@@ -169,25 +203,15 @@ class AjaxHandler {
 
 			while ( $search_query->have_posts() ) {
 				$search_query->the_post();
-
-				$is_exact_chord_match = true;
-				$the_post_chords = get_the_terms( get_the_ID(), 'chords' );
-
-				if ( is_array( $the_post_chords ) && ! empty( $the_post_chords ) ) {
-					$the_post_chords = array_map( function ( $chord_obj ) {
-						return $chord_obj->slug;
-					}, $the_post_chords );
-
-					sort( $the_post_chords );
-				}
-
-				if ( 'exact' === $song_chords_filter['filter-type'] ) {
-					sort( $song_chords_filter['chords'] );
-					$is_exact_chord_match = $song_chords_filter['chords'] === $the_post_chords;
+				$is_chord_match = true;
+				
+				// Only filter by chords if user selected certain chords for their search.
+				if ( count( $song_chords_filter['chords'] ) > 0 ) {
+					$is_chord_match = $this->post_matches_chord_selection( $song_chords_filter );
 				}
 
 				// Filter down the songs by exact chord match if applicable.
-				if ( $is_exact_chord_match ) {
+				if ( $is_chord_match ) {
 					$result["data"][] = [
 						"id" => get_the_ID(),
 						"title" => get_the_title(),

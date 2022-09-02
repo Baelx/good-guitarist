@@ -1,12 +1,25 @@
-import { getCtaDataFromPosts, createBlocksFromDescription } from '../../utils';
+import {
+    getCtaDataFromPosts,
+    createBlocksFromDescription
+} from '../../utils';
 import { SidebarCta } from '../../components/SidebarCta';
 const { TextControl, PanelRow, SelectControl, ToggleControl, Spinner } = wp.components;
 const { useBlockProps, InnerBlocks } = wp.blockEditor;
 const { PluginDocumentSettingPanel } = wp.editPost;
-const { select, useSelect, dispatch, useDispatch } = wp.data;
+const { select, useSelect, dispatch, subscribe } = wp.data;
 const { useRef, useState, useEffect } = wp.element;
 const { __ } = wp.i18n;
+const { isSavingPost } = select( 'core/editor' );
 
+/**
+ * Edit component for Youtube Post Template.
+ * 
+ * Presents a UI that the user can use to pull Youtube Video Post data with.
+ * Also presents a number of taxonomies and meta fields in the sidebar(chords, difficulty, etc.).
+ * 
+ * @param {object} props Gutenberg default props. 
+ * @returns {JSX}
+ */
 export const BlockEdit = ({ clientId, attributes, className, setAttributes }) => {
     const {
         videoInfoFetched,
@@ -23,11 +36,22 @@ export const BlockEdit = ({ clientId, attributes, className, setAttributes }) =>
     const blockProps = useBlockProps();
     const postBody = useRef();
     const [isFetching, setIsFetching] = useState(false);
+    const [isSavingProcess, setSavingProcess] = useState(false);
     const [errorMessage, setErrorMessage] = useState({
         class: 'fetch-message-hidden',
         message: ''
     });
 
+    // Subscribe to the post save event and update a piece of state if it's currently saving.
+    subscribe(() => {
+        if (isSavingPost()) {
+            setSavingProcess(true);
+        } else {
+            setSavingProcess(false);
+        }
+    });
+
+    // On component render, if there is no youtube API key in the site settings, show the user an error.
     useEffect(() => {
         if (!gutenbergVars.youtube_api_key) {
             setErrorMessage({
@@ -37,6 +61,7 @@ export const BlockEdit = ({ clientId, attributes, className, setAttributes }) =>
         }
     }, []);
 
+    // Get various data from the Wordpress store.
     const { postMeta, ctaData, ctaSelectOptions } = useSelect( ( select ) => {
         const ctaPosts = select( 'core' ).getEntityRecords( 'postType', 'cta', { per_page: -1 } );
         let ctaData;
@@ -44,6 +69,8 @@ export const BlockEdit = ({ clientId, attributes, className, setAttributes }) =>
             label: 'None',
             value: -1
         }];
+
+        // Extract data from all CTA posts to use in the sidebar slot dropdown menus.
         if (ctaPosts) {
             ctaData = getCtaDataFromPosts(ctaPosts);
             // Create dropdown options.
@@ -56,12 +83,131 @@ export const BlockEdit = ({ clientId, attributes, className, setAttributes }) =>
         }
 
         return {
+            // Return the post's meta values. This comes in handy for displaying those values in the block.
             postMeta: select( 'core/editor' ).getEditedPostAttribute( 'meta' ),
+            // Return the data from CTA posts.
             ctaData: ctaData,
+            // Return the options used in the sidebar slot dropdowns.
             ctaSelectOptions: ctaSelectOptions,
         };
     } );
 
+    /**
+     * 
+     * 
+     * @param {array} selectedChords The selected chords of the post.
+     * @return {void}
+     */
+    const updateSongChordsBlock = (selectedChords) => {
+        const currentBlock = select( 'core/block-editor' ).getBlocksByClientId( clientId )[ 0 ];
+        
+        if (currentBlock && currentBlock.innerBlocks) {
+            const songChordsBlocks = currentBlock.innerBlocks.filter(block => 'gutenberg-good-guitarist/song-chords' === block.name);
+            const songChordsBlocksIds = songChordsBlocks.map(block => block.id);
+            dispatch('core/block-editor').updateBlockAttributes(songChordsBlocksIds, {
+                chords: selectedChords
+            })
+        }
+    }
+
+    const updateSongDifficultyBlock = () => {
+        const postContent = select('core/editor').getEditedPostContent();
+        const songDifficultyBlock = getBlockTypeFromPostContent(postContent, 'gutenberg-good-guitarist/song-difficulty');
+    }
+    
+
+    // Watch for the song chords to change. If they do, update the post's chord list block(s).
+    useSelect((select) => {
+        let songChords = [];
+        const chordIds = select('core/editor').getEditedPostAttribute('chords');
+        const allChords = select('core').getEntityRecords('taxonomy', 'chords');
+        if (Array.isArray(chordIds) && Array.isArray(allChords)) {
+            const selectedChords = allChords.filter(chord => chordIds.includes(chord.id));
+            songChords = selectedChords.map(chord => chord.name);
+            console.log('the chords', selectedChords)
+            updateSongChordsBlock(selectedChords);
+
+        }
+        // return songChords;
+    });
+
+    // Watch for the song difficulty to change. If it does, update the post's chord list block(s).
+    const songDifficulty = useSelect((select) => {
+        let songDifficulty = '';
+        if (postMeta) {
+            const songDifficultyMeta = postMeta?.song_difficulty;
+            if ( songDifficultyMeta <= 10 ) {
+                songDifficulty = __('Very Beginner');
+            } else if (songDifficulty > 10 && songDifficulty <= 20) {
+                songDifficulty = __('Beginner');
+            } else if (songDifficulty > 20 && songDifficulty <= 30) {
+                songDifficulty = __('Beginner-To-Intermediate');
+            } else if (songDifficulty > 30 && songDifficulty <= 40) {
+                songDifficulty = __('Intermediate');
+            } else if (songDifficulty > 40 && songDifficulty <= 50) {
+                songDifficulty = __('Advanced');
+            }
+        }
+
+        console.log('the diff', postMeta?.song_difficulty)
+    });
+
+    /**
+     * Save meta fields and terms into attributes to be able to nicely display
+     * them on the frontend of the block.
+     * 
+     * @return {void}
+     */
+    const updateAttributesWithMetaAndTerms = async () => {
+        let songDifficultyMeta;
+        let songChords = [];
+        const chordIds = select('core/editor').getEditedPostAttribute('chords');
+        const allChords = select('core').getEntityRecords('taxonomy', 'chords');
+        if (Array.isArray(chordIds) && Array.isArray(allChords)) {
+            const selectedChords = allChords.filter(chord => chordIds.includes(chord.id));
+            songChords = selectedChords.map(chord => chord.name);
+        }
+
+        let songDifficulty = '';
+        if (postMeta) {
+            songDifficultyMeta = postMeta?.song_difficulty;
+            if ( songDifficultyMeta <= 10 ) {
+                songDifficulty = __('Very Beginner');
+            } else if (songDifficulty > 10 && songDifficulty <= 20) {
+                songDifficulty = __('Beginner');
+            } else if (songDifficulty > 20 && songDifficulty <= 30) {
+                songDifficulty = __('Beginner-To-Intermediate');
+            } else if (songDifficulty > 30 && songDifficulty <= 40) {
+                songDifficulty = __('Intermediate');
+            } else if (songDifficulty > 40 && songDifficulty <= 50) {
+                songDifficulty = __('Advanced');
+            }
+        }
+
+        console.log('song', songChords, songDifficulty)
+        await setAttributes({
+            songChordsAttribute: songChords,
+            songDifficultyAttribute: songDifficulty,
+            songTitle: 'susssss'
+        })
+
+    };
+
+    // Check if the post is saving and then save the meta and taxonomy into attributes.
+    useEffect(() => {
+        if (isSavingProcess) {
+            updateAttributesWithMetaAndTerms();
+        }
+    }, [isSavingProcess]);
+
+    /**
+     * Handle when the user toggles the sidebar CTAs to the right of the embedded
+     * Youtube video.
+     * 
+     * @param {string} sidebarSlot Which sidebar slot to toggle.
+     * @param {number} ctaId Which CTA to display in the sidebar.
+     * @return {void}
+     */
     const handleSidebarToggle = (sidebarSlot, ctaId) => {
         if (ctaData) {
             const numId = Number(ctaId);
@@ -71,7 +217,6 @@ export const BlockEdit = ({ clientId, attributes, className, setAttributes }) =>
                 ...cta
             }});
         }
-        
     }
 
     /**
@@ -95,7 +240,7 @@ export const BlockEdit = ({ clientId, attributes, className, setAttributes }) =>
     }
 
     /**
-     * Update fetch completion message state and make message visible to user.
+     * Update youtube video fetch completion message state and make message visible to user.
      *
      * @param {Boolean} completedSuccessfully
      * @param {String} errorMessage
@@ -124,8 +269,14 @@ export const BlockEdit = ({ clientId, attributes, className, setAttributes }) =>
 
     /**
      * Handle a successful youtube video fetch.
+     * 
+     * Attempts to populate the innerblocks with blocks containing the Youtube description.
+     * It adds a song chords and song difficulty block at the top.
+     * Adds a paragraph block for each line of the Youtube Video description.
+     * If a link is detected, it attempts to add it into a Small CTA block.
      *
-     * @param {Object} response
+     * @param {Object} response Youtube fetch response for a single YT video.
+     * @return {void}
      */
     const handleFetchResponse = (response) => {
         try {
@@ -168,8 +319,9 @@ export const BlockEdit = ({ clientId, attributes, className, setAttributes }) =>
      *
      * @link https://github.com/google/google-api-javascript-client/blob/master/docs/reference.md
      *
-     * @param {MouseEvent} event
-     * @param {String} videoID
+     * @param {FormEvent} event A form submit event.
+     * @param {String} videoID The video ID parsed out from the URL the user entered.
+     * @return {void}
      */
     const initFetch = (event, videoID) => {
         event.preventDefault();
@@ -186,6 +338,7 @@ export const BlockEdit = ({ clientId, attributes, className, setAttributes }) =>
                     id : videoID
                 })
                 .then(response => {
+                    // Fetch successful.
                     setIsFetching(false);
                     handleFetchResponse(response);
                 }, error => {
@@ -263,7 +416,7 @@ export const BlockEdit = ({ clientId, attributes, className, setAttributes }) =>
                     />
                     <button type="submit" className="yt-submit-button" disabled={isFetching}>{isFetching ? <Spinner /> : __('Submit') }</button>
                 </form>
-                { videoTitle && <TextControl label={__('Video Title')} value={videoTitle} onChange={(e) => setAttributes({videoTitle: e.target.value})} />}
+                { videoTitle && <TextControl label={__('Video Title')} value={videoTitle} onChange={(value) => setAttributes({videoTitle: value})} />}
                 { ( videoThumbnail && videoInfoFetched ) &&
                     <>
                         <label className="youtube-post-label">{__('Video Thumbnail')}</label>

@@ -2,29 +2,30 @@ const { parse } = wp.blockSerializationDefaultParser;
 const { createBlock } = wp.blocks;
 
 /**
- * Parse 'gutenberg-good-guitarist/cta-template' block from a post.
+ * Get certain blocks by ID from post content.
  *
- * @param {array} ctaPost
+ * @param {array} post Post content.
+ * @param {string} blockId The block ID to get all instances of.
  * @returns {array}
  */
-const getCtaTemplateBlockFromPost = (ctaPost) => {
-	const parsedBlocks = parse(ctaPost.content.raw);
-	return parsedBlocks.find(block => 'gutenberg-good-guitarist/cta-template' === block.blockName);
+export const getBlockTypeFromPostContent = (post, blockId) => {
+	const parsedBlocks = parse(post.content.raw);
+	return parsedBlocks.filter(block =>  blockId === block.blockName);
 }
 
 /**
- *  Format CTA data from a CTA post.
+ *  Format CTA data from a CTA post type.
  *
- * @param {array} ctaPosts
+ * @param {array} ctaPosts CTA posts.
  * @returns {array}
  */
 export const getCtaDataFromPosts = (ctaPosts) => {
 	const validCtaPosts = ctaPosts.filter(ctaPost => {
-		return ctaPost.id ? getCtaTemplateBlockFromPost(ctaPost) : undefined;
+		return ctaPost.id ? getBlockTypeFromPostContent(ctaPost, 'gutenberg-good-guitarist/cta-template')[0] : undefined;
 	})
 
 	return validCtaPosts.map(ctaPost => {
-		const ctaAtts = getCtaTemplateBlockFromPost(ctaPost).attrs;
+		const ctaAtts = getBlockTypeFromPostContent(ctaPost, 'gutenberg-good-guitarist/cta-template')[0].attrs;
 		return {
 			id: ctaPost.id,
 			title: ctaPost.title.raw,
@@ -41,6 +42,7 @@ export const getCtaDataFromPosts = (ctaPosts) => {
  * Check if string has http:// or https:// in it.
  *
  * @param {string} stringToCheck
+ * @return {string}
  */
 export const getLinkFromString = (stringToCheck) => {
 	const linkRegex = /(http:\/\/|https:\/\/).*/g;
@@ -57,7 +59,7 @@ export const getLinkFromString = (stringToCheck) => {
  * youtube description.
  *
  * @param {array} descriptionArray
- * @returns
+ * @returns {object}
  */
 export const createBlocksFromDescription = (descriptionArray) => {
 	const descriptionWithoutEmpties = descriptionArray.filter(description => description.length);

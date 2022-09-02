@@ -66,6 +66,15 @@ class Taxonomies {
 				]
 			],
 			[
+				'key' => 'feel',
+				'singular_name' => 'Feel',
+				'plural_name' => 'Feels',
+				'defaults' => [
+					'Swing',
+					'Straight',
+				]
+			],
+			[
 				'key' => 'chords',
 				'singular_name' => 'Chords',
 				'plural_name' => 'Chords',

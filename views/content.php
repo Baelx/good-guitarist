@@ -55,8 +55,4 @@
 			);
 		?>
 	</div><!-- .entry-content -->
-
-	<footer class="entry-footer">
-		<?php GoodGuitarist\Core\Tags::entry_footer(); ?>
-	</footer><!-- .entry-footer -->
 </article><!-- #post-## -->

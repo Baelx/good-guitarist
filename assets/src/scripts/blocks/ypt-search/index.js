@@ -3,7 +3,7 @@ const { registerBlockType } = wp.blocks;
 import { BlockEdit } from './BlockEdit';
 
 registerBlockType( 'gutenberg-good-guitarist/ypt-search', {
-	title: 'Youtube Post Search Box',
+	title: __('Youtube Post Search Box'),
 	icon: 'search',
 	category: 'layout',
 	className: 'youtube-post-type-search',

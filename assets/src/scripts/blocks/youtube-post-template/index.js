@@ -1,6 +1,7 @@
 const { registerBlockType } = wp.blocks;
 import { BlockEdit } from './BlockEdit';
 import { BlockSave } from './BlockSave';
+import { v1 } from './deprecated/v1';
 
 registerBlockType( 'gutenberg-good-guitarist/ypt', {
 	apiVersion: 2,
@@ -49,8 +50,19 @@ registerBlockType( 'gutenberg-good-guitarist/ypt', {
 		postBodyElements: {
 			type: 'array',
 			default: []
+		},
+		songChordsAttribute: {
+			type: 'array',
+			default: []
+		},
+		songDifficultyAttribute: {
+			type: 'string',
+			default: ''
 		}
 	},
+	deprecated: [
+		v1,
+	],
 	edit: BlockEdit,
 	save: BlockSave
 });

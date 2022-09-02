@@ -30,14 +30,6 @@ body {
 		}
 	}
 
-
-	// &.single {
-	// 	.entry-title {
-	// 		margin: inherit;
-	// 		margin-bottom: 5%;
-	// 	}
-	// }
-
 	&.page {
 		.site-content {
 			margin-top: 0%;
@@ -49,6 +41,7 @@ body {
 			margin-top: 5%;
 			margin-left: 5%;
 			margin-right: 5%;
+			text-align: center;
 	
 			@media screen and (min-width: $sm) {
 				margin-left: 10%;
@@ -56,12 +49,4 @@ body {
 			}
 		}
 	}
-
-	// &.single-youtube-post {
-	// 	.entry-header, .entry-content {
-	// 		.entry-title {
-	// 			margin: inherit;
-	// 		}
-	// 	}
-	// }
 }

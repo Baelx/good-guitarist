@@ -45,17 +45,4 @@ $headerSearchButton.on('click', (e) => {
 	const carousel = new Carousel();
 })(jQuery);
 
-/**
- * Set aria-expanded attributes for mobile devices(less than 901px wide).
- *
- * @param {HTMLElement} buttonElement
- */
-//  const setSearchFiltersAriaExpandedIfMobile = (buttonElement) => {
-// 	if ( window.innerWidth < 901) {
-// 		buttonElement.setAttribute('aria-expanded', "false");
-// 	} else {
-// 		buttonElement.setAttribute('aria-expanded', "true");
-// 	}
-// }
-
 

@@ -7,7 +7,8 @@ require( './blocks/latest-lessons' );
 require( './blocks/youtube-post-template' );
 require( './blocks/ypt-search' );
 require( './blocks/section' );
-require( './blocks/chord-diagram' );
+require( './blocks/song-chords' );
+require( './blocks/song-difficulty' );
 
 // Import utils to customize Gutenberg interface.
 require( './modules/gutenbergUtils' );
