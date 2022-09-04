@@ -60,17 +60,20 @@ class AjaxHandler {
 	 * Checks if the ajax parameter is set and adds a taxonmy query to the
 	 * WP Query if so. If not, returns the taxonomy query.
 	 *
-	 * @param	string	$tax_slug	The slug of the taxonomy to search in.
-	 * @param	string	$ajax_param The parameter to check for in the GET request.
+	 * @param	string		 $tax_slug		The slug of the taxonomy to search in.
+	 * @param	string		 $ajax_param 	The parameter to check for in the GET request.
+	 * @param	object  	 $tax_query  	The tax query object to append to.
+	 * @param	string|null  $operator   	The taxonomy query operator to use.
 	 * @return	array
 	 */
-	private function add_tax_query_from_request( string $tax_slug, string $ajax_param, array $tax_query): array {
+	private function add_tax_query_from_request( string $tax_slug, string $ajax_param, array $tax_query, $operator = null ): array {
 		if 	( isset( $_GET[ $ajax_param ] ) ) {
 			$tax_query[] = [
 				'taxonomy' => $tax_slug,
 				'field' => 'slug',
 				// sanitize_array() in Helpers.php.
-				'terms' => sanitize_array( $_GET[ $ajax_param ] )
+				'terms' => sanitize_array( $_GET[ $ajax_param ] ),
+				'operator' => $operator ? $operator : 'IN'
 			];
 		}
 		return $tax_query;
@@ -134,10 +137,7 @@ class AjaxHandler {
 		if ( 'exact' === $song_chords_filter['filter-type'] ) {
 			$is_chord_match = $song_chords_filter['chords'] === $the_post_chords;
 		} else if ( 'include' === $song_chords_filter['filter-type'] ) {
-			$chord_difference = array_intersect( $song_chords_filter['chords'], $the_post_chords );
-			if ( $chord_difference !== $song_chords_filter['chords'] ) {
-				$is_chord_match = false;
-			}
+			// Todo: remove this conditional if not needed.
 		}
 
 		return $is_chord_match;
@@ -159,13 +159,23 @@ class AjaxHandler {
 		// Append additional taxonomy queries to $tax_query.
 		$tax_query = $this->add_tax_query_from_request( 'decade', 'songDecade', $tax_query );
 		$tax_query = $this->add_tax_query_from_request( 'genre', 'songGenre', $tax_query );
-		$tax_query = $this->add_tax_query_from_request( 'chords', 'songChords', $tax_query );
 		$tax_query = $this->add_tax_query_from_request( 'beginner-songs-containing-only', 'songBeginner', $tax_query );
+		$tax_query = $this->add_tax_query_from_request( 'chords', 'songChords', $tax_query, 'AND' );
+
+		// Only add a query for feel types if the user selected a specific feel.
+		if ( 'all' !== sanitize_text_field( $_GET['songFeel'] ) ) {
+			$tax_query = $this->add_tax_query_from_request( 'rhythmic-feel', 'songFeel', $tax_query );
+		}
 
 		// Save for later to filter by exact chords.
 		if ( isset( $_GET['songChordsFilterType'] ) ) {
 			$song_chords_filter['chords'] = sanitize_array( $_GET['songChords'] );
 			$song_chords_filter['filter-type'] = sanitize_text_field( $_GET['songChordsFilterType'] );
+		}
+
+		// Only add the search query for chords if the user selected chords.
+		if ( is_array( $song_chords_filter['chords'] ) && ! empty( $song_chords_filter['chords'] ) ) {
+			$tax_query = $this->add_tax_query_from_request( 'chords', 'songChords', $tax_query, 'AND' );
 		}
 
 		// Add song difficulty meta query.
@@ -206,7 +216,7 @@ class AjaxHandler {
 				$is_chord_match = true;
 				
 				// Only filter by chords if user selected certain chords for their search.
-				if ( count( $song_chords_filter['chords'] ) > 0 ) {
+				if ( is_array( $song_chords_filter['chords'] ) && ! empty( $song_chords_filter['chords'] ) ) {
 					$is_chord_match = $this->post_matches_chord_selection( $song_chords_filter );
 				}
 
@@ -224,7 +234,7 @@ class AjaxHandler {
 			wp_send_json($result);
 
 		} else {
-			// no posts found.
+			// No posts found.
 			$result["data"] = [];
 			$result["status"] = 404;
 

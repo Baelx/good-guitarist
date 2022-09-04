@@ -126,6 +126,7 @@ if ( ! function_exists('sanitize_array') ) {
 	 *
 	 */
 	function sanitize_array( $array ) {
+		error_log($array);
 		foreach ( $array as $key => &$value ) {
 			if ( is_array( $value ) ) {
 				$value = sanitize_array($value);

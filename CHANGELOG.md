@@ -1,4 +1,9 @@
-### Sept 2, 2022
+### Sep 3, 2022
+- Add basic song chord and difficulty blocks that udpate automatically when post saved twice.
+- Adjust song finder chord search results when using "include"
+- Finish adding Feel taxonomy(works in song finder)
+
+### Sep 2, 2022
 - Center post titles
 - Add song chords and difficulty blocks for YPT block
 - Add new Feel taxonomy

@@ -62,7 +62,7 @@ AjaxHandler::ypt_filter_search_scripts();
 				<?php endif; ?>
 				<div class="single-button-filters-container">
 					<label class="checkbox single-button-filter-label" for="contains-one-barre-chord">
-						Songs that contain only one barre chord
+						<?php _e('Songs that contain only one barre chord'); ?>
 						<input type="checkbox"
 								name="songContainsOneBarre"
 								id="contains-one-barre-chord"
@@ -70,6 +70,75 @@ AjaxHandler::ypt_filter_search_scripts();
 						<span class="checkmark">
 					</label>
 				</div>
+				<fieldset class="column search-filter">
+					<legend class="search-label"><?php esc_html_e('Difficulty') ?></legend>
+						<label class="checkbox" for="very-beginner">
+							<?php esc_html_e('Very Beginner'); ?>
+							<input type="checkbox"
+									name="songDifficulty"
+									id="very-beginner"
+									value="very-beginner"
+							>
+							<span class="checkmark">
+						</label>
+						<label class="checkbox" for="beginner">
+							<?php esc_html_e('Beginner'); ?>
+							<input type="checkbox"
+									name="songDifficulty"
+									id="beginner"
+									value="beginner"
+							>
+							<span class="checkmark">
+						</label>
+						<label class="checkbox" for="beginner-to-intermediate">
+							<?php esc_html_e('Beginner-to-Intermediate'); ?>
+							<input type="checkbox"
+									name="songDifficulty"
+									id="beginner-to-intermediate"
+									value="beginner-to-intermediate"
+							>
+							<span class="checkmark">
+						</label>
+						<label class="checkbox" for="intermediate">
+							<?php esc_html_e('Intermediate'); ?>
+							<input type="checkbox"
+									name="songDifficulty"
+									id="intermediate"
+									value="intermediate"
+							>
+							<span class="checkmark">
+						</label>
+						<label class="checkbox" for="advanced">
+							<?php esc_html_e('Advanced'); ?>
+							<input type="checkbox"
+									name="songDifficulty"
+									id="advanced"
+									value="advanced"
+							>
+							<span class="checkmark">
+						</label>
+				</fieldset>
+				<?php if ( $ypt_terms['rhythmic-feel'] ?? null ): ?>
+					<fieldset class="column search-filter">
+						<legend class="search-label"><?php esc_html_e('Rhythmic Feel') ?></legend>
+							<label class="radio" for="all">
+								<?php _e('All'); ?>
+								<input type="radio" name="songFeel" id="all" value="all" checked="checked" />
+								<span class="dot"></span>
+							</label>
+							<?php foreach ( $ypt_terms['rhythmic-feel'] as $feel_term ): ?>
+								<label class="radio" for="<?php echo esc_attr( $feel_term['slug'] ); ?>">
+									<?php echo esc_html( $feel_term['name'] ); ?>
+									<input type="radio"
+											name="songFeel"
+											id="<?php echo esc_attr( $feel_term['slug'] ); ?>"
+											value="<?php echo esc_attr( $feel_term['slug'] ); ?>"
+									>
+									<span class="dot"></span>
+								</label>
+							<?php endforeach; ?>
+					</fieldset>
+				<?php endif; ?>
 				<?php if ( $ypt_terms['genre'] ?? null ): ?>
 					<fieldset class="column search-filter">
 						<legend class="search-label"><?php esc_html_e('Genre') ?></legend>
@@ -100,56 +169,6 @@ AjaxHandler::ypt_filter_search_scripts();
 									<span class="checkmark">
 								</label>
 							<?php endforeach; ?>
-					</fieldset>
-				<?php endif; ?>
-				<?php if ( $ypt_meta['difficulty'] ?? null ): ?>
-					<fieldset class="column search-filter">
-						<legend class="search-label"><?php esc_html_e('Difficulty') ?></legend>
-							<label class="checkbox" for="very-beginner">
-								<?php esc_html_e('Very Beginner'); ?>
-								<input type="checkbox"
-										name="songDifficulty"
-										id="very-beginner"
-										value="very-beginner"
-								>
-								<span class="checkmark">
-							</label>
-							<label class="checkbox" for="beginner">
-								<?php esc_html_e('Beginner'); ?>
-								<input type="checkbox"
-										name="songDifficulty"
-										id="beginner"
-										value="beginner"
-								>
-								<span class="checkmark">
-							</label>
-							<label class="checkbox" for="beginner-to-intermediate">
-								<?php esc_html_e('Beginner-to-Intermediate'); ?>
-								<input type="checkbox"
-										name="songDifficulty"
-										id="beginner-to-intermediate"
-										value="beginner-to-intermediate"
-								>
-								<span class="checkmark">
-							</label>
-							<label class="checkbox" for="intermediate">
-								<?php esc_html_e('Intermediate'); ?>
-								<input type="checkbox"
-										name="songDifficulty"
-										id="intermediate"
-										value="intermediate"
-								>
-								<span class="checkmark">
-							</label>
-							<label class="checkbox" for="advanced">
-								<?php esc_html_e('Advanced'); ?>
-								<input type="checkbox"
-										name="songDifficulty"
-										id="advanced"
-										value="advanced"
-								>
-								<span class="checkmark">
-							</label>
 					</fieldset>
 				<?php endif; ?>
 			</div>

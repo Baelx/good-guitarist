@@ -59,6 +59,7 @@ const sendAjaxRequest = ( yptSearchResultsElement, searchFormData ) => {
 			url : YPTSEARCHAJAX.ajax_url,
 			data : searchFormData,
 			success : (response) => {
+				console.log('the result', response)
 				yptSearchResultsElement.empty();
 				yptSearchResultsCountElement.each(function() {
 					$(this).text(response.data.length);
@@ -78,9 +79,10 @@ const sendAjaxRequest = ( yptSearchResultsElement, searchFormData ) => {
  */
 const populateSearchResults = (results, yptSearchResultsElement) => {
 	results.forEach((post) => {
+		const videoThumbnail = post.content.length > 0 ? post.content[0]?.attrs?.videoThumbnail : '';
 		let html = "<li class='ypt-result' id='ypt-" + post.id + "'>";
 		html += "  <a href='" + post.permalink + "' title='" + post.title + "'>";
-		html += "	   <img src='" + post.content[0].attrs.videoThumbnail + "' />";
+		html += "	   <img src='" + videoThumbnail + "' />";
 		html += "      <div class='ypt-info'>";
 		html += "          <h3>" + post.title + "</h3>";
 		html += "      </div>";
@@ -222,6 +224,7 @@ const searchFiltersMobile = () => {
 		'songChords',
 		'songChordsFilterType',
 		'songGenre',
+		'songFeel',
 		'songBeginner',
 		'songDifficulty',
 		'songContainsOneBarre'

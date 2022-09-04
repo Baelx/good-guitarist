@@ -5,12 +5,13 @@ export const BlockSave = ({ className, attributes }) => {
 
     return (
         <div className={className}>
-            { chords.length > 0 && chords.map((chord, i, array) => (
+            <span>{__('Song Chords: ')}</span>
+            { chords.length > 0 ? chords.map((chord, i, array) => (
                 <>
                     <span key={chord}>{chord}</span>
-                    {true ? ", " : ""}
+                    {i !== array.length - 1 ? ", " : ""}
                 </>
-            ))}
+            )) : <span></span>}
         </div>
     )
 }

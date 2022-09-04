@@ -5,12 +5,13 @@ export const BlockEdit = ({ className, attributes, setAttributes }) => {
 
     return (
         <div className={className}>
-            { chords.length > 0 && chords.map((chord, i, array) => (
+            <span>{__('Song Chords: ')}</span>
+            { chords.length > 0 ? chords.map((chord, i, array) => (
                 <>
                     <span key={chord}>{chord}</span>
-                    {true ? ", " : ""}
+                    {i !== array.length - 1 ? ", " : ""}
                 </>
-            ))}
+            )) : <span>{__('(Chords will populate when post is saved)')}</span>}
         </div>
     )
 }

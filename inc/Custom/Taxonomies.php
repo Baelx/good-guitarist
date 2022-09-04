@@ -66,12 +66,12 @@ class Taxonomies {
 				]
 			],
 			[
-				'key' => 'feel',
-				'singular_name' => 'Feel',
-				'plural_name' => 'Feels',
+				'key' => 'rhythmic-feel',
+				'singular_name' => 'Rhythmic Feel',
+				'plural_name' => 'Rhythmic Feels',
 				'defaults' => [
-					'Swing',
 					'Straight',
+					'Swing',
 				]
 			],
 			[

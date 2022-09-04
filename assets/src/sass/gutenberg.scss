@@ -4,7 +4,7 @@
 @import 'partials/checkbox';
 @import 'partials/radio';
 
-/** All blocks **/
+/** Blocks **/
 @import 'blocks/general';
 @import 'blocks/small-cta';
 @import 'blocks/large-cta';
@@ -17,6 +17,8 @@
 @import 'blocks/youtube-search-block';
 @import 'blocks/section';
 @import 'blocks/popover';
+@import 'blocks/song-chords';
+@import 'blocks/song-difficulty';
 
 /** Components **/
 @import 'components/sidebar-cta';

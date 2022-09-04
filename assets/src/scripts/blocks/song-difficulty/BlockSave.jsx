@@ -5,8 +5,8 @@ export const BlockSave = ({ className, attributes }) => {
 
     return (
         <div className={className}>
-            {difficulty && <span>{__('Song difficulty: ')}</span>}
-            {difficulty && <span>{difficulty}</span>}
+            <span>{__('Song difficulty: ')}</span>
+            {difficulty ? <span>{difficulty}</span> : <span></span>}
         </div>
     )
 }

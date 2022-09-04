@@ -10,7 +10,7 @@ registerBlockType( 'gutenberg-good-guitarist/song-difficulty', {
 	// Only show this block in the youtube post template block.
 	parent: [ "gutenberg-good-guitarist/ypt" ],
 	attributes: {
-		chords: {
+		difficulty: {
 			type: 'string',
 			default: ''
 		}

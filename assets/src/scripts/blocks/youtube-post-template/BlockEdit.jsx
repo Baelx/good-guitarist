@@ -62,7 +62,7 @@ export const BlockEdit = ({ clientId, attributes, className, setAttributes }) =>
     }, []);
 
     // Get various data from the Wordpress store.
-    const { postMeta, ctaData, ctaSelectOptions } = useSelect( ( select ) => {
+    const { postMeta, ctaData, ctaSelectOptions, allChords, currentBlock } = useSelect( ( select ) => {
         const ctaPosts = select( 'core' ).getEntityRecords( 'postType', 'cta', { per_page: -1 } );
         let ctaData;
         let ctaSelectOptions = [{
@@ -89,6 +89,10 @@ export const BlockEdit = ({ clientId, attributes, className, setAttributes }) =>
             ctaData: ctaData,
             // Return the options used in the sidebar slot dropdowns.
             ctaSelectOptions: ctaSelectOptions,
+            // Return all possible chords.
+            allChords: select('core').getEntityRecords('taxonomy', 'chords'),
+            // Return information about the current block(Youtube Post Template).
+            currentBlock: select( 'core/block-editor' ).getBlocksByClientId( clientId )[ 0 ]
         };
     } );
 
@@ -99,58 +103,23 @@ export const BlockEdit = ({ clientId, attributes, className, setAttributes }) =>
      * @return {void}
      */
     const updateSongChordsBlock = (selectedChords) => {
-        const currentBlock = select( 'core/block-editor' ).getBlocksByClientId( clientId )[ 0 ];
-        
-        if (currentBlock && currentBlock.innerBlocks) {
-            const songChordsBlocks = currentBlock.innerBlocks.filter(block => 'gutenberg-good-guitarist/song-chords' === block.name);
-            const songChordsBlocksIds = songChordsBlocks.map(block => block.id);
-            dispatch('core/block-editor').updateBlockAttributes(songChordsBlocksIds, {
-                chords: selectedChords
-            })
-        }
+        const songChordsBlocks = currentBlock.innerBlocks.filter(block => 'gutenberg-good-guitarist/song-chords' === block.name);
+        const songChordsBlocksIds = songChordsBlocks.map(block => block.clientId);
+
+        dispatch('core/block-editor').updateBlockAttributes(songChordsBlocksIds, {
+            chords: selectedChords
+        })
     }
 
-    const updateSongDifficultyBlock = () => {
-        const postContent = select('core/editor').getEditedPostContent();
-        const songDifficultyBlock = getBlockTypeFromPostContent(postContent, 'gutenberg-good-guitarist/song-difficulty');
+    const updateSongDifficultyBlock = (songDifficulty) => {
+        const songChordsBlocks = currentBlock.innerBlocks.filter(block => 'gutenberg-good-guitarist/song-difficulty' === block.name);
+        const songChordsBlocksIds = songChordsBlocks.map(block => block.clientId);
+
+        dispatch('core/block-editor').updateBlockAttributes(songChordsBlocksIds, {
+            difficulty: songDifficulty
+        })
     }
-    
 
-    // Watch for the song chords to change. If they do, update the post's chord list block(s).
-    useSelect((select) => {
-        let songChords = [];
-        const chordIds = select('core/editor').getEditedPostAttribute('chords');
-        const allChords = select('core').getEntityRecords('taxonomy', 'chords');
-        if (Array.isArray(chordIds) && Array.isArray(allChords)) {
-            const selectedChords = allChords.filter(chord => chordIds.includes(chord.id));
-            songChords = selectedChords.map(chord => chord.name);
-            console.log('the chords', selectedChords)
-            updateSongChordsBlock(selectedChords);
-
-        }
-        // return songChords;
-    });
-
-    // Watch for the song difficulty to change. If it does, update the post's chord list block(s).
-    const songDifficulty = useSelect((select) => {
-        let songDifficulty = '';
-        if (postMeta) {
-            const songDifficultyMeta = postMeta?.song_difficulty;
-            if ( songDifficultyMeta <= 10 ) {
-                songDifficulty = __('Very Beginner');
-            } else if (songDifficulty > 10 && songDifficulty <= 20) {
-                songDifficulty = __('Beginner');
-            } else if (songDifficulty > 20 && songDifficulty <= 30) {
-                songDifficulty = __('Beginner-To-Intermediate');
-            } else if (songDifficulty > 30 && songDifficulty <= 40) {
-                songDifficulty = __('Intermediate');
-            } else if (songDifficulty > 40 && songDifficulty <= 50) {
-                songDifficulty = __('Advanced');
-            }
-        }
-
-        console.log('the diff', postMeta?.song_difficulty)
-    });
 
     /**
      * Save meta fields and terms into attributes to be able to nicely display
@@ -158,45 +127,41 @@ export const BlockEdit = ({ clientId, attributes, className, setAttributes }) =>
      * 
      * @return {void}
      */
-    const updateAttributesWithMetaAndTerms = async () => {
-        let songDifficultyMeta;
-        let songChords = [];
-        const chordIds = select('core/editor').getEditedPostAttribute('chords');
-        const allChords = select('core').getEntityRecords('taxonomy', 'chords');
-        if (Array.isArray(chordIds) && Array.isArray(allChords)) {
-            const selectedChords = allChords.filter(chord => chordIds.includes(chord.id));
-            songChords = selectedChords.map(chord => chord.name);
-        }
+    const updateSongChordAndDifficultyBlocks = async () => {
+        if (currentBlock && currentBlock.innerBlocks) {
+            const chordIds = await select('core/editor').getEditedPostAttribute('chords');
+            
+            if ( ! select('core').isResolving( 'getEntityRecords', [ 'taxonomy', 'chords' ] ) ) {
+                const selectedChords = allChords.filter(chord => chordIds.includes(chord.id));
+                const songChords = selectedChords.map(chord => chord.name);
+                updateSongChordsBlock(songChords);
+            }
 
-        let songDifficulty = '';
-        if (postMeta) {
-            songDifficultyMeta = postMeta?.song_difficulty;
-            if ( songDifficultyMeta <= 10 ) {
-                songDifficulty = __('Very Beginner');
-            } else if (songDifficulty > 10 && songDifficulty <= 20) {
-                songDifficulty = __('Beginner');
-            } else if (songDifficulty > 20 && songDifficulty <= 30) {
-                songDifficulty = __('Beginner-To-Intermediate');
-            } else if (songDifficulty > 30 && songDifficulty <= 40) {
-                songDifficulty = __('Intermediate');
-            } else if (songDifficulty > 40 && songDifficulty <= 50) {
-                songDifficulty = __('Advanced');
+            if (postMeta) {
+                let songDifficulty = '';
+                const songDifficultyMeta = postMeta?.song_difficulty;
+
+                if ( songDifficultyMeta <= 10 ) {
+                    songDifficulty = __('Very Beginner');
+                } else if (songDifficultyMeta > 10 && songDifficultyMeta <= 20) {
+                    songDifficulty = __('Beginner');
+                } else if (songDifficultyMeta > 20 && songDifficultyMeta <= 30) {
+                    songDifficulty = __('Beginner-To-Intermediate');
+                } else if (songDifficultyMeta > 30 && songDifficultyMeta <= 40) {
+                    songDifficulty = __('Intermediate');
+                } else if (songDifficultyMeta > 40 && songDifficultyMeta <= 50) {
+                    songDifficulty = __('Advanced');
+                }
+
+                updateSongDifficultyBlock(songDifficulty);
             }
         }
-
-        console.log('song', songChords, songDifficulty)
-        await setAttributes({
-            songChordsAttribute: songChords,
-            songDifficultyAttribute: songDifficulty,
-            songTitle: 'susssss'
-        })
-
     };
 
     // Check if the post is saving and then save the meta and taxonomy into attributes.
     useEffect(() => {
         if (isSavingProcess) {
-            updateAttributesWithMetaAndTerms();
+            updateSongChordAndDifficultyBlocks();
         }
     }, [isSavingProcess]);
 
