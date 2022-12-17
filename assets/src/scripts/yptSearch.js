@@ -59,7 +59,6 @@ const sendAjaxRequest = ( yptSearchResultsElement, searchFormData ) => {
 			url : YPTSEARCHAJAX.ajax_url,
 			data : searchFormData,
 			success : (response) => {
-				console.log('the result', response)
 				yptSearchResultsElement.empty();
 				yptSearchResultsCountElement.each(function() {
 					$(this).text(response.data.length);
@@ -112,11 +111,13 @@ const paginateSearchResults = (results, yptSearchResultsElement, yptSearchResult
 	yptSearchResultsPageCountElement.find('.last-page').text('1');
 	yptSearchResultsElement.empty();
 	
-	if (results.length >= resultsPerPage) {
+	if (results.length > resultsPerPage) {
 		const chunkedResults = chunk(results, resultsPerPage);
 		yptSearchResultsPageCountElement.find('.current-page').text('1');
 		yptSearchResultsPageCountElement.find('.last-page').text(chunkedResults.length);
 		populateSearchResults(chunkedResults[0], yptSearchResultsElement, yptSearchResultsCountElement);
+		yptSearchPreviousPageButton.off('click');
+		yptSearchNextPageButton.off('click');
 
 		// Event listeners for previous and next page buttons.
 		yptSearchPreviousPageButton.on('click', (e) => {
@@ -129,7 +130,6 @@ const paginateSearchResults = (results, yptSearchResultsElement, yptSearchResult
 			yptSearchResultsElement.empty();
 			populateSearchResults(chunkedResults[newPageCount], yptSearchResultsElement, yptSearchResultsCountElement);
 		});
-
 	} else {
 		populateSearchResults(results, yptSearchResultsElement, yptSearchResultsCountElement);
 		yptSearchPreviousPageButton.prop("disabled", true).css("cursor", "not-allowed");
@@ -150,7 +150,8 @@ const paginateSearchResults = (results, yptSearchResultsElement, yptSearchResult
  * @return {string}
  */
 const updatePageCount = (changePageButton, increasePage, pageCount, yptSearchResultsPageCountElement) => {
-	const $pageCountElement = $(changePageButton).parent().first().find('.search-results-page-count .current-page').first();
+	const $pageCountElement = $('.search-results-page-count .current-page').first();
+	// const $pageCountElement = $(changePageButton).parent().first().find('.search-results-page-count .current-page').first();
 	let currentPage = Number($pageCountElement.data('page'));
 	let humanCurrentPage = currentPage + 1;
 
@@ -206,7 +207,7 @@ const searchFiltersMobile = () => {
 			searchFiltersButtonElement.setAttribute('aria-expanded', "false");
 			searchFiltersButtonArrowElement.style.transform = "rotate(0deg)";
 		} else if ("false" === searchFiltersButtonElement.getAttribute("aria-expanded")) {
-			searchFiltersElement.style.height = "450px";
+			searchFiltersElement.style.height = "100%";
 			searchFiltersButtonElement.setAttribute('aria-expanded', "true");
 			searchFiltersButtonArrowElement.style.transform = "rotate(180deg)";
 		}

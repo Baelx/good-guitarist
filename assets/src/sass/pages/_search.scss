@@ -1,4 +1,29 @@
 div.search-results {
+	margin-top: 7%;
+
+	form {
+		.search-field {
+			border: 2px solid $black;
+			border-radius: 3px;
+			padding: 0.5rem;
+		}
+
+		.search-submit {
+			background: $gg-blue;
+			border: 2px solid $gg-blue;
+			color: white;
+			padding: 0.5rem 0.75rem;
+			border-radius: 3px;
+			font-weight: bold;
+		}
+	}
+
+	header {
+		h1 {
+			font-size: 2rem;
+			margin-left: 0;
+		}
+	}
 
 	main {
 		margin: 5% 1rem;
@@ -16,7 +41,8 @@ div.search-results {
 				width: 100%;
 				
 				@media screen and (min-width: $md) {
-					width: 250px;
+					width: 320px;
+					height: 180px;
 				}
 			}
 
@@ -35,6 +61,12 @@ div.search-results {
 					color: black;
 					margin-top: 1%;
 				}
+			}
+		}
+
+		.no-results {
+			.search-form, h1 {
+				display: none;
 			}
 		}
 	}

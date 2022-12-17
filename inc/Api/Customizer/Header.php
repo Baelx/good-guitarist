@@ -22,44 +22,18 @@ class Header
 	 */
 	public function register( $wp_customize )
 	{
-		$wp_customize->add_section( 'awps_header_section' , array(
-			'title' => __( 'Header', 'good-guitarist' ),
-			'description' => __( 'Customize the Header' ),
-			'priority' => 35
+		$wp_customize->add_setting( 'mobile-logo' , array(
+			'title'      => __( 'Mobile Logo' ),
+			'priority'   => 30,
 		) );
 
-		$wp_customize->add_setting( 'awps_header_background_color' , array(
-			'default' => '#ffffff',
-			'transport' => 'postMessage', // or refresh if you want the entire page to reload
-		) );
-
-		$wp_customize->add_setting( 'awps_header_text_color' , array(
-			'default' => '#333333',
-			'transport' => 'postMessage', // or refresh if you want the entire page to reload
-		) );
-
-		$wp_customize->add_setting( 'awps_header_link_color' , array(
-			'default' => '#004888',
-			'transport' => 'postMessage', // or refresh if you want the entire page to reload
-		) );
-
-		$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'awps_header_background_color', array(
-			'label' => __( 'Header Background Color', 'good-guitarist' ),
-			'section' => 'awps_header_section',
-			'settings' => 'awps_header_background_color',
-		) ) );
-
-		$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'awps_header_text_color', array(
-			'label' => __( 'Header Text Color', 'good-guitarist' ),
-			'section' => 'awps_header_section',
-			'settings' => 'awps_header_text_color',
-		) ) );
-
-		$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'awps_header_link_color', array(
-			'label' => __( 'Header Link Color', 'good-guitarist' ),
-			'section' => 'awps_header_section',
-			'settings' => 'awps_header_link_color',
-		) ) );
+		$wp_customize->add_control( new \WP_Customize_Image_Control( $wp_customize, 'mobile-logo', array(
+				   'label'      => __( 'Upload a logo' ),
+				   'section'    => 'mobile-logo',
+				   'settings'   => 'mobile-logo-id' 
+				)
+			)
+		);
 
 		$wp_customize->get_setting( 'blogname' )->transport = 'postMessage';
 		$wp_customize->get_setting( 'blogdescription' )->transport = 'postMessage';
@@ -76,21 +50,6 @@ class Header
 				'render_callback' => function() {
 					bloginfo( 'description' );
 				},
-			) );
-			$wp_customize->selective_refresh->add_partial( 'awps_header_background_color', array(
-				'selector' => '#awps-header-control',
-				'render_callback' => array( $this, 'outputCss' ),
-				'fallback_refresh' => true
-			) );
-			$wp_customize->selective_refresh->add_partial( 'awps_header_text_color', array(
-				'selector' => '#awps-header-control',
-				'render_callback' => array( $this, 'outputCss' ),
-				'fallback_refresh' => true
-			) );
-			$wp_customize->selective_refresh->add_partial( 'awps_header_link_color', array(
-				'selector' => '#awps-header-control',
-				'render_callback' => array( $this, 'outputCss' ),
-				'fallback_refresh' => true
 			) );
 		}
 	}

@@ -11,15 +11,10 @@ get_header(); ?>
 
 <div class="search-results">
 	<div id="primary" class="content-area">
+		<?php get_search_form(); ?>
 		<header>
 			<h1 class="page-title">
-			<?php
-			printf(
-				/* translators: %s: Search Term. */
-				esc_html__( 'Search Results for: %s', 'good-guitarist' ),
-				'<span>' . get_search_query() . '</span>'
-			);
-			?>
+			<?php esc_html_e( 'Search Results', 'good-guitarist' ); ?>
 			</h1>
 		</header><!-- .page-header -->
 		<main id="main" class="site-main" role="main">

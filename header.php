@@ -12,6 +12,7 @@
 $header_classes = 'site-header';
 $post = get_post();
 $custom_logo = wp_get_attachment_image_url( get_theme_mod( 'custom_logo', 0 ) );
+$mobile_logo = wp_get_attachment_image_url( get_theme_mod( 'mobile_logo', 0 ) );
 
 if ( has_blocks( $post->post_content ) ) {
     $blocks = parse_blocks( $post->post_content );
@@ -43,12 +44,20 @@ if ( has_blocks( $post->post_content ) ) {
 					<div class="site-branding-container">
 						<div class="site-branding">
 							<h1 class="site-title">
-								<?php the_custom_logo(); ?>
+								<a href="<?php echo get_home_url(); ?>">
+									<picture>
+										<source class="site-title-image" media="(min-width: 500px)" srcset="<?php echo esc_url( wp_get_attachment_url( get_theme_mod( 'custom_logo' ) ) ); ?>">
+										<img class="site-title-image-mobile" src="<?php echo get_template_directory_uri() . '/assets/dist/images/good-guitarist-mobile-logo.png' ?>" />
+									</picture>
+								</a>
 							</h1>
 						</div><!-- .site-branding -->
 					</div><!-- .col -->
 					<div class="nav-elements-container">
-						<button class="dashicons dashicons-button dashicons-menu mobile-nav-button"></button>
+						<div class="nav-hamburger-container">
+							<button class="dashicons dashicons-button dashicons-menu mobile-nav-button"></button>
+							<label class="nav-hamburger-label">Menu</label>
+						</div>
 						<nav id="site-navigation" class="main-navigation" role="navigation" aria-expanded="false">
 							<?php
 							if ( has_nav_menu( 'primary' ) ) :
@@ -66,13 +75,10 @@ if ( has_blocks( $post->post_content ) ) {
 									tabindex="">
 							</button>
 						</nav>
-						<form role="search" method="get" class="search-form" action="<?php echo get_site_url(); ?>">
-							<label class="search-form-box">
-								<span class="screen-reader-text">Search for:</span>
-								<input type="search" class="search-field" placeholder="Search …" value="" name="s">
-							</label>
-							<button type="submit" aria-expanded="false" class="header-search-submit dashicons dashicons-search"></button>
-						</form>
+						<div class="header-search-btn-container">
+							<a href="<?php echo get_home_url( null, '?s=' ); ?>" class="header-search-submit dashicons dashicons-search"></a>
+							<label class="nav-search-label">Search</label>
+						</div>
 					</div>
 			</div><!-- .row -->
 		</div><!-- .container-fluid -->
