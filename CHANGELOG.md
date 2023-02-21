@@ -1,3 +1,6 @@
+### Feb 20, 2023
+- Make small adjustment to small CTA CSS
+
 ### Sep 3, 2022
 - Add basic song chord and difficulty blocks that udpate automatically when post saved twice.
 - Adjust song finder chord search results when using "include"
